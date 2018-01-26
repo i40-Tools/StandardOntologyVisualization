@@ -11,8 +11,6 @@ var colIndex = 0;
 
 function readData(){
     var myData = data.results.bindings;
-    console.log(myData.length);
-    console.log(final_data.children);
 
     for(var i in myData){
         var obj = myData[i];
@@ -22,7 +20,7 @@ function readData(){
 
         pushInitiative(initiative, classification, standard);
     }
-    console.log(JSON.stringify(final_data));
+    return final_data;
 }
 
 function pushInitiative(initiative, classification, standard){

@@ -2,7 +2,7 @@
  * Created by mayesha on 1/11/2018.
  */
 
-function drawChart(){
+function drawChart(json){
     var svg = d3.select("#chart"),
         margin = 20,
         diameter = +svg.attr("width"),
@@ -34,9 +34,9 @@ function drawChart(){
         .size([diameter - margin, diameter - margin])
         .padding(2);
 
-    d3.json("test.json", function(error, root) {
-        if (error) throw error;
-        root = d3.hierarchy(root)
+    // d3.json(json, function(error, root) {
+    //     if (error) throw error;
+        var root = d3.hierarchy(json)
             .sum(function(d) { return d.size; })
             .sort(function(a, b) { return b.value - a.value; });
 
@@ -102,5 +102,5 @@ function drawChart(){
             node.attr("transform", function(d) { return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; });
             circle.attr("r", function(d) { return d.r * k; });
         }
-    });
+    // });
 }

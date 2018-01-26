@@ -16,7 +16,10 @@
 </body>
 
 <script>
-    drawChart();
+    var json = readData();
+    setTimeout(function () {
+        drawChart(json);
+    }, 1000);
 </script>
 
 
