@@ -24,10 +24,6 @@ function drawChart(){
         startColor = "hsl(" + hue + ",100%,100%)";
         endColor = "hsl(" + hue + ",100%,30%)";
 
-        console.log(colorIndex);
-        console.log(startColor);
-        console.log(endColor);
-
         return d3.scaleLinear()
             .domain([-1, 5])
             .range([startColor, endColor])
@@ -38,7 +34,7 @@ function drawChart(){
         .size([diameter - margin, diameter - margin])
         .padding(2);
 
-    d3.json("flare.json", function(error, root) {
+    d3.json("test.json", function(error, root) {
         if (error) throw error;
         root = d3.hierarchy(root)
             .sum(function(d) { return d.size; })
@@ -52,6 +48,7 @@ function drawChart(){
             .data(nodes)
             .enter().append("circle")
             .attr("class", function(d) { return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"; })
+            .attr("text-overflow", "ellipsis")
             .style("fill", function(d) {
                 if(d.depth === 0) return "#e8e8e8";
                 var scheme = colorScheme(d.data.colIndex);
@@ -67,6 +64,8 @@ function drawChart(){
             .attr("font-size", function (d) {
                 return Math.sqrt(d.r) * 3
             })
+            .attr("text-overflow", "ellipsis")
+            .style("text-overflow", "ellipsis")
             .style("fill-opacity", function(d) {
                 return d.parent === root ? 1 : 0;
             })
