@@ -26,6 +26,7 @@ function readData(){
 function pushInitiative(initiative, classification, standard){
     if(final_data.children.length === 0){
         final_data.children.push({"name" : initiative, "colIndex": colIndex, "children":[]});
+        pushClassification(classification, 0, standard)
         colIndex++;
     }
     else{
@@ -41,6 +42,7 @@ function pushInitiative(initiative, classification, standard){
         //didn't find it
         if(flag === 0){
             final_data.children.push({"name" : initiative, "colIndex": colIndex, "children":[]});
+            pushClassification(classification, final_data.children.length - 1, standard);
             colIndex++;
         }
     }
@@ -50,6 +52,7 @@ function pushClassification(classification, parentIndex, standard){
     var intv = final_data.children[parentIndex];
     if(intv.children.length === 0){
         intv.children.push({"name" : classification, "colIndex": intv.colIndex, "children":[]});
+        pushStandard(standard, parentIndex, 0)
     }
     else{
         for(var k in intv.children){
@@ -64,29 +67,14 @@ function pushClassification(classification, parentIndex, standard){
         //didn't find it
         if(flag === 0){
             intv.children.push({"name" : classification, "colIndex": intv.colIndex, "children":[]});
+            pushStandard(standard, parentIndex, intv.children.length - 1)
         }
     }
 }
 
 function pushStandard(standard, grandparentIndex, parentIndex){
     var clsf = final_data.children[grandparentIndex].children[parentIndex];
-    if(clsf.children.length === 0){
-        clsf.children.push({"name" : standard, "colIndex": clsf.colIndex, size: 100});
-    }
-    else{
-        for(var k in clsf.children){
-            var flag = 0;
-            var std = clsf.children[k];
-            if(std.name === standard){
-                //exists already!
-                flag = 1;
-            }
-        }
-        //didn't find it
-        if(flag === 0){
-            clsf.children.push({"name" : standard, "colIndex": clsf.colIndex, size: 100});
-        }
-    }
+    clsf.children.push({"name" : standard, "colIndex": clsf.colIndex, size: 100});
 }
 
 
