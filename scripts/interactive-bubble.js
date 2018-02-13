@@ -49,7 +49,7 @@ function drawChart(json) {
     var circle = g.selectAll("circle")
         .data(nodes)
         .enter().append("circle")
-        .attr("id", function(d,i){ return d.data.name})
+        .attr("id", function(d,i){ return d.data.id})
         .attr("class", function (d) {
             return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root";
         })
@@ -70,7 +70,11 @@ function drawChart(json) {
         .enter().append("text")
         .attr("class", "node-label")
         .attr("font-size", function (d) {
+            if(!d.children){
+                return Math.sqrt(d.r) * 5
+            }
             return Math.sqrt(d.r) * 3
+
         })
         .attr("text-overflow", "ellipsis")
         .style("text-overflow", "ellipsis")
@@ -84,7 +88,7 @@ function drawChart(json) {
             return d3.wordwrap(d.data.name, 15);  // break line after 15 characters
         }, function(d){return Math.sqrt(d.r) * 2.5})
         .on("click", function (d) {
-            window.open(window.location.href + d.parent.data.name);
+            window.open("http://i40.semantic-interoperability.org/" + d.parent.data.id);
         });
 
     var node = g.selectAll("circle, text");
