@@ -14,7 +14,7 @@ function readData(){
 
     for(var i in myData){
         var obj = myData[i];
-        var standard = parse(obj.std.value);
+        var standard = obj.std.value.split('#')[1];
         var classification = parse(obj.classification.value);
         var initiative = parse(obj.initiative.value);
 
@@ -80,7 +80,9 @@ function pushStandard(standard, grandparentIndex, parentIndex){
 
 
 function parse(string){
-    return string.split('#')[1]
+    var uri = string.split('#')[1];
+    // insert a space before all caps
+    return uri.replace(/([A-Z])/g, ' $1');
 }
 
 function match(element) {

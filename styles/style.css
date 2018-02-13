@@ -11,19 +11,24 @@
     fill: white;
 }
 
-.label {
+.node-label {
     text-anchor: middle;
     color: #fff9ff;
 }
 
-.label,
 .node--root,
 .node--leaf {
     pointer-events: none;
 }
 
 .bubble-chart{
-    margin-left: 20%
+    margin-left: 10%
+}
+
+.node-label:hover{
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 body{
@@ -33,4 +38,10 @@ body{
 
 h2 {
     text-align: center;
+}
+
+tspan{
+    display: inline-block;
+    margin-top: 1%;
+    background-color: rgba(0,0,0,0.25)
 }
