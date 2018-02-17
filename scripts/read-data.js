@@ -17,20 +17,19 @@ function readData(){
     var original_headers = data.head.vars;
     var myData = data.results.bindings;
     var headers = original_headers.filter(checkSuffix);
-    console.log(headers);
 
     for(var i in myData){
         var obj = myData[i];
         var standard = {
-            "id" : parseURI(obj[headers[0]].value),
+            "id" : obj[headers[0]].value,
             "name" : obj[headers[0] + "_name"] !== undefined ? obj[headers[0] + "_name"].value : addSpace(parseURI(obj[headers[0]].value))
         };
         var classification = {
-            "id" : parseURI(obj[headers[1]].value),
+            "id" : obj[headers[1]].value,
             "name" : obj[headers[1] + "_name"] !== undefined ? obj[headers[1] + "_name"].value : addSpace(parseURI(obj[headers[1]].value))
         };
         var initiative = {
-            "id" : parseURI(obj[headers[2]].value),
+            "id" : obj[headers[2]].value,
             "name" :  obj[headers[2] + "_name"] !== undefined ? obj[headers[2] + "_name"].value : addSpace(parseURI(obj[headers[2]].value))
         };
         pushInitiative(initiative, classification, standard);

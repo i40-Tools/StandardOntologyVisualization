@@ -88,7 +88,7 @@ function drawChart(json) {
             return d3.wordwrap(d.data.name, 15);  // break line after 15 characters
         }, function(d){return Math.sqrt(d.r) * 2.5})
         .on("click", function (d) {
-            window.open("http://i40.semantic-interoperability.org/" + d.parent.data.id);
+            window.open(d.parent.data.id);
         });
 
     var node = g.selectAll("circle, text");
