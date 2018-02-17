@@ -55,11 +55,14 @@ function drawChart(json) {
         })
         .attr("text-overflow", "ellipsis")
         .style("fill", function (d) {
-            if (d.depth === 0) return "#e8e8e8";
+            if (d.depth === 0) return "#ffffff";
             var scheme = colorScheme(d.data.colIndex);
             return scheme(d.depth);
         })
-        .style("stroke", "#373c48")
+        .style("stroke", function(d){
+            if(d.depth === 0) return "#ffffff";
+            return "#373c48";
+        })
         .on("click", function (d) {
             if (focus !== d) zoom(d), d3.event.stopPropagation();
         });
