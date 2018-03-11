@@ -30,7 +30,6 @@
     <!-- Chart Script -->
     <script src="scripts/interactive-bubble.js"></script>
     <!-- Load Data -->
-    <script type="text/javascript" src="data.js"></script>
     <script src="scripts/read-data.js"></script>
     <link rel="stylesheet" type="text/css" href="styles/style.css"/>
     <title>Industry 4.0 Standards</title>
@@ -94,6 +93,7 @@
             <div class="col-lg-12 text-center">
                 <!-- <h2>Standards</h2> -->
                 <!-- <hr class="star-primary"> -->
+                <div id="sequence"></div>
             </div>
         </div>
         <div class="row">
@@ -165,10 +165,9 @@
 </body>
 
 <script>
-    var json = readData();
-    setTimeout(function () {
-        drawChart(json);
-    }, 2000);
+    fetchData()
+        .then(readData)
+        .then(drawChart);
 </script>
 
 
