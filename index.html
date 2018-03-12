@@ -2,31 +2,14 @@
 <meta charset="utf-8">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <!-- jQuery -->
-    <script src="../static/vendor/jquery/jquery.min.js"></script>
-    <!-- Bootstrap Core CSS -->
-    <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Core JavaScript -->
-    <script src="../static/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <!-- Theme CSS -->
-    <link href="../static/css/freelancer.min.css" rel="stylesheet">
-    <!-- Custom Fonts -->
-    <link href="../static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles/simple-sidebar.css" rel="stylesheet">
     <!-- d3.js -->
     <script src="scripts/d3.v4.min.js"></script>
     <script src="scripts/d3-jetpack.js"></script>
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
     <!-- Chart Script -->
     <script src="scripts/interactive-bubble.js"></script>
     <!-- Load Data -->
@@ -36,149 +19,71 @@
 </head>
 
 <body>
-<!-- Navigation -->
-<nav id="header" class="navbar navbar-default navbar-fixed-top navbar-custom">
-    <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
-            </button>
-            <a class="navbar-brand" href="index.html#page-top">Industry 4.0 Standards</a>
-        </div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="hidden">
-                    <a href="index.html#page-top"></a>
-                </li>
-                <li class="page-scroll">
-                    <a href="index.html#portfolio">Standards</a>
-                </li>
-                <li class="page-scroll">
-                    <a href="index.html#about">About</a>
-                </li>
-                <li class="page-scroll">
-                    <a href="index.html#contact">Contact</a>
-                </li>
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand">
+                <a href="#">
+                    Start Bootstrap
+                </a>
+            </li>
+            <li>
+                <a href="#">Dashboard</a>
+            </li>
+            <li>
+                <a href="#">Shortcuts</a>
+            </li>
+            <li>
+                <a href="#">Overview</a>
+            </li>
+            <li>
+                <a href="#">Events</a>
+            </li>
+            <li>
+                <a href="#">About</a>
+            </li>
+            <li>
+                <a href="#">Services</a>
+            </li>
+            <li>
+                <a href="#">Contact</a>
+            </li>
+        </ul>
     </div>
-    <!-- /.container-fluid -->
-</nav>
+    <!-- /#sidebar-wrapper -->
 
-<!-- Header -->
-<header>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <!--<img class="img-responsive" src="img/profile.png" alt="">-->
-                <div class="intro-text">
-                    <span class="name">Industry 4.0 Standards</span>
-                    <!-- <hr class="star-light"> -->
-                    <span class="skills">Supporting Interoperability of Industry 4.0 Standards by means of Semantic Technologies</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
-<!-- Portfolio Grid Section -->
-<section id="portfolio">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <!-- <h2>Standards</h2> -->
-                <!-- <hr class="star-primary"> -->
-                <div id="sequence"></div>
-            </div>
-        </div>
-        <div class="row">
-            <!-- Diagram -->
-            <div id="group_gradient" class="tabcontent">
-                <svg id="chart" class="bubble-chart" width="960" height="960"></svg>
-            </div>
-            <!--<div class="mxgraph" style="max-width:100%;" data-mxgraph="{&quot;highlight&quot;:&quot;#0000ff&quot;,&quot;lightbox&quot;:false,&quot;nav&quot;:true,&quot;xml&quot;:&quot;&lt;mxfile userAgent=\&quot;Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36\&quot; version=\&quot;6.0.2.1\&quot; editor=\&quot;www.draw.io\&quot; type=\&quot;google\&quot;&gt;&lt;diagram name=\&quot;Page-1\&quot;&gt;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&lt;/diagram&gt;&lt;/mxfile&gt;&quot;}"></div>-->
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <div id="sequence"></div>
+            <h1>Standards Ontology Visualization</h1>
+            <p>The Industry 4.0 vision is the fourth revolution of the industry by means of the Internet of Things, Internet of Services and Cyber Physical Systems.</p>
+            <p><code>Standards</code> are important for realizing the Industry 4.0 vision. This website is an attempt to give an overview of the most relevant standards for I4.0.</p>
+            <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Toggle Menu</a>
+            <svg id="chart" class="bubble-chart" width="960" height="960"></svg>
         </div>
     </div>
-</section>
 
-<!-- About Section -->
-<section class="success" id="about">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h2>About</h2>
-                <p>&nbsp;</p>
-                <!-- <hr class="star-light"> -->
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-lg-offset-2">
-                <p>The Industry 4.0 vision is the fourth revolution of the industry by means of the Internet of Things,
-                    Internet of Services and Cyber Physical Systems.</p>
-            </div>
-            <div class="col-lg-4">
-                <p>Standards are important for realizing the Industry 4.0 vision. This website is an attempt to give an
-                    overview of the most relevant standards for I4.0.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Footer -->
-<footer class="text-center">
-    <div class="footer-below">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    Copyright &copy; Enterprise Information Systems 2016-2017
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
-
-<!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
-<div class="scroll-top page-scroll hidden-sm hidden-xs hidden-lg hidden-md">
-    <a class="btn btn-primary" href="index.html#page-top">
-        <i class="fa fa-chevron-up"></i>
-    </a>
 </div>
+<script src="static/jquery/jquery.min.js"></script>
+<script src="static/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-<!-- Plugin JavaScript -->
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-
-<!-- Contact Form JavaScript -->
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-
-<script src="../static/js/jqBootstrapValidation.js"></script>
-<script src="../static/js/contact_me.js"></script>
-
-<!-- Theme JavaScript -->
-<script src="../static/js/freelancer.min.js"></script>
+<!-- Menu Toggle Script -->
+<script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
 
 </body>
 
+<!-- Chart Script -->
 <script>
     fetchData()
         .then(readData)
         .then(drawChart);
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
