@@ -7,17 +7,13 @@
     stroke-width: 3px;
 }
 
-.node--leaf {
-    fill: white;
-}
 
 .node-label {
     text-anchor: middle;
     color: #fff9ff;
 }
 
-.node--root,
-.node--leaf {
+.node--root{
     pointer-events: none;
 }
 
@@ -44,4 +40,8 @@ tspan{
     display: inline-block;
     margin-top: 1%;
     background-color: rgba(0,0,0,0.25)
+}
+
+.breadcrumb{
+    cursor: pointer;
 }

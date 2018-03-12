@@ -2,6 +2,9 @@
  * Created by mayesha on 1/11/2018.
  */
 
+var width = 1300;
+var height = 900;
+
 function drawChart(json) {
     var svg = d3.select("#chart"),
         margin = 20,
@@ -34,6 +37,8 @@ function drawChart(json) {
         .size([diameter - margin, diameter - margin])
         .padding(2);
 
+    initializeBreadcrumbTrail();
+
     var root = d3.hierarchy(json)
         .sum(function (d) {
             return d.size;
@@ -65,6 +70,9 @@ function drawChart(json) {
         })
         .on("click", function (d) {
             if (focus !== d) zoom(d), d3.event.stopPropagation();
+            var sequenceArray = d.ancestors().reverse();
+            sequenceArray.shift();
+            updateBreadcrumbs(sequenceArray);
         });
 
 
@@ -79,8 +87,6 @@ function drawChart(json) {
             return Math.sqrt(d.r) * 3
 
         })
-        .attr("text-overflow", "ellipsis")
-        .style("text-overflow", "ellipsis")
         .style("fill-opacity", function (d) {
             return d.parent === root ? 1 : 0;
         })
@@ -89,7 +95,7 @@ function drawChart(json) {
         })
         .tspans(function(d) {
             return d3.wordwrap(d.data.name, 15);  // break line after 15 characters
-        }, function(d){return Math.sqrt(d.r) * 2.5})
+        }, function(d){return Math.sqrt(d.r) * 4})
         .on("click", function (d) {
             window.open(d.parent.data.id);
         });
@@ -100,6 +106,7 @@ function drawChart(json) {
         .style("background", "white")
         .on("click", function () {
             zoom(root);
+            updateBreadcrumbs([]);
         });
 
     zoomTo([root.x, root.y, root.r * 2 + margin]);
@@ -122,13 +129,23 @@ function drawChart(json) {
                 return d.parent === focus || this.style.display === "inline";
             })
             .style("fill-opacity", function (d) {
-                return d.parent === focus ? 1 : 0;
+                if (!d.children){
+                    return (d.parent === focus || d === focus) ? 1 : 0;
+                }
+                else{
+                    return d.parent === focus ? 1 : 0;
+                }
             })
             .on("start", function (d) {
                 if (d.parent === focus) this.style.display = "inline";
             })
             .on("end", function (d) {
-                if (d.parent !== focus) this.style.display = "none";
+                if (!d.children){
+                    if (d.parent !== focus && d !== focus) this.style.display = "none";
+                }
+                else{
+                    if (d.parent !== focus) this.style.display = "none";
+                }
             });
     }
 
@@ -141,5 +158,92 @@ function drawChart(json) {
         circle.attr("r", function (d) {
             return d.r * k;
         });
+    }
+
+    // Breadcrumb dimensions: width, height, spacing, width of tip/tail.
+    var b = {
+        w: 400, h: 50, s: 3, t: 10
+    };
+
+
+    function initializeBreadcrumbTrail() {
+        // Add the svg area.
+        var trail = d3.select("#sequence").append("svg:svg")
+            .attr("width", width)
+            .attr("height", 50)
+            .attr("id", "trail");
+    }
+
+    // Generate a string that describes the points of a breadcrumb polygon.
+    function breadcrumbPoints(d, i) {
+        var points = [];
+        points.push("0,0");
+        points.push(b.w + ",0");
+        points.push(b.w + b.t + "," + (b.h / 2));
+        points.push(b.w + "," + b.h);
+        points.push("0," + b.h);
+        if (i > 0) { // Leftmost breadcrumb; don't include 6th vertex.
+            points.push(b.t + "," + (b.h / 2));
+        }
+        return points.join(" ");
+    }
+
+    function clearTrail(nodeArray, d){
+        for(var index in nodeArray){
+            if(d === nodeArray[index]){
+                updateBreadcrumbs(nodeArray.slice(0, index + 1));
+            }
+        }
+    }
+
+    // Update the breadcrumb trail to show the current sequence and percentage.
+    function updateBreadcrumbs(nodeArray) {
+
+        // Data join; key function combines name and depth (= position in sequence).
+        var trail = d3.select("#trail")
+            .selectAll("g")
+            .data(nodeArray, function(d) { return d.data.name + d.depth; });
+
+        // Remove exiting nodes.
+        trail.exit().remove();
+
+        // Add breadcrumb and label for entering nodes.
+        var entering = trail.enter().append("svg:g");
+
+        entering.append("svg:polygon")
+            .attr("points", breadcrumbPoints)
+            .style("fill", function(d) {
+                if (d.depth === 0) return "#e8e8e8";
+                var scheme = colorScheme(d.data.colIndex);
+                return scheme(d.depth);
+            })
+            .attr("class", "breadcrumb")
+            .on("click", function (d) {
+                zoom(d);
+                clearTrail(nodeArray, d);
+            });
+
+        entering.append("svg:text")
+            .attr("x", (b.w + b.t) / 2)
+            .attr("y", b.h / 2)
+            .attr("dy", "0.35em")
+            .attr("text-anchor", "middle")
+            .attr("font-size", "20pt")
+            .attr("class", "breadcrumb")
+            .text(function(d) { return d.data.name; })
+            .on("click", function (d) {
+                zoom(d);
+                clearTrail(nodeArray, d);
+            });
+
+        // Merge enter and update selections; set position for all nodes.
+        entering.merge(trail).attr("transform", function(d, i) {
+            return "translate(" + i * (b.w + b.s) + ", 0)";
+        });
+
+        // Make the breadcrumb trail visible, if it's hidden.
+        d3.select("#trail")
+            .style("visibility", "");
+
     }
 }
