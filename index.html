@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link href="static/jquery/jquery-ui.css" rel="stylesheet">
     <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="styles/simple-sidebar.css" rel="stylesheet">
     <!-- d3.js -->
@@ -20,64 +21,55 @@
 
 <body>
 
-<div id="wrapper">
+<div id="wrapper" class="toggled">
 
     <!-- Sidebar -->
     <div id="sidebar-wrapper">
         <ul class="sidebar-nav">
-            <li class="sidebar-brand">
-                <a href="#">
-                    Start Bootstrap
-                </a>
+            <li class="sidebar-brand" data-page="circle-chart">
+                    STO Visualization
             </li>
-            <li>
-                <a href="#">Dashboard</a>
+            <li data-page="circle-chart">
+                <a href="#">Packed Circles</a>
             </li>
-            <li>
-                <a href="#">Shortcuts</a>
-            </li>
-            <li>
-                <a href="#">Overview</a>
-            </li>
-            <li>
-                <a href="#">Events</a>
-            </li>
-            <li>
-                <a href="#">About</a>
-            </li>
-            <li>
-                <a href="#">Services</a>
-            </li>
-            <li>
-                <a href="#">Contact</a>
+            <li data-page="map-chart">
+                <a href="#">Map</a>
             </li>
         </ul>
     </div>
-    <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->
-    <div id="page-content-wrapper">
-        <div class="container-fluid">
-            <h1>Standards Ontology Visualization</h1>
-            <p>The Industry 4.0 vision is the fourth revolution of the industry by means of the Internet of Things, Internet of Services and Cyber Physical Systems.</p>
-            <p><code>Standards</code> are important for realizing the Industry 4.0 vision. This website is an attempt to give an overview of the most relevant standards for I4.0.</p>
-            <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Toggle Menu</a>
-            <div id="sequence"></div>
-            <svg id="chart" class="bubble-chart" width="960" height="960"></svg>
+    <div class="container-fluid">
+        <div id="circle-chart">
+            <div id="page-content-wrapper">
+                <div class="container-fluid col-md-12">
+                    <h1>Standards Ontology Visualization</h1>
+                    <p>The Industry 4.0 vision is the fourth revolution of the industry by means of the Internet of Things, Internet of Services and Cyber Physical Systems.</p>
+                    <p><code>Standards</code> are important for realizing the Industry 4.0 vision. This website is an attempt to give an overview of the most relevant standards for I4.0.</p>
+                    <!--<a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Toggle Menu</a>-->
+                    <div id='search_container' class='row'>
+                        <input id='search_box' type="text" class="form-control" placeholder="Search Standards" aria-describedby="sizing-addon2">
+                        <div id='search_button' class="btn-group" data-toggle="buttons">
+                            <label id='search_submit' class="btn btn-primary active" onclick="search_chart();">Search</label>
+                        </div>
+                        <div id='reset_button' class="btn-group" data-toggle="buttons">
+                            <label id='reset_submit' class="btn btn-primary active" onclick="reset_flag()">Reset</label>
+                        </div>
+                    </div>
+                    <div id="sequence"></div>
+                    <svg id="chart" class="bubble-chart" width="960" height="960"></svg>
+
+                </div>
+            </div>
+        </div>
+        <div id="map-chart" class="ui-helper-hidden">
         </div>
     </div>
 
 </div>
 <script src="static/jquery/jquery.min.js"></script>
+<script src="static/jquery/jquery-ui.js"></script>
 <script src="static/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<!-- Menu Toggle Script -->
-<script>
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
-</script>
 
 </body>
 
@@ -86,4 +78,12 @@
     fetchData()
         .then(readData)
         .then(drawChart);
+    $("ul.sidebar-nav li").each(function() {
+        $(this).on("click", function(){
+            $("ul.sidebar-nav li").each(function() {
+                $("#" + $(this).attr("data-page")).addClass("ui-helper-hidden");
+            });
+            $("#" + $(this).attr("data-page")).toggleClass("ui-helper-hidden");
+        });
+    });
 </script>

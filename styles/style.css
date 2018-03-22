@@ -45,3 +45,20 @@ tspan{
 .breadcrumb{
     cursor: pointer;
 }
+#search_box{
+    width:30%;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-bottom: 5px;
+    /*float:left;*/
+    /*display: none;*/
+}
+
+#reset_button{
+    margin-left: 10px;
+}
+
+#chart{
+    display: block;
+    margin: auto;
+}

@@ -5,6 +5,9 @@
 var width = 1300;
 var height = 900;
 
+var find_node;
+var blink_flag = true;
+
 function drawChart(json) {
     var svg = d3.select("#chart"),
         margin = 20,
@@ -54,9 +57,14 @@ function drawChart(json) {
     var circle = g.selectAll("circle")
         .data(nodes)
         .enter().append("circle")
-        .attr("id", function(d,i){ return d.data.id})
+        .attr("id", function (d, i) {
+                return "node_" + i;
+            }
+        )
         .attr("class", function (d) {
-            return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root";
+            var name = d.data.name.replace(/[^A-Z0-9]+/ig, "-");
+            name = name.toLowerCase();
+            return d.parent ? d.children ? "node " + name  : "node node--leaf " + name : "node node--root " + name;
         })
         .attr("text-overflow", "ellipsis")
         .style("fill", function (d) {
@@ -64,8 +72,8 @@ function drawChart(json) {
             var scheme = colorScheme(d.data.colIndex);
             return scheme(d.depth);
         })
-        .style("stroke", function(d){
-            if(d.depth === 0) return "#ffffff";
+        .style("stroke", function (d) {
+            if (d.depth === 0) return "#ffffff";
             return "#373c48";
         })
         .on("click", function (d) {
@@ -246,4 +254,63 @@ function drawChart(json) {
             .style("visibility", "");
 
     }
+
+    var search_source = $.map(nodes, function(d){
+        return {
+            label : d.data.name,
+            value : d.data.name
+        };
+    });
+
+
+    $( "#search_box" ).autocomplete({
+        source: search_source
+    });
+
+    // find gene in clustergram
+    find_node = function(text){
+        var class_name = text.replace(/[^A-Z0-9]+/ig, "-");
+        class_name = class_name.toLowerCase();
+        var colArray = [];
+        d3.selectAll("." + class_name)
+            .each(function(d, i){
+                colArray.push(d3.select(this).style("fill"));
+            });
+
+        function blink() {
+            if(blink_flag){
+                d3.selectAll("." + class_name).transition()
+                    .duration(1000)
+                    .style("fill", "rgb(255,255,0)")
+                    .transition()
+                    .duration(1000)
+                    .style("fill", "rgb(255,255,255)")
+                    .on("end", blink)
+            }
+            else{
+                var counter = 0;
+                d3.selectAll("." + class_name)
+                    .each(function (d,i) {
+                        d3.select(this).style("fill", colArray[counter]);
+                        counter = counter + 1;
+                    })
+            }
+        }
+        blink();
+    };
+
+
+
+}
+
+function search_chart(){
+    // get the searched node name
+    blink_flag = true;
+    var text = $('#search_box').val();
+    find_node(text);
+}
+
+function reset_flag() {
+    blink_flag = false;
+    $('#search_box').val('');
 }
