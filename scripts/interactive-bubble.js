@@ -272,31 +272,75 @@ function drawChart(json) {
         var class_name = text.replace(/[^A-Z0-9]+/ig, "-");
         class_name = class_name.toLowerCase();
         var colArray = [];
-        d3.selectAll("." + class_name)
-            .each(function(d, i){
-                colArray.push(d3.select(this).style("fill"));
-            });
+        var sel = d3.selectAll("." + class_name)
+            .each(function (d) {
+                console.log(d);
+                drawHalo(d3.select(this.parentNode), d.r, d.x, d.y);
+            })
 
-        function blink() {
-            if(blink_flag){
-                d3.selectAll("." + class_name).transition()
-                    .duration(1000)
-                    .style("fill", "rgb(255,255,0)")
-                    .transition()
-                    .duration(1000)
-                    .style("fill", "rgb(255,255,255)")
-                    .on("end", blink)
-            }
-            else{
-                var counter = 0;
-                d3.selectAll("." + class_name)
-                    .each(function (d,i) {
-                        d3.select(this).style("fill", colArray[counter]);
-                        counter = counter + 1;
-                    })
-            }
+        // function blink() {
+        //     if(blink_flag){
+        //         d3.selectAll("." + class_name).transition()
+        //             .duration(1000)
+        //             .style("fill", "rgb(255,255,0)")
+        //             .transition()
+        //             .duration(1000)
+        //             .style("fill", "rgb(255,255,255)")
+        //             .on("end", blink)
+        //     }
+        //     else{
+        //         var counter = 0;
+        //         d3.selectAll("." + class_name)
+        //             .each(function (d,i) {
+        //                 d3.select(this).style("fill", colArray[counter]);
+        //                 counter = counter + 1;
+        //             })
+        //     }
+        // }
+        // blink();
+    };
+
+    function drawHalo(container, radius, x, y) {
+        if (container===undefined){
+            return null;
+            // there is no element to add the halo to;
+            // this means the node was not rendered previously
         }
-        blink();
+
+        console.log(x,y);
+
+        var haloGroupElement = container
+            .append("g")
+            .classed("hidden-in-export", true);
+
+
+
+        var el = haloGroupElement
+            .append("circle",":first-child")
+            .classed("searchResultA", true)
+            .attr("r", radius)
+            .attr("cx", -x/2);
+
+
+        haloGroupElement.attr("animationRunning",true);
+
+
+        haloGroupElement.node().addEventListener("webkitAnimationEnd", function(){
+            var test=haloGroupElement.selectAll(".searchResultA");
+            test.classed("searchResultA", false)
+                .classed("searchResultB", true)
+                .attr("animationRunning",false);
+            haloGroupElement.attr("animationRunning",false);
+        });
+        haloGroupElement.node().addEventListener("animationend", function(){
+            var test=haloGroupElement.selectAll(".searchResultA");
+            test.classed("searchResultA", false)
+                .classed("searchResultB", true)
+                .attr("animationRunning",false);
+            haloGroupElement.attr("animationRunning",false);
+        });
+
+        return haloGroupElement;
     };
 
 
