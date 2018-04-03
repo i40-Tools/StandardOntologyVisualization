@@ -16,11 +16,12 @@ function loadHeadquarters(countryList){
             var m = L.marker(coordinates[obj.country]).addTo(sto_map);
             var initiative = obj.initiative;
             var iName = initiative.split("#")[1].replace("_", " ");
-            m.bindPopup("<b>Headquarter of Initiative</b><br><a href='" + initiative +  "'>" + iName + "</a> ").openPopup();
+            m.bindPopup("<b>Headquarter of Initiative</b><br><a href='" + initiative +  "'>" + iName + "</a> ");
         }
     }
 }
 
 function refreshMap() {
     sto_map.invalidateSize();
+    sto_map.setView([51.9375, 6.9603], 3);
 }
