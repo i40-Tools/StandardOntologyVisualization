@@ -16,18 +16,20 @@
     <script src="static/jquery/jquery-ui.js"></script>
     <script src="static/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- d3.js -->
-    <script src="scripts/d3.v4.min.js"></script>
-    <script src="scripts/d3-jetpack.js"></script>
-    <!-- Chart Script -->
-    <script src="scripts/interactive-bubble.js"></script>
-    <!-- Load Data -->
-    <script src="scripts/read-data.js"></script>
+    <script src="static/d3/d3.v4.min.js"></script>
+    <script src="static/d3/d3-jetpack.js"></script>
+    <!-- Bubble Chart Script -->
+    <script src="scripts/common.js"></script>
+    <script src="scripts/read-sto-data.js"></script>
+    <script src="scripts/sto-bubble.js"></script>
     <!-- Map Script -->
     <script src="static/leaflet/leaflet.js"></script>
-    <script src="scripts/fetch-map-data.js"></script>
+    <script src="scripts/read-map-data.js"></script>
     <script src="static/data/countries.js"></script>
     <script src="scripts/sto-map.js"></script>
-
+    <!-- Timeline Script -->
+    <script src="scripts/read-time-data.js"></script>
+    <script src="scripts/sto-timeline.js"></script>
     <title>Industry 4.0 Standards</title>
 </head>
 
@@ -46,6 +48,9 @@
             </li>
             <li data-page="map-chart">
                 <a href="#">Map</a>
+            </li>
+            <li data-page="time-chart">
+                <a href="#">Timeline</a>
             </li>
         </ul>
     </div>
@@ -76,13 +81,20 @@
                 </div>
             </div>
         </div>
-        <div id="map-chart" class="ui-helper-hidden">
-            <div class="vertical-center">
-                <div class="col-md-12">
-                    <div id="sto_map"></div>
-                </div>
+    <div id="map-chart" class="ui-helper-hidden">
+        <div class="vertical-center">
+            <div class="col-md-12">
+                <div id="sto_map"></div>
             </div>
         </div>
+    </div>
+    <div id="time-chart" class="ui-helper-hidden">
+        <div class="vertical-center">
+            <div class="col-md-12">
+                <div id="timeline"></div>
+            </div>
+        </div>
+    </div>
     </div>
 
 </div>
@@ -91,9 +103,9 @@
 
 <!-- Chart Script -->
 <script>
-    fetchData()
-        .then(readData)
-        .then(drawChart);
+    fetchStoData()
+        .then(readStoData)
+        .then(drawBubbleChart);
     $("ul.sidebar-nav li").each(function() {
         $(this).on("click", function(){
             $("ul.sidebar-nav li").each(function() {
@@ -106,4 +118,7 @@
     fetchMapData()
         .then(readMapData)
         .then(loadHeadquarters);
+    fetchTimeData()
+        .then(readTimeData)
+        .then(drawTimeline);
 </script>

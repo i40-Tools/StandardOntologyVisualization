@@ -8,7 +8,7 @@ var height = 900;
 var find_node;
 var blink_flag = true;
 
-function drawChart(json) {
+function drawBubbleChart(json) {
     var svg = d3.select("#chart"),
         margin = 20,
         diameter = +svg.attr("width"),

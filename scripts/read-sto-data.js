@@ -13,7 +13,7 @@ function checkSuffix(header) {
     return !header.includes("_name");
 }
 
-function fetchData() {
+function fetchStoData() {
     var url = 'http://vocol.iais.fraunhofer.de/sto/fuseki/dataset/query';
     var query = "PREFIX rami: <https://w3id.org/i40/rami#> \
     PREFIX sto: <https://w3id.org/i40/sto#> \
@@ -30,25 +30,10 @@ function fetchData() {
     BIND(CONCAT(str(?cto)) as ?classification_name) .    \
     BIND(CONCAT(str(?ito)) as ?initiative_name)    \
     }";
-    var promise = new Promise(function (resolve) {
-        var data, xhr;
-        xhr = new XMLHttpRequest();
-        xhr.open('POST', url, true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function (response) {
-            var fetched_data = JSON.parse(response.target.response);
-            if (fetched_data !== undefined) {
-                console.log(fetched_data);
-                resolve(fetched_data);
-            }
-        };
-        xhr.send('query=' + query);
-    });
-    //Returns Promise object
-    return promise;
+    return fetchData(url, query);
 };
 
-function readData(data) {
+function readStoData(data) {
     var promise = new Promise(function (resolve) {
         var original_headers = data.head.vars;
         var myData = data.results.bindings;

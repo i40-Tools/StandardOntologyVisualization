@@ -109,3 +109,35 @@ tspan{
     stroke-width: 5;
     stroke: #f00;
 }
+
+.axis--grid .domain {
+    fill: #ddd;
+    stroke: none;
+}
+
+.axis--x .domain,
+.axis--grid .tick line {
+    stroke: #fff;
+}
+
+.axis--grid .tick--minor line {
+    stroke-opacity: .5;
+}
+
+.time-span-rect {
+    stroke-width: 6;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 80px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+
