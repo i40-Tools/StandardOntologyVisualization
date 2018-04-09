@@ -7,7 +7,6 @@ function fetchData(url, query) {
         xhr.onreadystatechange = function (response) {
             var fetched_data = JSON.parse(response.target.response);
             if (fetched_data !== undefined) {
-                console.log(fetched_data);
                 resolve(fetched_data);
             }
         };

@@ -10,14 +10,14 @@ $(document).ready(function(){
 });
 
 function loadHeadquarters(countryList){
+    console.log(countryList);
     for(var i in countryList){
         var obj = countryList[i];
-        if(coordinates[obj.country] !== undefined){
-            var m = L.marker(coordinates[obj.country]).addTo(sto_map);
-            var initiative = obj.initiative;
-            var iName = initiative.split("#")[1].replace("_", " ");
-            m.bindPopup("<b>Headquarter of Initiative</b><br><a href='" + initiative +  "'>" + iName + "</a> ");
-        }
+        var m = L.marker(obj.location).addTo(sto_map);
+        var initiative = obj.initiative;
+        var iName = initiative.split("#")[1].replace("_", " ");
+        m.bindPopup("<b>Headquarter of Initiative</b><br><a href='" + initiative +  "'>" + iName + "</a> ");
+
     }
 }
 
