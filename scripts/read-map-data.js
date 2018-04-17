@@ -1,6 +1,20 @@
 function fetchMapData() {
     var url = 'http://vocol.iais.fraunhofer.de/sto/fuseki/dataset/query';
-    var query = "SELECT ?subject ?object WHERE { ?subject <https://w3id.org/i40/sto#hasHeadquaterIn> ?object . }";
+    var query = "PREFIX sto: <https://w3id.org/i40/sto#>  \
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  \
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  \
+        PREFIX foaf: <http://xmlns.com/foaf/0.1/> \
+        SELECT DISTINCT ?org ?name ?abb ?comment ?label ?location \
+        WHERE { \
+        ?org rdf:type sto:StandardOrganization . \
+        ?org sto:abbreviation ?abb . \
+        ?org  rdfs:comment  ?comment . \
+        ?org rdfs:label ?label . \
+        ?org sto:orgName ?orgName . \
+        ?org sto:hasHeadquaterIn ?location . \
+    FILTER( langMatches( lang(?label), 'en' ) ) \
+        FILTER( langMatches( lang (?comment), 'en' ) ) \
+} ";
     return fetchData(url, query);
 };
 
@@ -18,16 +32,18 @@ function parseLocationForGoogle(string) {
 function readMapData(data) {
     var promise = new Promise(function (resolve) {
         var countryData = data.results.bindings;
-        var countryList = [];
+        var countryList = {};
         for (var i in countryData) {
             var obj = countryData[i];
-            var mapData = {
-                "country" : parseLocationForGoogle(obj.object.value),
-                "initiative" : obj.subject.value
+            countryList[obj.org.value] = {
+                country : parseLocationForGoogle(obj.location.value),
+                initiative : obj.org.value,
+                name: obj.name === undefined ? obj.label.value : obj.name.value,
+                abbr: obj.abb.value,
+                comment: obj.comment.value
             };
-            countryList.push(mapData);
         }
-        resolve(countryList);
+        resolve(Object.values(countryList));
     });
     return promise;
 }

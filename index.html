@@ -113,6 +113,7 @@
         .then(drawBubbleChart);
     $("ul.sidebar-nav li").each(function() {
         $(this).on("click", function(){
+            $("#sidebar-info").css('visibility', 'hidden');
             $("ul.sidebar-nav li").each(function() {
                 $("#" + $(this).attr("data-page")).addClass("ui-helper-hidden");
             });

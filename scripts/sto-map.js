@@ -13,15 +13,29 @@ function loadHeadquarters(countryList){
     console.log(countryList);
     for(var i in countryList){
         var obj = countryList[i];
-        var m = L.marker(obj.location).addTo(sto_map);
+        var m = L.marker(obj.location);
+        m.properties = {};
         var initiative = obj.initiative;
-        var iName = initiative.split("#")[1].replace("_", " ");
+        var iName = obj.abbr;
         m.bindPopup("<b>Headquarter of Initiative</b><br><a href='" + initiative +  "'>" + iName + "</a> ");
-
+        m.properties.countryName = parseCountryName(obj.country);
+        m.properties.name = obj.name;
+        m.properties.comment = obj.comment;
+        m.on('click', function (e) {
+            console.log(e);
+            var obj = e.sourceTarget.properties;
+            var info = "<h4>" + obj.name + "</h4></br><b>Located In: </b>" + obj.countryName + "</br></br>" + obj.comment;
+            showInfo(info);
+        });
+        m.addTo(sto_map);
     }
 }
 
 function refreshMap() {
     sto_map.invalidateSize();
     sto_map.setView([51.9375, 6.9603], 3);
+}
+
+function parseCountryName(string) {
+    return string.replace("+", " ");
 }

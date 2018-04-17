@@ -15,3 +15,8 @@ function fetchData(url, query) {
     //Returns Promise object
     return promise;
 };
+
+function showInfo(html) {
+    $("#sidebar-info").css('visibility', 'visible');
+    $("#sidebar-info").html(html);
+}

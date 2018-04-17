@@ -64,14 +64,14 @@ function drawTimeline(dates) {
                 .duration(500)
                 .style("opacity", 0);
         })
-        .on("click", function (d, i) {
+        .on("click", function (d) {
             d3.selectAll(".highlight-circle").classed("highlight-circle", false);
             d3.selectAll(".highlight-text").classed("highlight-text", false);
             d3.select(this).classed("highlight-circle", true);
             d3.select("#tLine_" + d.abbr).classed("highlight-circle", true);
             d3.select("#tLabel_" + d.abbr).classed("highlight-text", true);
-            $("#sidebar-info").css('visibility', 'visible');
-            $("#sidebar-info").html("<h4>" + d.name + "</h4></br><b>Formed on: </b>" + parseDate(d.date) + "</br></br>" + d.comment);
+            var info = "<h4>" + d.name + "</h4></br><b>Formed on: </b>" + parseDate(d.date) + "</br></br>" + d.comment;
+            showInfo(info);
         });
 
     var line = svg.selectAll('.circle-container')
