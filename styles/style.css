@@ -70,7 +70,7 @@ tspan{
 .vertical-center {
     min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
     min-height: 100vh; /* These two lines are counted as one :-)       */
-
+    max-width: 83vw;
     display: flex;
     align-items: center;
 }
@@ -131,13 +131,26 @@ tspan{
 div.tooltip {
     position: absolute;
     text-align: center;
-    width: 80px;
+    width: 150px;
     padding: 2px;
-    font: 12px sans-serif;
+    font: 14px sans-serif;
     background: lightsteelblue;
     border: 0px;
     border-radius: 8px;
     pointer-events: none;
 }
 
+.axis--x > .tick > text {
+    font-size: 15px;
+    color: #0c5460;
+}
+
+.highlight-circle{
+    stroke-width: 2px;
+    stroke: red;
+}
+
+.highlight-text{
+    font-weight: bold;
+}
 

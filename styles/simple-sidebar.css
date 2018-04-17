@@ -9,7 +9,7 @@ body {
 }
 
 #wrapper {
-  padding-left: 0;
+  padding-right: 0;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
@@ -17,18 +17,17 @@ body {
 }
 
 #wrapper.toggled {
-  padding-left: 250px;
+  padding-right: 250px;
 }
 
 #sidebar-wrapper {
   z-index: 1000;
   position: fixed;
-  left: 250px;
-  width: 0;
+  right: 0px;
+  width: 20% !important;
   height: 100%;
-  margin-left: -250px;
   overflow-y: auto;
-  background: #000;
+  background: #38394f;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
@@ -36,7 +35,7 @@ body {
 }
 
 #wrapper.toggled #sidebar-wrapper {
-  width: 250px;
+  width: 20vw;
 }
 
 #page-content-wrapper {
@@ -47,7 +46,7 @@ body {
 
 #wrapper.toggled #page-content-wrapper {
   position: absolute;
-  margin-right: -250px;
+  margin-right: -20vw;
 }
 
 
@@ -56,7 +55,7 @@ body {
 .sidebar-nav {
   position: absolute;
   top: 0;
-  width: 250px;
+  width: 20vw;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -70,7 +69,7 @@ body {
 .sidebar-nav li a {
   display: block;
   text-decoration: none;
-  color: #999999;
+  color: #fff9ff;
 }
 
 .sidebar-nav li a:hover {
@@ -106,16 +105,16 @@ body {
 
 @media(min-width:768px) {
   #wrapper {
-    padding-left: 0;
+    padding-right: 0;
   }
   #wrapper.toggled {
-    padding-left: 250px;
+    padding-right: 20vw;
   }
   #sidebar-wrapper {
     width: 0;
   }
   #wrapper.toggled #sidebar-wrapper {
-    width: 250px;
+    width: 20vw;
   }
   #page-content-wrapper {
     padding: 20px;
@@ -125,4 +124,22 @@ body {
     position: relative;
     margin-right: 0;
   }
+}
+
+#sidebar-info {
+  visibility: hidden;
+  background: #5a6268;
+  margin: 5%;
+  padding: 5%;
+  height: auto;
+  max-height: 50%;
+  overflow-y: auto;
+  width: 90%;
+  color: white;
+  position: absolute;
+  bottom: 0;
+}
+
+#sidebar-info h4{
+  color: #9fcdff;
 }

@@ -1,6 +1,6 @@
 function drawTimeline(dates) {
-    var margin = {top: 100, right: 40, bottom: 200, left: 40},
-        width = 1400 - margin.left - margin.right,
+    var margin = {top: 100, right: 600, bottom: 200, left: 0},
+        width = $(window).width() - margin.left - margin.right,
         height = 800 - margin.top - margin.bottom;
 
     var colorScale = d3.scaleOrdinal(d3.schemeCategory20);
@@ -24,30 +24,37 @@ function drawTimeline(dates) {
 
     var x_axis = svg.append("g")
         .attr("class", "axis axis--x")
-        .attr("transform", "translate(0," + height + ")")
+        .attr("transform", "translate(0," + height/2 + ")")
         .call(xAxis
             .ticks(dates.length)
             .tickPadding(10));
 
     var rects = svg.selectAll('.time-span-rect')
         .data(dates)
-        .enter().append('circle')
+        .enter()
+        .append("g")
+        .attr("class", "circle-container")
+        .append('circle')
         .attr('class', 'time-span-rect')
+        .attr('id', function (d, i) {
+            return "circle_" + i;
+        })
         .attr('cx', function (d) {
             return x(d.date);
         })
-        .attr('cy', function () {
-            return 100 + Math.floor((Math.random() * height - 100) + 1)
+        .attr('cy', function (d,i) {
+            if(i % 4 === 0) return height;
+            else if(i % 4 === 1) return (3 * height/4);
+            else if(i % 4 === 2) return height/4;
+            else return 0;
         })
         .attr('r', 10)
-        .style('fill', function () {
-            return colorScale(Math.floor((Math.random() * 10) + 1))
-        })
+        .style('fill', "#0a5c9a")
         .on("mouseover", function (d) {
             div.transition()
                 .duration(200)
                 .style("opacity", .9);
-            div.html(d.name + "<br/> (" + parseDate(d.date) + ")")
+            div.html(d.name)
                 .style("height", d.name.length)
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
@@ -56,7 +63,57 @@ function drawTimeline(dates) {
             div.transition()
                 .duration(500)
                 .style("opacity", 0);
+        })
+        .on("click", function (d, i) {
+            d3.selectAll(".highlight-circle").classed("highlight-circle", false);
+            d3.selectAll(".highlight-text").classed("highlight-text", false);
+            d3.select(this).classed("highlight-circle", true);
+            d3.select("#tLine_" + d.abbr).classed("highlight-circle", true);
+            d3.select("#tLabel_" + d.abbr).classed("highlight-text", true);
+            $("#sidebar-info").css('visibility', 'visible');
+            $("#sidebar-info").html("<h4>" + d.name + "</h4></br><b>Formed on: </b>" + parseDate(d.date) + "</br></br>" + d.comment);
         });
+
+    var line = svg.selectAll('.circle-container')
+        .insert('line', ':first-child')
+        .attr('id', function (d, i) {
+            return "tLine_" + d.abbr;
+        })
+        .attr("x1", function () {
+            return d3.select(this.parentNode).selectAll(".time-span-rect").node().getAttribute('cx');
+        })
+        .attr("x2", function () {
+            return d3.select(this.parentNode).selectAll(".time-span-rect").node().getAttribute('cx');
+        })
+        .attr("y1", function () {
+            return d3.select(this.parentNode).selectAll(".time-span-rect").node().getAttribute('cy');
+        })
+        .attr("y2", function () {
+            return height/2;
+        })
+        .style("stroke", "#454545");
+
+    var labels = svg.selectAll('.circle-container')
+        .insert('text', ':first-child')
+        .attr("id", function (d, i) {
+            return "tLabel_" + d.abbr;
+        })
+        .attr("x", function (d) {
+            var circleX = d3.select(this.parentNode).selectAll(".time-span-rect").node().getAttribute('cx');
+            return parseInt(circleX) - 15;
+        })
+        .attr("y", function (d, i) {
+            var circleY = d3.select(this.parentNode).selectAll(".time-span-rect").node().getAttribute('cy');
+            if(parseInt(circleY) > height/2) return parseInt(circleY) + 30;
+            else return parseInt(circleY) - 20;
+        })
+        .attr("font-size", function () {
+            return 20;
+        })
+        .text(function (d) {
+            return d.abbr;
+        });
+
 
     // Define the div for the tooltip
     var div = d3.select("body").append("div")
@@ -73,6 +130,15 @@ function drawTimeline(dates) {
         var new_xScale = d3.event.transform.rescaleX(x);
         rects.attr("cx", function (d) {
             return new_xScale(d.date);
+        });
+        line.attr("x1", function (d) {
+            return new_xScale(d.date);
+        });
+        line.attr("x2", function (d) {
+            return new_xScale(d.date);
+        });
+        labels.attr("x", function (d) {
+            return parseInt(new_xScale(d.date)) + 10;
         });
     }
 }
