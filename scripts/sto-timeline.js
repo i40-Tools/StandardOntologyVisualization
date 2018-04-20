@@ -1,7 +1,7 @@
 function drawTimeline(dates) {
-    var margin = {top: 100, right: 600, bottom: 200, left: 0},
-        width = $(window).width() - margin.left - margin.right,
-        height = 800 - margin.top - margin.bottom;
+    var margin = {top: 50, right: 100, bottom: 50, left: 0},
+        width = $('#timeline').width() - margin.left - margin.right,
+        height = 450 - margin.top - margin.bottom;
 
     var colorScale = d3.scaleOrdinal(d3.schemeCategory20);
 
@@ -13,6 +13,7 @@ function drawTimeline(dates) {
 
     var parseDate = d3.timeFormat("%Y-%m-%d");
 
+    var HEIGHT_LEVELS = 8.0;
 
     var svg = d3.select("#timeline")
         .append("svg")
@@ -43,12 +44,11 @@ function drawTimeline(dates) {
             return x(d.date);
         })
         .attr('cy', function (d,i) {
-            if(i % 4 === 0) return height;
-            else if(i % 4 === 1) return (3 * height/4);
-            else if(i % 4 === 2) return height/4;
-            else return 0;
+            var mod = i % HEIGHT_LEVELS;
+            if (mod < HEIGHT_LEVELS / 2) return ((HEIGHT_LEVELS - mod) / HEIGHT_LEVELS) * height;
+            else return ((HEIGHT_LEVELS - mod - 1) / HEIGHT_LEVELS) * height;
         })
-        .attr('r', 10)
+        .attr('r', 8)
         .style('fill', "#0a5c9a")
         .on("mouseover", function (d) {
             div.transition()
@@ -100,15 +100,16 @@ function drawTimeline(dates) {
         })
         .attr("x", function (d) {
             var circleX = d3.select(this.parentNode).selectAll(".time-span-rect").node().getAttribute('cx');
-            return parseInt(circleX) - 15;
+            return parseInt(circleX) + 10;
         })
         .attr("y", function (d, i) {
             var circleY = d3.select(this.parentNode).selectAll(".time-span-rect").node().getAttribute('cy');
-            if(parseInt(circleY) > height/2) return parseInt(circleY) + 30;
-            else return parseInt(circleY) - 20;
+            // if(parseInt(circleY) > height/2) return parseInt(circleY) + 30;
+            // else
+                return parseInt(circleY);
         })
         .attr("font-size", function () {
-            return 20;
+            return 14;
         })
         .text(function (d) {
             return d.abbr;

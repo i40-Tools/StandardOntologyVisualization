@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- stylesheets -->
+    <link href="../static/jquery/jquery-ui.css" rel="stylesheet">
+    <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../styles/style.css"/>
+    <!-- jquery and bootstrap -->
+    <script src="../static/jquery/jquery.min.js"></script>
+    <script src="../static/jquery/jquery-ui.js"></script>
+    <script src="../static/bootstrap/js/bootstrap.min.js"></script>
+    <!-- d3.js -->
+    <script src="../static/d3/d3.v4.min.js"></script>
+    <script src="../static/d3/d3-jetpack.js"></script>
+    <!-- Bubble Chart Script -->
+    <script src="../scripts/common.js"></script>
+    <script src="../scripts/read-sto-data.js"></script>
+    <script src="../scripts/sto-bubble.js"></script>
+
+    <title>Industry 4.0 Standards</title>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header"><a href="../index.html" class="navbar-brand">Standards Knowledge Graph</a>
+                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main"><span
+                        class="icon-bar"></span> <span class="icon-bar"></span><span class="icon-bar"></span></button>
+            </div>
+            <div class="navbar-collapse collapse" id="navbar-main">
+                <ul class="nav navbar-nav">
+                    <li><a href="chart.html">Standards</a></li>
+                    <li><a href="map.html">Locations</a></li>
+                    <li><a href="timeline.html">Timeline</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="left col-xs-9">
+        <!--TODO: Move search to common sidebar container-->
+        <!--<div id='search_container' class='row'>-->
+        <!--<input id='search_box' type="text" class="form-control" placeholder="Search Standards"-->
+        <!--aria-describedby="sizing-addon2">-->
+        <!--<div id='search_button' class="btn-group" data-toggle="buttons">-->
+        <!--<label id='search_submit' class="btn btn-primary active" onclick="search_chart();">Search</label>-->
+        <!--</div>-->
+        <!--<div id='reset_button' class="btn-group" data-toggle="buttons">-->
+        <!--<label id='reset_submit' class="btn btn-primary active" onclick="reset_flag()">Reset</label>-->
+        <!--</div>-->
+        <!--</div>-->
+        <div class="chart-container">
+            <div id="sequence"></div>
+        </div>
+    </div>
+
+    <div id="sidebar-info" class="right col-xs-3">
+        <p class="info">Click on a chart item to see details</p>
+    </div>
+</div>
+
+</body>
+
+<!--Chart Script-->
+<script>
+    fetchStoData()
+        .then(readStoData)
+        .then(drawBubbleChart);
+</script>

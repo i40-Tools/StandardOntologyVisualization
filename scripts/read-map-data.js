@@ -36,8 +36,8 @@ function readMapData(data) {
         for (var i in countryData) {
             var obj = countryData[i];
             countryList[obj.org.value] = {
-                country : parseLocationForGoogle(obj.location.value),
-                initiative : obj.org.value,
+                country: parseLocationForGoogle(obj.location.value),
+                initiative: obj.org.value,
                 name: obj.name === undefined ? obj.label.value : obj.name.value,
                 abbr: obj.abb.value,
                 comment: obj.comment.value
@@ -59,7 +59,7 @@ function addCoordinates(list) {
                 url: "https://maps.googleapis.com/maps/api/geocode/json",
                 type: "GET", //send it through get method
                 data: {
-                    key: "AIzaSyAFDsfENF5ouq4B1FeykYDE8tY2NVVlGqQ",
+                    key: "AIzaSyBKPsQnSgddKK0ty7qGhnjo3bBOowRxYOU",
                     address: location
                 },
                 success: function (response) {

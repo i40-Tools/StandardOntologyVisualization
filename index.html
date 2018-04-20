@@ -8,124 +8,82 @@
     <!-- stylesheets -->
     <link href="static/jquery/jquery-ui.css" rel="stylesheet">
     <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="styles/simple-sidebar.css" rel="stylesheet">
-    <link href="static/leaflet/leaflet.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="styles/style.css"/>
     <!-- jquery and bootstrap -->
     <script src="static/jquery/jquery.min.js"></script>
     <script src="static/jquery/jquery-ui.js"></script>
-    <script src="static/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- d3.js -->
-    <script src="static/d3/d3.v4.min.js"></script>
-    <script src="static/d3/d3-jetpack.js"></script>
-    <!-- Bubble Chart Script -->
-    <script src="scripts/common.js"></script>
-    <script src="scripts/read-sto-data.js"></script>
-    <script src="scripts/sto-bubble.js"></script>
-    <!-- Map Script -->
-    <script src="static/leaflet/leaflet.js"></script>
-    <script src="scripts/read-map-data.js"></script>
-    <script src="static/data/countries.js"></script>
-    <script src="scripts/sto-map.js"></script>
-    <!-- Timeline Script -->
-    <script src="scripts/read-time-data.js"></script>
-    <script src="scripts/sto-timeline.js"></script>
+    <script src="static/bootstrap/js/bootstrap.min.js"></script>
+
     <title>Industry 4.0 Standards</title>
 </head>
 
 <body>
 
-<div id="wrapper" class="toggled">
-
-    <!-- Sidebar -->
-    <div id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <li class="sidebar-brand" data-page="circle-chart">
-                    STO Visualization
-            </li>
-            <li data-page="circle-chart">
-                <a href="#">Packed Circles</a>
-            </li>
-            <li data-page="map-chart">
-                <a href="#">Map</a>
-            </li>
-            <li data-page="time-chart">
-                <a href="#">Timeline</a>
-            </li>
-        </ul>
-        <div id="sidebar-info" >
-            Some sample info text
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header"><a href="#" class="navbar-brand">Standards Knowledge Graph</a>
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main"><span
+                    class="icon-bar"></span> <span class="icon-bar"></span><span class="icon-bar"></span></button>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-main">
+            <ul class="nav navbar-nav">
+                <li><a href="views/chart.html">Standards</a></li>
+                <li><a href="views/map.html">Locations</a></li>
+                <li><a href="views/timeline.html">Timeline</a></li>
+            </ul>
         </div>
     </div>
-
-    <!-- Page Content -->
-    <div class="container-fluid">
-        <div id="circle-chart">
-            <div id="page-content-wrapper">
-                <div class="container-fluid col-md-12">
-                    <div class="col-md-8">
-                        <h1>Standards Ontology Visualization</h1>
-                        <p>The Industry 4.0 vision is the fourth revolution of the industry by means of the Internet of Things,
-                            Internet of Services and Cyber Physical Systems. Standards are important for realizing the Industry
-                            4.0 vision. This website is an attempt to give an overview of the most relevant standards for I4.0.</p>
+</nav>
+<!-- Page Content -->
+<div class="container-fluid">
+    <div id="home">
+        <div class="container-fluid col-md-12">
+            <div id="intro_text" class="col-md-8">
+                <h1>Standards Ontology Visualization</h1>
+                <p>The Industry 4.0 vision is the fourth revolution of the industry by means of the Internet of
+                    Things,
+                    Internet of Services and Cyber Physical Systems. Standards are important for realizing the
+                    Industry
+                    4.0 vision. This website is an attempt to give an overview of the most relevant standards for
+                    I4.0.</p>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        <a href="views/chart.html">
+                            <img class="img-responsive" alt="Standards" src="static/images/standards.PNG">
+                            <div class="caption">
+                                <p>Hierarchical View of The Standards within Organizations</p>
+                            </div>
+                        </a>
                     </div>
-                    <div id='search_container' class='row'>
-                        <input id='search_box' type="text" class="form-control" placeholder="Search Standards" aria-describedby="sizing-addon2">
-                        <div id='search_button' class="btn-group" data-toggle="buttons">
-                            <label id='search_submit' class="btn btn-primary active" onclick="search_chart();">Search</label>
-                        </div>
-                        <div id='reset_button' class="btn-group" data-toggle="buttons">
-                            <label id='reset_submit' class="btn btn-primary active" onclick="reset_flag()">Reset</label>
-                        </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        <a href="views/map.html">
+                            <img class="img-responsive" alt="Map" src="static/images/map.PNG">
+                            <div class="caption">
+                                <p>Locations of Headquarters of Standards Organizations</p>
+                            </div>
+                        </a>
                     </div>
-                    <div id="sequence"></div>
-                    <svg id="chart" class="bubble-chart" width="960" height="960"></svg>
-
+                </div>
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        <a href="views/timeline.html">
+                            <img class="img-responsive" alt="Timeline" src="static/images/timeline.PNG">
+                            <div class="caption">
+                                <p>Timeline of the Formation of Standards Organizations</p>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    <div id="map-chart" class="ui-helper-hidden">
-        <div class="vertical-center">
-            <div class="col-md-12">
-                <h2>Locations of Headquarters of Standards Organizations</h2>
-                <div id="sto_map"></div>
-            </div>
-        </div>
     </div>
-    <div id="time-chart" class="ui-helper-hidden">
-        <div class="vertical-center">
-            <div class="col-md-12">
-                <h2>Timeline of the Formation Dates of Standards Organizations</h2>
-                <div id="timeline"></div>
-            </div>
-        </div>
-    </div>
-    </div>
-
 </div>
 
 </body>
-
-<!-- Chart Script -->
-<script>
-    fetchStoData()
-        .then(readStoData)
-        .then(drawBubbleChart);
-    $("ul.sidebar-nav li").each(function() {
-        $(this).on("click", function(){
-            $("#sidebar-info").css('visibility', 'hidden');
-            $("ul.sidebar-nav li").each(function() {
-                $("#" + $(this).attr("data-page")).addClass("ui-helper-hidden");
-            });
-            $("#" + $(this).attr("data-page")).toggleClass("ui-helper-hidden");
-            refreshMap();
-        });
-    });
-    fetchMapData()
-        .then(readMapData)
-        .then(addCoordinates)
-        .then(loadHeadquarters);
-    fetchTimeData()
-        .then(readTimeData)
-        .then(drawTimeline);
-</script>

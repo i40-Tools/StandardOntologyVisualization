@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- stylesheets -->
+    <link href="../static/jquery/jquery-ui.css" rel="stylesheet">
+    <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/leaflet/leaflet.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../styles/style.css"/>
+    <!-- jquery and bootstrap -->
+    <script src="../static/jquery/jquery.min.js"></script>
+    <script src="../static/jquery/jquery-ui.js"></script>
+    <script src="../static/bootstrap/js/bootstrap.min.js"></script>
+    <!-- d3.js -->
+    <script src="../static/d3/d3.v4.min.js"></script>
+    <script src="../static/d3/d3-jetpack.js"></script>
+    <script src="../scripts/common.js"></script>
+    <!-- Map Script -->
+    <script src="../static/leaflet/leaflet.js"></script>
+    <script src="../scripts/read-map-data.js"></script>
+    <script src="../static/data/countries.js"></script>
+    <script src="../scripts/sto-map.js"></script>
+
+    <title>Industry 4.0 Standards</title>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header"><a href="../index.html" class="navbar-brand">Standards Knowledge Graph</a>
+                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main"><span
+                        class="icon-bar"></span> <span class="icon-bar"></span><span class="icon-bar"></span></button>
+            </div>
+            <div class="navbar-collapse collapse" id="navbar-main">
+                <ul class="nav navbar-nav">
+                    <li><a href="chart.html">Standards</a></li>
+                    <li><a href="map.html">Locations</a></li>
+                    <li><a href="timeline.html">Timeline</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="left col-xs-9">
+        <div id="map-chart">
+            <div class="col-md-12">
+                <h2>Locations of Headquarters of Standards Organizations</h2>
+                <div id="sto_map"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sidebar-info" class="right col-xs-3">
+        <p class="info">Click on a chart item to see details</p>
+    </div>
+</div>
+
+</body>
+
+<!--Chart Script-->
+<script>
+    fetchMapData()
+        .then(readMapData)
+        .then(addCoordinates)
+        .then(loadHeadquarters);
+</script>

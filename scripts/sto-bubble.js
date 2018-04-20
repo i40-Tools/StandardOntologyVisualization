@@ -2,17 +2,21 @@
  * Created by mayesha on 1/11/2018.
  */
 
-var width = 1300;
-var height = 900;
-
 var find_node;
 var blink_flag = true;
 
 function drawBubbleChart(json) {
-    var svg = d3.select("#chart"),
+    var width = $(".chart-container").width();
+    var height = $(".chart-container").height();
+    var svg = d3.select(".chart-container")
+            .append("svg")
+            .attr('width', width)
+            .attr('height', height)
+            .attr('viewBox','0 0 '+ height +' '+ height)
+            .attr('preserveAspectRatio','xMinYMin'),
         margin = 20,
         diameter = +svg.attr("width"),
-        g = svg.append("g").attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+        g = svg.append("g").attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
     var colorScheme = function (colorIndex) {
         var endColor;
@@ -37,7 +41,7 @@ function drawBubbleChart(json) {
     };
 
     var pack = d3.pack()
-        .size([diameter - margin, diameter - margin])
+        .size([width,height])
         .padding(2);
 
     initializeBreadcrumbTrail();
@@ -81,6 +85,8 @@ function drawBubbleChart(json) {
             var sequenceArray = d.ancestors().reverse();
             sequenceArray.shift();
             updateBreadcrumbs(sequenceArray);
+            var info = "<h4>" + d.data.name + "</h4></br></br>" + d.data.comment + "</br></br><a href='" + d.id + "'>" + d.data.id + "</a>";
+            showInfo(info);
         });
 
 
@@ -92,7 +98,7 @@ function drawBubbleChart(json) {
             if(!d.children){
                 return Math.sqrt(d.r) * 5
             }
-            return Math.sqrt(d.r) * 3
+            return Math.sqrt(d.r) * 2.5
 
         })
         .style("fill-opacity", function (d) {
@@ -104,8 +110,9 @@ function drawBubbleChart(json) {
         .tspans(function(d) {
             return d3.wordwrap(d.data.name, 15);  // break line after 15 characters
         }, function(d){return Math.sqrt(d.r) * 4})
-        .on("click", function (d) {
-            window.open(d.parent.data.id);
+        .append("svg:title")
+        .text(function(d,i){
+            return d.parent.data.name;
         });
 
     var node = g.selectAll("circle, text");
@@ -170,7 +177,7 @@ function drawBubbleChart(json) {
 
     // Breadcrumb dimensions: width, height, spacing, width of tip/tail.
     var b = {
-        w: 400, h: 50, s: 3, t: 10
+        w: (width) / 3, h: 25, s: 2, t: 5
     };
 
 
@@ -236,7 +243,7 @@ function drawBubbleChart(json) {
             .attr("y", b.h / 2)
             .attr("dy", "0.35em")
             .attr("text-anchor", "middle")
-            .attr("font-size", "20pt")
+            .attr("font-size", "12pt")
             .attr("class", "breadcrumb")
             .text(function(d) { return d.data.name; })
             .on("click", function (d) {

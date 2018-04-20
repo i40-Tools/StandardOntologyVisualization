@@ -22,14 +22,8 @@
 }
 
 .node-label:hover{
-    text-decoration: underline;
     cursor: pointer;
-    font-weight: bold;
-}
-
-body{
-    font-family: Cambria, sans-serif;
-    font-size: medium;
+    font-weight: 500;
 }
 
 h2 {
@@ -47,7 +41,7 @@ tspan{
 }
 #search_box{
     width:30%;
-    margin-left: 2%;
+    margin-left: 157px;
     margin-right: 2%;
     margin-bottom: 5px;
     /*float:left;*/
@@ -64,7 +58,7 @@ tspan{
 }
 
 #sto_map {
-    height: 700px;
+    height: 80vh;
 }
 
 .vertical-center {
@@ -154,3 +148,55 @@ div.tooltip {
     font-weight: bold;
 }
 
+
+#intro_text p{
+    font-size: medium;
+}
+
+#search_container{
+    margin-top: 20px;
+}
+
+#sidebar-info {
+    padding: 5% 1% 1% 2%;
+    overflow-y: auto;
+    color: white;
+    background-color: #222;
+    height: 100%;
+    position: fixed;
+    right: 0;
+    margin-top: -7vh;
+}
+
+#sidebar-info h4{
+    color: #9fcdff;
+}
+
+/* custom template */
+html, body {
+    height: 100%;
+}
+
+body {
+    padding-top:50px;
+}
+
+.wrapper {
+    height: 99%;
+    overflow-y:hidden !important;
+}
+
+.chart-container {
+    width:100%;
+    height:90vh;
+}
+
+#sequence{
+    margin-bottom: -28px;
+}
+
+.info{
+    font-size: small;
+    color: lightgrey;
+    text-align: center;
+}

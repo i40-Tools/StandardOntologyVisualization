@@ -19,13 +19,18 @@ function fetchStoData() {
     PREFIX sto: <https://w3id.org/i40/sto#> \
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \
         PREFIX dct: <http://purl.org/dc/terms/>    \
-        SELECT DISTINCT  ?std_name ?classification_name ?initiative_name ?std ?classification ?initiative    \
+        SELECT DISTINCT  ?std_name ?classification_name ?initiative_name ?std ?classification ?initiative ?std_comment ?classification_comment ?initiative_comment   \
         WHERE {    \
         ?classification sto:isDescribedin ?initiative .    \
         ?std sto:hasClassification ?classification .    \
-        OPTIONAL{ ?std rdfs:label ?sto } .    \
-    OPTIONAL{	?classification rdfs:label ?cto } .    \
+    OPTIONAL{ ?std rdfs:label ?sto } .    \
+    OPTIONAL{ ?classification rdfs:label ?cto } .    \
     OPTIONAL{ ?initiative rdfs:label ?ito } .    \
+    OPTIONAL{ ?std rdfs:comment ?std_comment } .    \
+    OPTIONAL{ ?classification rdfs:comment ?classification_comment } . \
+    OPTIONAL{ ?initiative rdfs:comment ?initiative_comment } . \
+    FILTER( langMatches( lang(?sto), 'en' ) ) \
+    FILTER( langMatches( lang(?std_comment), 'en' ) ) \
     BIND(CONCAT(str(?sto)) as ?std_name) .    \
     BIND(CONCAT(str(?cto)) as ?classification_name) .    \
     BIND(CONCAT(str(?ito)) as ?initiative_name)    \
@@ -43,15 +48,18 @@ function readStoData(data) {
             var obj = myData[i];
             var standard = {
                 "id": obj[headers[0]].value,
-                "name": obj[headers[0] + "_name"] !== undefined ? obj[headers[0] + "_name"].value : addSpace(parseURI(obj[headers[0]].value))
+                "name": obj[headers[0] + "_name"] !== undefined ? obj[headers[0] + "_name"].value : addSpace(parseURI(obj[headers[0]].value)),
+                "comment": obj[headers[0] + "_comment"] !== undefined ? obj[headers[0] + "_comment"].value : addSpace(parseURI(obj[headers[0]].value))
             };
             var classification = {
                 "id": obj[headers[1]].value,
-                "name": obj[headers[1] + "_name"] !== undefined ? obj[headers[1] + "_name"].value : addSpace(parseURI(obj[headers[1]].value))
+                "name": obj[headers[1] + "_name"] !== undefined ? obj[headers[1] + "_name"].value : addSpace(parseURI(obj[headers[1]].value)),
+                "comment": obj[headers[1] + "_comment"] !== undefined ? obj[headers[1] + "_comment"].value : addSpace(parseURI(obj[headers[1]].value))
             };
             var initiative = {
                 "id": obj[headers[2]].value,
-                "name": obj[headers[2] + "_name"] !== undefined ? obj[headers[2] + "_name"].value : addSpace(parseURI(obj[headers[2]].value))
+                "name": obj[headers[2] + "_name"] !== undefined ? obj[headers[2] + "_name"].value : addSpace(parseURI(obj[headers[2]].value)),
+                "comment": obj[headers[2] + "_comment"] !== undefined ? obj[headers[2] + "_comment"].value : addSpace(parseURI(obj[headers[2]].value))
             };
             pushInitiative(initiative, classification, standard);
         }
@@ -63,7 +71,13 @@ function readStoData(data) {
 
 function pushInitiative(initiative, classification, standard) {
     if (final_data.children.length === 0) {
-        final_data.children.push({"name": initiative.name, "id": initiative.id, "colIndex": colIndex, "children": []});
+        final_data.children.push({
+            "name": initiative.name,
+            "comment":initiative.comment,
+            "id": initiative.id,
+            "colIndex": colIndex,
+            "children": []
+        });
         pushClassification(classification, 0, standard);
         colIndex++;
     }
@@ -81,6 +95,7 @@ function pushInitiative(initiative, classification, standard) {
         if (flag === 0) {
             final_data.children.push({
                 "name": initiative.name,
+                "comment":initiative.comment,
                 "id": initiative.id,
                 "colIndex": colIndex,
                 "children": []
@@ -96,6 +111,7 @@ function pushClassification(classification, parentIndex, standard) {
     if (intv.children.length === 0) {
         intv.children.push({
             "name": classification.name,
+            "comment":classification.comment,
             "id": classification.id,
             "colIndex": intv.colIndex,
             "children": []
@@ -116,6 +132,7 @@ function pushClassification(classification, parentIndex, standard) {
         if (flag === 0) {
             intv.children.push({
                 "name": classification.name,
+                "comment":classification.comment,
                 "id": classification.id,
                 "colIndex": intv.colIndex,
                 "children": []
@@ -127,7 +144,13 @@ function pushClassification(classification, parentIndex, standard) {
 
 function pushStandard(standard, grandparentIndex, parentIndex) {
     var clsf = final_data.children[grandparentIndex].children[parentIndex];
-    clsf.children.push({"name": standard.name, "id": standard.id, "colIndex": clsf.colIndex, size: 100});
+    clsf.children.push({
+        "name": standard.name,
+        "comment":standard.comment,
+        "id": standard.id,
+        "colIndex": clsf.colIndex,
+        size: 100
+    });
 }
 
 
