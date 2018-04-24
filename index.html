@@ -32,14 +32,19 @@
                 <li><a href="views/map.html">Locations</a></li>
                 <li><a href="views/timeline.html">Timeline</a></li>
             </ul>
+            <ul class="nav navbar-nav pull-right copyright">
+                <li class="nav-item">
+                    <span class="nav-link">© Fraunhofer IAIS, 2017-2018</span>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
 <!-- Page Content -->
-<div class="container-fluid">
+<div class="container-fluid text-center">
     <div id="home">
         <div class="container-fluid col-md-12">
-            <div id="intro_text" class="col-md-8">
+            <div id="intro_text">
                 <h1>Standards Ontology Visualization</h1>
                 <p>The Industry 4.0 vision is the fourth revolution of the industry by means of the Internet of
                     Things,
@@ -54,9 +59,12 @@
                 <div class="col-md-4">
                     <div class="thumbnail">
                         <a href="views/chart.html">
-                            <img class="img-responsive" alt="Standards" src="static/images/standards.PNG">
                             <div class="caption">
-                                <p>Hierarchical View of The Standards within Organizations</p>
+                                <p><strong>Standards</strong></p>
+                            </div>
+                            <img class="img-responsive" alt="Standards" src="static/images/standards.PNG">
+                            <div class="caption ">
+                                <p>Hierarchical View of Standards by Organizations</p>
                             </div>
                         </a>
                     </div>
@@ -64,6 +72,9 @@
                 <div class="col-md-4">
                     <div class="thumbnail">
                         <a href="views/map.html">
+                            <div class="caption">
+                                <p><strong>Locations</strong></p>
+                            </div>
                             <img class="img-responsive" alt="Map" src="static/images/map.PNG">
                             <div class="caption">
                                 <p>Locations of Headquarters of Standards Organizations</p>
@@ -74,16 +85,30 @@
                 <div class="col-md-4">
                     <div class="thumbnail">
                         <a href="views/timeline.html">
+                            <div class="caption">
+                                <p><strong>Timeline</strong></p>
+                            </div>
                             <img class="img-responsive" alt="Timeline" src="static/images/timeline.PNG">
                             <div class="caption">
-                                <p>Timeline of the Formation of Standards Organizations</p>
+                                <p>Timeline of Formation of Standards Organizations</p>
                             </div>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="col-md-12">
+            <p>For reference, see <a href="http://vocol.iais.fraunhofer.de/sto">Standards Ontology</a> and <a href="http://i40.semantic-interoperability.org/sto/index-en.html">Standards Vocabulary</a></p>
+        </div>
     </div>
+</div>
+<!--Footer-->
+<div class="footer navbar-fixed-bottom footer-cp">
+    <ul class="nav navbar-nav pull-right">
+        <li class="nav-item">
+            <span class="nav-link">© Fraunhofer IAIS, 2017-2018, Irlan Grangel, Steffen Lohmann, Mayesha Tasnim</span>
+        </li>
+    </ul>
 </div>
 
 </body>

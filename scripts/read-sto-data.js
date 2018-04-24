@@ -63,6 +63,7 @@ function readStoData(data) {
             };
             pushInitiative(initiative, classification, standard);
         }
+        console.log(final_data);
         resolve(final_data);
     });
 
@@ -82,8 +83,8 @@ function pushInitiative(initiative, classification, standard) {
         colIndex++;
     }
     else {
+        var flag = 0;
         for (var k in final_data.children) {
-            var flag = 0;
             var intv = final_data.children[k];
             if (intv.id === initiative.id) {
                 //exists already!
@@ -119,8 +120,8 @@ function pushClassification(classification, parentIndex, standard) {
         pushStandard(standard, parentIndex, 0)
     }
     else {
+        var flag = 0;
         for (var k in intv.children) {
-            var flag = 0;
             var clsf = intv.children[k];
             if (clsf.id === classification.id) {
                 //exists already!
@@ -144,13 +145,24 @@ function pushClassification(classification, parentIndex, standard) {
 
 function pushStandard(standard, grandparentIndex, parentIndex) {
     var clsf = final_data.children[grandparentIndex].children[parentIndex];
-    clsf.children.push({
-        "name": standard.name,
-        "comment":standard.comment,
-        "id": standard.id,
-        "colIndex": clsf.colIndex,
-        size: 100
-    });
+    var flag = 0;
+    for (var k in clsf.children) {
+        var std = clsf.children[k];
+        if (std.id === standard.id) {
+            //exists already!
+            flag = 1;
+        }
+    }
+    //didn't find it
+    if (flag === 0) {
+        clsf.children.push({
+            "name": standard.name,
+            "comment": standard.comment,
+            "id": standard.id,
+            "colIndex": clsf.colIndex,
+            size: 100
+        });
+    }
 }
 
 

@@ -63,14 +63,25 @@
     </div>
 
     <div id="sidebar-info" class="right col-xs-3">
-        <p class="info">Click on a chart item to see details</p>
+        <p class="info">Select an element in the visualization to see details</p>
     </div>
+</div>
+
+<!--Footer-->
+<div class="footer navbar-fixed-bottom footer-cp">
+    <ul class="nav navbar-nav pull-right">
+        <li class="nav-item">
+            <span class="nav-link">© Fraunhofer IAIS, 2017-2018, Irlan Grangel, Steffen Lohmann, Mayesha Tasnim</span>
+        </li>
+    </ul>
 </div>
 
 </body>
 
 <!--Chart Script-->
 <script>
+
+    d3.select(window).on('resize', adjustSize);
     fetchStoData()
         .then(readStoData)
         .then(drawBubbleChart);

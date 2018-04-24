@@ -13,18 +13,20 @@ function loadHeadquarters(countryList){
     console.log(countryList);
     for(var i in countryList){
         var obj = countryList[i];
+        console.log(obj);
         var m = L.marker(obj.location);
         m.properties = {};
         var initiative = obj.initiative;
-        var iName = obj.abbr;
-        m.bindPopup("<b>Headquarter of Initiative</b><br><a href='" + initiative +  "'>" + iName + "</a> ");
+        var iName = obj.name;
+        m.bindPopup(obj.abbr !== undefined ? "<b>" + iName + "</b>(" + obj.abbr + ")" : "<b>" + iName + "</b>");
         m.properties.countryName = parseCountryName(obj.country);
         m.properties.name = obj.name;
         m.properties.comment = obj.comment;
+        m.properties.abbr = obj.abbr;
+        m.properties.initiative = obj.initiative;
         m.on('click', function (e) {
-            console.log(e);
             var obj = e.sourceTarget.properties;
-            var info = "<h4>" + obj.name + "</h4></br><b>Located In: </b>" + obj.countryName + "</br></br>" + obj.comment;
+            var info = "<h4>" + obj.name + "</h4></br><b>Located In: </b>" + obj.countryName + "</br></br>" + obj.comment + "</br></br><a href='" + obj.initiative + "'>More information on " + obj.abbr + "</a>";
             showInfo(info);
         });
         m.addTo(sto_map);
@@ -37,5 +39,6 @@ function refreshMap() {
 }
 
 function parseCountryName(string) {
-    return string.replace("+", " ");
+    var str =  string.replace("+", " ");
+    return str.replace("_", " ");
 }

@@ -7,14 +7,15 @@ function fetchMapData() {
         SELECT DISTINCT ?org ?name ?abb ?comment ?label ?location \
         WHERE { \
         ?org rdf:type sto:StandardOrganization . \
-        ?org sto:abbreviation ?abb . \
-        ?org  rdfs:comment  ?comment . \
-        ?org rdfs:label ?label . \
-        ?org sto:orgName ?orgName . \
         ?org sto:hasHeadquaterIn ?location . \
-    FILTER( langMatches( lang(?label), 'en' ) ) \
-        FILTER( langMatches( lang (?comment), 'en' ) ) \
-} ";
+        OPTIONAL {?org sto:abbreviation ?abb} . \
+    OPTIONAL {?org  rdfs:comment  ?comment} . \
+    OPTIONAL {?org rdfs:label ?label } . \
+    OPTIONAL {?org sto:orgName ?name} . \
+    FILTER( LANG(?comment) = '' || langMatches( lang(?comment), 'en' ) ) \
+    FILTER( LANG(?name) = '' || langMatches( lang(?name), 'en' ) ) \
+    FILTER( !bound(?label) || langMatches( lang(?label), 'en' ) ) \
+}";
     return fetchData(url, query);
 };
 

@@ -38,6 +38,7 @@ tspan{
 
 .breadcrumb{
     cursor: pointer;
+    font-size: 11.5pt !important;
 }
 #search_box{
     width:30%;
@@ -158,10 +159,10 @@ div.tooltip {
 }
 
 #sidebar-info {
-    padding: 5% 1% 1% 2%;
+    padding: 5% 1% 8% 2%;
     overflow-y: auto;
     color: white;
-    background-color: #222;
+    background-color: #333333;
     height: 100%;
     position: fixed;
     right: 0;
@@ -169,7 +170,8 @@ div.tooltip {
 }
 
 #sidebar-info h4{
-    color: #9fcdff;
+    color: lightgrey;
+    font-weight: 400;
 }
 
 /* custom template */
@@ -188,15 +190,50 @@ body {
 
 .chart-container {
     width:100%;
-    height:90vh;
+    height:85vh;
 }
 
 #sequence{
-    margin-bottom: -28px;
+    margin-bottom: -20px;
+    margin-top:5px;
 }
 
 .info{
     font-size: small;
     color: lightgrey;
     text-align: center;
+}
+
+#timeline{
+    height: 70vh !important;
+}
+
+.thumbnail a > img {
+    height: 45vh;
+}
+
+.copyright{
+    padding: 12px;
+    color:darkgray;
+}
+
+.footer-cp{
+    background-color: #333333;
+    font-size: x-small;
+    color: darkgray;
+}
+
+.custom-tooltip{
+    background: transparent;
+    font-weight: 600;
+    border: none !important;
+    color: darkblue;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    -moz-box-shadow: none;
+    -o-box-shadow: none;
+}
+
+.node--leaf {
+    pointer-events: auto;
 }

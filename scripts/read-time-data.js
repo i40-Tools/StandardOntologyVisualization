@@ -5,9 +5,10 @@ function readTimeData(oData) {
         for (var key in list) {
             var org = list[key];
             tData[org.org.value] = {
-                name: org.name === undefined ? org.label.value : org.name.value,
+                id: org.org.value,
+                name: org.name === undefined ? org.label === undefined ? org.abb.value : org.label.value : org.name.value,
                 date: new Date(org.date.value),
-                abbr: org.abb.value,
+                abbr: org.abb === undefined ? "" : org.abb.value,
                 comment: org.comment.value
             };
         }
@@ -26,13 +27,14 @@ function fetchTimeData() {
         SELECT DISTINCT ?org ?date ?name ?abb ?comment ?label \
         WHERE { \
         ?org rdf:type sto:StandardOrganization . \
-        ?org sto:abbreviation ?abb . \
         ?org sto:formationDate ?date . \
-        ?org  rdfs:comment  ?comment . \
-        ?org rdfs:label ?label . \
-        ?org sto:orgName ?orgName . \
-    FILTER( langMatches( lang(?label), 'en' ) ) \
-        FILTER( langMatches( lang (?comment), 'en' ) ) \
+        OPTIONAL {?org sto:abbreviation ?abb} . \
+    OPTIONAL {?org  rdfs:comment  ?comment} . \
+    OPTIONAL {?org rdfs:label ?label} . \
+    OPTIONAL {?org sto:orgName ?name }. \
+    FILTER( !bound(?label) || langMatches( lang(?label), 'en' ) ) \
+    FILTER( !bound(?comment) ||langMatches( lang (?comment), 'en' ) ) \
+    FILTER( !bound(?name) ||langMatches( lang (?name), 'en' ) ) \
 } ORDER BY ?date";
     return fetchData(url, query);
 }

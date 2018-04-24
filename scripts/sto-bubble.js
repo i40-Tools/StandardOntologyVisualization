@@ -4,15 +4,17 @@
 
 var find_node;
 var blink_flag = true;
+var b;
 
-function drawBubbleChart(json) {
+function drawBubbleChart(json, width, height) {
     var width = $(".chart-container").width();
     var height = $(".chart-container").height();
     var svg = d3.select(".chart-container")
             .append("svg")
+            .attr("class", "resizeW resizeH")
             .attr('width', width)
             .attr('height', height)
-            .attr('viewBox','0 0 '+ height +' '+ height)
+            .attr('viewBox','0 0 '+ width +' '+ height)
             .attr('preserveAspectRatio','xMinYMin'),
         margin = 20,
         diameter = +svg.attr("width"),
@@ -85,7 +87,7 @@ function drawBubbleChart(json) {
             var sequenceArray = d.ancestors().reverse();
             sequenceArray.shift();
             updateBreadcrumbs(sequenceArray);
-            var info = "<h4>" + d.data.name + "</h4></br></br>" + d.data.comment + "</br></br><a href='" + d.id + "'>" + d.data.id + "</a>";
+            var info = "<h4>" + d.data.name + "</h4></br></br>" + d.data.comment + "</br></br><a href='" + d.data.id + "'>More information on " + d.data.name + "</a>";
             showInfo(info);
         });
 
@@ -108,7 +110,7 @@ function drawBubbleChart(json) {
             return d.parent === root ? "inline" : "none";
         })
         .tspans(function(d) {
-            return d3.wordwrap(d.data.name, 15);  // break line after 15 characters
+            return d3.wordwrap(d.data.name, 10);  // break line after 15 characters
         }, function(d){return Math.sqrt(d.r) * 4})
         .append("svg:title")
         .text(function(d,i){
@@ -124,7 +126,7 @@ function drawBubbleChart(json) {
             updateBreadcrumbs([]);
         });
 
-    zoomTo([root.x, root.y, root.r * 2 + margin]);
+    zoomTo([root.x, root.y, root.r * 3 + margin]);
 
     function zoom(d) {
         var focus0 = focus;
@@ -133,15 +135,15 @@ function drawBubbleChart(json) {
         var transition = d3.transition()
             .duration(d3.event.altKey ? 7500 : 750)
             .tween("zoom", function (d) {
-                var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + margin]);
+                var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 3 + margin]);
                 return function (t) {
                     zoomTo(i(t));
                 };
             });
 
-        transition.selectAll("text")
+        transition.selectAll(".node-label")
             .filter(function (d) {
-                return d.parent === focus || this.style.display === "inline";
+                return d.parent === focus || d === focus || this.style.display === "inline";
             })
             .style("fill-opacity", function (d) {
                 if (!d.children){
@@ -156,7 +158,12 @@ function drawBubbleChart(json) {
             })
             .on("end", function (d) {
                 if (!d.children){
-                    if (d.parent !== focus && d !== focus) this.style.display = "none";
+                    if (d.parent !== focus && d !== focus){
+                        this.style.display = "none";
+                    }
+                    else{
+                        this.style.display = "inline";
+                    }
                 }
                 else{
                     if (d.parent !== focus) this.style.display = "none";
@@ -176,8 +183,8 @@ function drawBubbleChart(json) {
     }
 
     // Breadcrumb dimensions: width, height, spacing, width of tip/tail.
-    var b = {
-        w: (width) / 3, h: 25, s: 2, t: 5
+    b = {
+        w: (width) / 3, h: (height) / 22, s: 2, t: 5
     };
 
 
@@ -186,7 +193,8 @@ function drawBubbleChart(json) {
         var trail = d3.select("#sequence").append("svg:svg")
             .attr("width", width)
             .attr("height", 50)
-            .attr("id", "trail");
+            .attr("id", "trail")
+            .attr("class", "resizeW");
     }
 
     // Generate a string that describes the points of a breadcrumb polygon.

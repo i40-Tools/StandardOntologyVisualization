@@ -20,3 +20,16 @@ function showInfo(html) {
     $("#sidebar-info").css('visibility', 'visible');
     $("#sidebar-info").html(html);
 }
+
+function adjustSize() {
+    d3.selectAll('.resizeW').attr('width', $('.chart-container').width());
+    d3.selectAll('.resizeH').attr('height', $('.chart-container').height());
+    b.w = $('.chart-container').width() / 3;
+    b.h = $('.chart-container').height() / 25;
+}
+
+function adjustTimeLine() {
+    d3.selectAll('.resizeW').attr('width', $('.chart-container').width());
+    d3.selectAll('.resizeH').attr('height', $('.chart-container').height());
+    line_size = $('.chart-container').height() - 100;
+}

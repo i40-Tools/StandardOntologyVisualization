@@ -1,7 +1,11 @@
+var line_size;
+
 function drawTimeline(dates) {
     var margin = {top: 50, right: 100, bottom: 50, left: 0},
-        width = $('#timeline').width() - margin.left - margin.right,
-        height = 450 - margin.top - margin.bottom;
+        width = $('.chart-container').width(),
+        height = $('.chart-container').height();
+
+    line_size = height - margin.top - margin.bottom;
 
     var colorScale = d3.scaleOrdinal(d3.schemeCategory20);
 
@@ -15,17 +19,18 @@ function drawTimeline(dates) {
 
     var HEIGHT_LEVELS = 8.0;
 
-    var svg = d3.select("#timeline")
+    var svg = d3.select(".chart-container")
         .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("class", "resizeW resizeH")
+        .attr("width", width)
+        .attr("height", height)
         .call(d3.zoom().on("zoom", zoom))
         .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform", "translate(-" + margin.top + "," + margin.top + ")");
 
     var x_axis = svg.append("g")
         .attr("class", "axis axis--x")
-        .attr("transform", "translate(0," + height/2 + ")")
+        .attr("transform", "translate(0," + (height/2 - margin.top) + ")")
         .call(xAxis
             .ticks(dates.length)
             .tickPadding(10));
@@ -45,8 +50,8 @@ function drawTimeline(dates) {
         })
         .attr('cy', function (d,i) {
             var mod = i % HEIGHT_LEVELS;
-            if (mod < HEIGHT_LEVELS / 2) return ((HEIGHT_LEVELS - mod) / HEIGHT_LEVELS) * height;
-            else return ((HEIGHT_LEVELS - mod - 1) / HEIGHT_LEVELS) * height;
+            if (mod < HEIGHT_LEVELS / 2) return ((HEIGHT_LEVELS - mod) / HEIGHT_LEVELS) * line_size;
+            else return ((HEIGHT_LEVELS - mod - 1) / HEIGHT_LEVELS) * line_size;
         })
         .attr('r', 8)
         .style('fill', "#0a5c9a")
@@ -54,7 +59,7 @@ function drawTimeline(dates) {
             div.transition()
                 .duration(200)
                 .style("opacity", .9);
-            div.html(d.name)
+            div.html(d.abbr === undefined || d.abbr === "" ? d.name : d.name + " (" + d.abbr + ")")
                 .style("height", d.name.length)
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
@@ -70,7 +75,9 @@ function drawTimeline(dates) {
             d3.select(this).classed("highlight-circle", true);
             d3.select("#tLine_" + d.abbr).classed("highlight-circle", true);
             d3.select("#tLabel_" + d.abbr).classed("highlight-text", true);
-            var info = "<h4>" + d.name + "</h4></br><b>Formed on: </b>" + parseDate(d.date) + "</br></br>" + d.comment;
+            var abbr = d.abbr;
+            if(abbr === "") abbr = d.name;
+            var info = "<h4>" + d.name + "</h4></br><b>Formed on: </b>" + parseDate(d.date) + "</br></br>" + d.comment + "</br></br><a href='" + d.id + "'>More information on " + abbr + "</a>";
             showInfo(info);
         });
 
@@ -89,7 +96,7 @@ function drawTimeline(dates) {
             return d3.select(this.parentNode).selectAll(".time-span-rect").node().getAttribute('cy');
         })
         .attr("y2", function () {
-            return height/2;
+            return line_size/2;
         })
         .style("stroke", "#454545");
 
