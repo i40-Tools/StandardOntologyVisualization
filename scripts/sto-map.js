@@ -18,7 +18,7 @@ function loadHeadquarters(countryList){
         m.properties = {};
         var initiative = obj.initiative;
         var iName = obj.name;
-        m.bindPopup(obj.abbr !== undefined ? "<b>" + iName + "</b>(" + obj.abbr + ")" : "<b>" + iName + "</b>");
+        m.bindPopup(obj.abbr !== undefined ? "<b>" + iName + "</b> (" + obj.abbr + ")" : "<b>" + iName + "</b>");
         m.properties.countryName = parseCountryName(obj.country);
         m.properties.name = obj.name;
         m.properties.comment = obj.comment;

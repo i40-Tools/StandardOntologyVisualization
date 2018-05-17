@@ -40,7 +40,7 @@ function readMapData(data) {
                 country: parseLocationForGoogle(obj.location.value),
                 initiative: obj.org.value,
                 name: obj.name === undefined ? obj.label.value : obj.name.value,
-                abbr: obj.abb.value,
+                abbr: obj.abb === undefined ? obj. label.value : obj.abb.value,
                 comment: obj.comment.value
             };
         }

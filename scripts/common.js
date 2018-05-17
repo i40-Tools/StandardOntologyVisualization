@@ -25,7 +25,7 @@ function adjustSize() {
     d3.selectAll('.resizeW').attr('width', $('.chart-container').width());
     d3.selectAll('.resizeH').attr('height', $('.chart-container').height());
     b.w = $('.chart-container').width() / 3;
-    b.h = $('.chart-container').height() / 25;
+    b.h = $('.chart-container').height() / 28;
 }
 
 function adjustTimeLine() {
