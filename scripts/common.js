@@ -17,8 +17,8 @@ function fetchData(url, query) {
 };
 
 function showInfo(html) {
-    $("#sidebar-info").css('visibility', 'visible');
-    $("#sidebar-info").html(html);
+    $("#sidebar-text").css('visibility', 'visible');
+    $("#sidebar-text").html(html);
 }
 
 function adjustSize() {

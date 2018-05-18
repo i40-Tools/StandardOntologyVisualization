@@ -8,6 +8,7 @@
     <!-- stylesheets -->
     <link href="../static/jquery/jquery-ui.css" rel="stylesheet">
     <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="../styles/style.css"/>
     <!-- jquery and bootstrap -->
     <script src="../static/jquery/jquery.min.js"></script>
@@ -40,30 +41,29 @@
                     <li><a href="map.html">Locations</a></li>
                     <li><a href="timeline.html">Timeline</a></li>
                 </ul>
+                <div class="search-container">
+                    <input id="search_box" type="text" placeholder="Search.." name="search">
+                    <button id="search_button" type="submit" onclick="search_chart()"><i class="fa fa-search"></i></button>
+                </div>
             </div>
         </div>
     </nav>
 
     <!-- Page Content -->
     <div class="left col-xs-9">
-        <!--TODO: Move search to common sidebar container-->
-        <!--<div id='search_container' class='row'>-->
-        <!--<input id='search_box' type="text" class="form-control" placeholder="Search Standards"-->
-        <!--aria-describedby="sizing-addon2">-->
-        <!--<div id='search_button' class="btn-group" data-toggle="buttons">-->
-        <!--<label id='search_submit' class="btn btn-primary active" onclick="search_chart();">Search</label>-->
-        <!--</div>-->
-        <!--<div id='reset_button' class="btn-group" data-toggle="buttons">-->
-        <!--<label id='reset_submit' class="btn btn-primary active" onclick="reset_flag()">Reset</label>-->
-        <!--</div>-->
-        <!--</div>-->
         <div class="chart-container">
             <div id="sequence"></div>
         </div>
     </div>
 
     <div id="sidebar-info" class="right col-xs-3">
-        <p class="info">Select an element in the visualization to see details</p>
+        <!--<div id='search_container' class='row'>-->
+            <!--<input id='search_box' type="text" class="form-control" placeholder="Search Standards" aria-describedby="sizing-addon2">-->
+            <!--<button id="search_button" class="btn btn-primary" onclick="search_chart()">Search</button>-->
+        <!--</div>-->
+        <div id="sidebar-text">
+            <p class="info">Select an element in the visualization to see details</p>
+        </div>
     </div>
 </div>
 

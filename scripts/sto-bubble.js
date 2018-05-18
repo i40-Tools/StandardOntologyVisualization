@@ -87,7 +87,7 @@ function drawBubbleChart(json, width, height) {
             var sequenceArray = d.ancestors().reverse();
             sequenceArray.shift();
             updateBreadcrumbs(sequenceArray);
-            var info = "<h4>" + d.data.name + "</h4></br></br>" + d.data.comment + "</br></br><a href='" + d.data.id + "'>More information on " + d.data.name + "</a>";
+            var info = "<h4>" + d.data.name + "</h4></br>" + d.data.comment + "</br></br><a href='" + d.data.id + "'>More information on " + d.data.name + "</a>";
             showInfo(info);
         });
 
@@ -131,6 +131,8 @@ function drawBubbleChart(json, width, height) {
     function zoom(d) {
         var focus0 = focus;
         focus = d;
+
+        $(".hidden-in-export").remove();
 
         var transition = d3.transition()
             .duration(d3.event.altKey ? 7500 : 750)
@@ -271,11 +273,11 @@ function drawBubbleChart(json, width, height) {
     }
 
     var search_source = $.map(nodes, function(d){
-        return {
-            label : d.data.name,
-            value : d.data.name
-        };
+        return d.data.name;
     });
+
+    search_source = getUnique(search_source);
+    console.log(search_source);
 
 
     $( "#search_box" ).autocomplete({
@@ -284,13 +286,16 @@ function drawBubbleChart(json, width, height) {
 
     // find gene in clustergram
     find_node = function(text){
+        $(".hidden-in-export").remove();
+        console.log("Inside find_node for " + text);
         var class_name = text.replace(/[^A-Z0-9]+/ig, "-");
         class_name = class_name.toLowerCase();
         var colArray = [];
         var sel = d3.selectAll("." + class_name)
             .each(function (d) {
-                console.log(d);
-                drawHalo(d3.select(this.parentNode), d.r, d.x, d.y);
+                var r = d3.select(this).attr("r");
+                var t = getTranslation(d3.select(this).attr("transform"));
+                drawHalo(d3.select(this.parentNode), r, t[0], t[1]);
             })
 
         // function blink() {
@@ -322,19 +327,18 @@ function drawBubbleChart(json, width, height) {
             // this means the node was not rendered previously
         }
 
-        console.log(x,y);
 
         var haloGroupElement = container
             .append("g")
             .classed("hidden-in-export", true);
 
 
-
         var el = haloGroupElement
             .append("circle",":first-child")
             .classed("searchResultA", true)
             .attr("r", radius)
-            .attr("cx", -x/2);
+            .attr("cx", x)
+            .attr("cy", y);
 
 
         haloGroupElement.attr("animationRunning",true);
@@ -362,9 +366,35 @@ function drawBubbleChart(json, width, height) {
 
 }
 
+function getTranslation(transform) {
+    // Create a dummy g for calculation purposes only. This will never
+    // be appended to the DOM and will be discarded once this function
+    // returns.
+    var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+
+    // Set the transform attribute to the provided string value.
+    g.setAttributeNS(null, "transform", transform);
+
+    // consolidate the SVGTransformList containing all transformations
+    // to a single SVGTransform of type SVG_TRANSFORM_MATRIX and get
+    // its SVGMatrix.
+    var matrix = g.transform.baseVal.consolidate().matrix;
+
+    // As per definition values e and f are the ones for the translation.
+    return [matrix.e, matrix.f];
+}
+
+function getUnique(a) {
+    var temp = {};
+    for (var i = 0; i < a.length; i++)
+        temp[a[i]] = true;
+    return Object.keys(temp);
+}
+
 function search_chart(){
     // get the searched node name
     blink_flag = true;
+    console.log("inside search chart");
     var text = $('#search_box').val();
     find_node(text);
 }
