@@ -1,4 +1,5 @@
 var sto_map;
+var marker_list = {};
 $(document).ready(function(){
     sto_map = L.map('sto_map').setView([51.9375, 6.9603], 3);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -10,13 +11,17 @@ $(document).ready(function(){
 });
 
 function loadHeadquarters(countryList){
-    console.log(countryList);
+    var search_source = $.map(countryList, function(d){
+        return d.abbr;
+    });
+    search_source = getUnique(search_source);
+    $( "#search_box" ).autocomplete({
+        source: search_source
+    });
     for(var i in countryList){
         var obj = countryList[i];
-        console.log(obj);
         var m = L.marker(obj.location);
         m.properties = {};
-        var initiative = obj.initiative;
         var iName = obj.name;
         m.bindPopup(obj.abbr !== undefined ? "<b>" + iName + "</b> (" + obj.abbr + ")" : "<b>" + iName + "</b>");
         m.properties.countryName = parseCountryName(obj.country);
@@ -25,10 +30,12 @@ function loadHeadquarters(countryList){
         m.properties.abbr = obj.abbr;
         m.properties.initiative = obj.initiative;
         m.on('click', function (e) {
+            (this).disablePermanentHighlight();
             var obj = e.sourceTarget.properties;
             var info = "<h4>" + obj.name + "</h4></br><b>Located In: </b>" + obj.countryName + "</br></br>" + obj.comment + "</br></br><a href='" + obj.initiative + "'>More information on " + obj.abbr + "</a>";
             showInfo(info);
         });
+        marker_list[obj.abbr] = m;
         m.addTo(sto_map);
     }
 }

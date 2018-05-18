@@ -8,6 +8,7 @@
     <!-- stylesheets -->
     <link href="../static/jquery/jquery-ui.css" rel="stylesheet">
     <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="../static/leaflet/leaflet.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../styles/style.css"/>
     <!-- jquery and bootstrap -->
@@ -42,6 +43,10 @@
                     <li><a href="map.html">Locations</a></li>
                     <li><a href="timeline.html">Timeline</a></li>
                 </ul>
+                <div class="search-container">
+                    <input id="search_box" type="text" placeholder="Search.." name="search">
+                    <button id="search_button" type="submit" onclick="search_chart('timeline')"><i class="fa fa-search"></i></button>
+                </div>
             </div>
         </div>
     </nav>
@@ -50,14 +55,16 @@
     <div class="left col-xs-9">
         <div id="time-chart">
             <div class="col-md-12">
-                <h2>Timeline of Formation of Standards Organizations</h2>
+                <h2>Foundation of Standards Organizations</h2>
                 <div id="timeline" class="chart-container"></div>
             </div>
         </div>
     </div>
 
     <div id="sidebar-info" class="right col-xs-3">
-        <p class="info">Select an element in the visualization to see details</p>
+        <div id="sidebar-text">
+            <p class="info">Select an element in the visualization to see details</p>
+        </div>
     </div>
 </div>
 

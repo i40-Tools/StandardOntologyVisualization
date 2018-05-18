@@ -277,129 +277,12 @@ function drawBubbleChart(json, width, height) {
     });
 
     search_source = getUnique(search_source);
-    console.log(search_source);
 
 
     $( "#search_box" ).autocomplete({
         source: search_source
     });
 
-    // find gene in clustergram
-    find_node = function(text){
-        $(".hidden-in-export").remove();
-        console.log("Inside find_node for " + text);
-        var class_name = text.replace(/[^A-Z0-9]+/ig, "-");
-        class_name = class_name.toLowerCase();
-        var colArray = [];
-        var sel = d3.selectAll("." + class_name)
-            .each(function (d) {
-                var r = d3.select(this).attr("r");
-                var t = getTranslation(d3.select(this).attr("transform"));
-                drawHalo(d3.select(this.parentNode), r, t[0], t[1]);
-            })
-
-        // function blink() {
-        //     if(blink_flag){
-        //         d3.selectAll("." + class_name).transition()
-        //             .duration(1000)
-        //             .style("fill", "rgb(255,255,0)")
-        //             .transition()
-        //             .duration(1000)
-        //             .style("fill", "rgb(255,255,255)")
-        //             .on("end", blink)
-        //     }
-        //     else{
-        //         var counter = 0;
-        //         d3.selectAll("." + class_name)
-        //             .each(function (d,i) {
-        //                 d3.select(this).style("fill", colArray[counter]);
-        //                 counter = counter + 1;
-        //             })
-        //     }
-        // }
-        // blink();
-    };
-
-    function drawHalo(container, radius, x, y) {
-        if (container===undefined){
-            return null;
-            // there is no element to add the halo to;
-            // this means the node was not rendered previously
-        }
 
 
-        var haloGroupElement = container
-            .append("g")
-            .classed("hidden-in-export", true);
-
-
-        var el = haloGroupElement
-            .append("circle",":first-child")
-            .classed("searchResultA", true)
-            .attr("r", radius)
-            .attr("cx", x)
-            .attr("cy", y);
-
-
-        haloGroupElement.attr("animationRunning",true);
-
-
-        haloGroupElement.node().addEventListener("webkitAnimationEnd", function(){
-            var test=haloGroupElement.selectAll(".searchResultA");
-            test.classed("searchResultA", false)
-                .classed("searchResultB", true)
-                .attr("animationRunning",false);
-            haloGroupElement.attr("animationRunning",false);
-        });
-        haloGroupElement.node().addEventListener("animationend", function(){
-            var test=haloGroupElement.selectAll(".searchResultA");
-            test.classed("searchResultA", false)
-                .classed("searchResultB", true)
-                .attr("animationRunning",false);
-            haloGroupElement.attr("animationRunning",false);
-        });
-
-        return haloGroupElement;
-    };
-
-
-
-}
-
-function getTranslation(transform) {
-    // Create a dummy g for calculation purposes only. This will never
-    // be appended to the DOM and will be discarded once this function
-    // returns.
-    var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-
-    // Set the transform attribute to the provided string value.
-    g.setAttributeNS(null, "transform", transform);
-
-    // consolidate the SVGTransformList containing all transformations
-    // to a single SVGTransform of type SVG_TRANSFORM_MATRIX and get
-    // its SVGMatrix.
-    var matrix = g.transform.baseVal.consolidate().matrix;
-
-    // As per definition values e and f are the ones for the translation.
-    return [matrix.e, matrix.f];
-}
-
-function getUnique(a) {
-    var temp = {};
-    for (var i = 0; i < a.length; i++)
-        temp[a[i]] = true;
-    return Object.keys(temp);
-}
-
-function search_chart(){
-    // get the searched node name
-    blink_flag = true;
-    console.log("inside search chart");
-    var text = $('#search_box').val();
-    find_node(text);
-}
-
-function reset_flag() {
-    blink_flag = false;
-    $('#search_box').val('');
 }

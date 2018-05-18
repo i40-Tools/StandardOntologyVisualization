@@ -1,6 +1,14 @@
 var line_size;
 
 function drawTimeline(dates) {
+    var search_source = $.map(dates, function(d){
+        return d.abbr;
+    });
+    search_source = getUnique(search_source);
+    $( "#search_box" ).autocomplete({
+        source: search_source
+    });
+
     var margin = {top: 50, right: 100, bottom: 50, left: 0},
         width = $('.chart-container').width(),
         height = $('.chart-container').height();
@@ -43,15 +51,27 @@ function drawTimeline(dates) {
         .append('circle')
         .attr('class', 'time-span-rect')
         .attr('id', function (d, i) {
-            return "circle_" + i;
+            return "tCircle_" + d.abbr;
         })
         .attr('cx', function (d) {
             return x(d.date);
         })
         .attr('cy', function (d,i) {
             var mod = i % HEIGHT_LEVELS;
-            if (mod < HEIGHT_LEVELS / 2) return ((HEIGHT_LEVELS - mod) / HEIGHT_LEVELS) * line_size;
-            else return ((HEIGHT_LEVELS - mod - 1) / HEIGHT_LEVELS) * line_size;
+            switch(mod){
+                case 0: return line_size;
+                case 1: return 0;
+                case 2: return 7/8 * line_size;
+                case 3: return 1/8 * line_size;
+                case 4: return 6/8 * line_size;
+                case 5: return 2/8 * line_size;
+                case 6: return 5/8 * line_size;
+                case 7: return 3/8 * line_size;
+            }
+            // var size = 0;
+            // if (mod < HEIGHT_LEVELS / 2) size = ((HEIGHT_LEVELS - mod) / HEIGHT_LEVELS) * line_size;
+            // else size = ((HEIGHT_LEVELS - mod - 1) / HEIGHT_LEVELS) * line_size;
+            // return size;
         })
         .attr('r', 8)
         .style('fill', "#0a5c9a")
