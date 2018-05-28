@@ -184,9 +184,11 @@ function drawBubbleChart(json, width, height) {
         });
     }
 
+    var seqWidth = $("#sequence").width();
+
     // Breadcrumb dimensions: width, height, spacing, width of tip/tail.
     b = {
-        w: (width) / 3, h: (height) / 22, s: 2, t: 5
+        w: (seqWidth) / 3, h: (height) / 22, s: 2, t: 5
     };
 
 

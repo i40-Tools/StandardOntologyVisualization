@@ -42,10 +42,6 @@
                     <li><a href="timeline.html">Timeline</a></li>
                     <li><a href="network.html">Network</a></li>
                 </ul>
-                <div class="search-container">
-                    <input id="search_box" type="text" placeholder="Search.." name="search">
-                    <button id="search_button" type="submit" onclick="search_chart('network')"><i class="fa fa-search"></i></button>
-                </div>
             </div>
         </div>
     </nav>
@@ -54,8 +50,20 @@
     <div class="left col-xs-9">
         <div id="network-chart">
             <div class="col-md-12">
-                <h2>Relations between Standards</h2>
-                <svg id="network" width="960" height="600"></svg>
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2>Relations between Standards</h2>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="search-container">
+                            <input id="search_box" type="text" placeholder="Search.." name="search">
+                            <button id="search_button" type="submit" onclick="search_chart('network')"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <svg id="network" width="960" height="600"></svg>
+                </div>
             </div>
         </div>
     </div>

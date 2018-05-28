@@ -41,7 +41,7 @@ tspan{
     font-size: 11.5pt !important;
 }
 #search_box {
-    width: 18vw;
+    width: 85%;
     padding: 5px;
     margin-top: 7px;
 }
@@ -58,6 +58,7 @@ tspan{
 
 #sto_map {
     height: 80vh;
+    z-index: 0;
 }
 
 .vertical-center {
@@ -243,7 +244,7 @@ body {
 
 #sequence{
     margin-bottom: -20px;
-    margin-top:5px;
+    margin-top:1%;
 }
 
 .info{
@@ -288,6 +289,11 @@ body {
 
 .search-container{
     float: right;
-    margin-right: 17vw;
+    margin: 0% 5% 2% 0%;
+    z-index: 10;
+}
+
+h2{
+    margin-top: 2px !important;
 }
 

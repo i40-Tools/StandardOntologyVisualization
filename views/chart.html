@@ -42,26 +42,28 @@
                     <li><a href="timeline.html">Timeline</a></li>
                     <li><a href="network.html">Network</a></li>
                 </ul>
-                <div class="search-container">
-                    <input id="search_box" type="text" placeholder="Search.." name="search">
-                    <button id="search_button" type="submit" onclick="search_chart('chart')"><i class="fa fa-search"></i></button>
-                </div>
             </div>
         </div>
     </nav>
 
     <!-- Page Content -->
     <div class="left col-xs-9">
-        <div class="chart-container">
-            <div id="sequence"></div>
+        <div class="col-md-12">
+            <div class="row">
+                <div id="sequence" class="col-md-8"></div>
+                <div class="col-md-4">
+                    <div class="search-container">
+                        <input id="search_box" type="text" placeholder="Search.." name="search">
+                        <button id="search_button" type="submit" onclick="search_chart('chart')"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="row chart-container">
+            </div>
         </div>
     </div>
 
     <div id="sidebar-info" class="right col-xs-3">
-        <!--<div id='search_container' class='row'>-->
-            <!--<input id='search_box' type="text" class="form-control" placeholder="Search Standards" aria-describedby="sizing-addon2">-->
-            <!--<button id="search_button" class="btn btn-primary" onclick="search_chart()">Search</button>-->
-        <!--</div>-->
         <div id="sidebar-text">
             <p class="info">Select an element in the visualization to see details</p>
         </div>

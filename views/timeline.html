@@ -44,10 +44,6 @@
                     <li><a href="timeline.html">Timeline</a></li>
                     <li><a href="network.html">Network</a></li>
                 </ul>
-                <div class="search-container">
-                    <input id="search_box" type="text" placeholder="Search.." name="search">
-                    <button id="search_button" type="submit" onclick="search_chart('timeline')"><i class="fa fa-search"></i></button>
-                </div>
             </div>
         </div>
     </nav>
@@ -56,8 +52,20 @@
     <div class="left col-xs-9">
         <div id="time-chart">
             <div class="col-md-12">
-                <h2>Foundation of Standards Organizations</h2>
-                <div id="timeline" class="chart-container"></div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2>Foundation of Standards Organizations</h2>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="search-container">
+                            <input id="search_box" type="text" placeholder="Search.." name="search">
+                            <button id="search_button" type="submit" onclick="search_chart('timeline')"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="timeline" class="chart-container"></div>
+                </div>
             </div>
         </div>
     </div>
