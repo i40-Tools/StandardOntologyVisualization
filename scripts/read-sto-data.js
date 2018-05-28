@@ -14,7 +14,6 @@ function checkSuffix(header) {
 }
 
 function fetchStoData() {
-    var url = 'http://vocol.iais.fraunhofer.de/sto/fuseki/dataset/query';
     var query = "PREFIX rami: <https://w3id.org/i40/rami#> \
     PREFIX sto: <https://w3id.org/i40/sto#> \
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \

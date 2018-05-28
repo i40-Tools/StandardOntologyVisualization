@@ -1,5 +1,4 @@
 function fetchMapData() {
-    var url = 'http://vocol.iais.fraunhofer.de/sto/fuseki/dataset/query';
     var query = "PREFIX sto: <https://w3id.org/i40/sto#>  \
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  \
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  \

@@ -9,7 +9,6 @@
     <link href="../static/jquery/jquery-ui.css" rel="stylesheet">
     <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="../static/leaflet/leaflet.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../styles/style.css"/>
     <!-- jquery and bootstrap -->
     <script src="../static/jquery/jquery.min.js"></script>
@@ -18,11 +17,10 @@
     <!-- d3.js -->
     <script src="../static/d3/d3.v4.min.js"></script>
     <script src="../static/d3/d3-jetpack.js"></script>
+    <!-- Bubble Chart Script -->
     <script src="../scripts/common.js"></script>
-
-    <!-- Timeline Script -->
-    <script src="../scripts/read-time-data.js"></script>
-    <script src="../scripts/sto-timeline.js"></script>
+    <script src="../scripts/read-network-data.js"></script>
+    <script src="../scripts/sto-network.js"></script>
 
     <title>Industry 4.0 Standards</title>
 </head>
@@ -46,7 +44,7 @@
                 </ul>
                 <div class="search-container">
                     <input id="search_box" type="text" placeholder="Search.." name="search">
-                    <button id="search_button" type="submit" onclick="search_chart('timeline')"><i class="fa fa-search"></i></button>
+                    <button id="search_button" type="submit" onclick="search_chart('chart')"><i class="fa fa-search"></i></button>
                 </div>
             </div>
         </div>
@@ -54,10 +52,10 @@
 
     <!-- Page Content -->
     <div class="left col-xs-9">
-        <div id="time-chart">
+        <div id="network-chart">
             <div class="col-md-12">
-                <h2>Foundation of Standards Organizations</h2>
-                <div id="timeline" class="chart-container"></div>
+                <h2>Relations between Standards</h2>
+                <svg id="network" width="960" height="600"></svg>
             </div>
         </div>
     </div>
@@ -82,8 +80,9 @@
 
 <!--Chart Script-->
 <script>
-    d3.select(window).on('resize', adjustTimeLine);
-    fetchTimeData()
-        .then(readTimeData)
-        .then(drawTimeline);
+
+    //d3.select(window).on('resize', adjustSize);
+    fetchNetworkData()
+        .then(readNetworkData)
+        .then(loadNetwork);
 </script>

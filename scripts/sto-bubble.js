@@ -284,5 +284,4 @@ function drawBubbleChart(json, width, height) {
     });
 
 
-
 }

@@ -1,3 +1,6 @@
+// var url = 'http://vocol.iais.fraunhofer.de/sto/fuseki/dataset/query';
+var url = 'https://dydra.com/mtasnim/sto/sparql';
+
 function fetchData(url, query) {
     var promise = new Promise(function (resolve) {
         var xhr;
