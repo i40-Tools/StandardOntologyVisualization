@@ -36,6 +36,10 @@ function loadNetwork(networkData){
             .selectAll("circle")
             .data(graph.nodes)
             .enter().append("circle")
+            .attr("class", function (d) {
+                var class_name = d.label.replace(/[^A-Z0-9]+/ig, "-").toLowerCase();
+                return class_name;
+            })
             .attr("r", function(d) {
                 d.weight = link.filter(function(l) {
                     return l.source == d.id || l.target == d.id
@@ -126,25 +130,15 @@ function loadNetwork(networkData){
         }
     }
 
-    function dragstarted(d) {
-        if (!d3.event.active) simulation.alphaTarget(0.3).restart()
-        d.fx = d.x
-        d.fy = d.y
-//  simulation.fix(d);
-    }
+    var search_source = $.map(networkData.nodes, function(d){
+        return d.label;
+    });
 
-    function dragged(d) {
-        d.fx = d3.event.x
-        d.fy = d3.event.y
-//  simulation.fix(d, d3.event.x, d3.event.y);
-    }
+    search_source = getUnique(search_source);
 
-    function dragended(d) {
-        d.fx = d3.event.x
-        d.fy = d3.event.y
-        if (!d3.event.active) simulation.alphaTarget(0);
-        //simulation.unfix(d);
-    }
+    $( "#search_box" ).autocomplete({
+        source: search_source
+    });
 
     run(networkData)
 

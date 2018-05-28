@@ -69,6 +69,18 @@ find_node = function(text, pageName){
         d3.select("#" + circle_name).classed('highlight-circle', true);
         d3.select("#" + text_name).classed('highlight-text', true);
     }
+    else if(pageName === "network"){
+        $(".hidden-in-export").remove();
+        var class_name = text.replace(/[^A-Z0-9]+/ig, "-");
+        class_name = class_name.toLowerCase();
+        d3.selectAll("." + class_name)
+            .each(function (d) {
+                var r = d3.select(this).attr("r");
+                var cx = d3.select(this).attr("cx");
+                var cy = d3.select(this).attr("cy");
+                drawHalo(d3.select(this.parentNode), r, cx, cy);
+            })
+    }
 
 
 
