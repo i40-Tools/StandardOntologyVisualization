@@ -29,7 +29,13 @@ function loadNetwork(networkData){
             .data(graph.links)
             .enter().append("line");
 
-        const color = d3.scaleOrdinal(d3.schemeCategory20c);
+        var startColor = "hsl(200,100%,70%)";
+        var endColor = "hsl(200,100%,10%)";
+
+        var colorScale = d3.scaleLinear()
+            .domain([0, 20])
+            .range([startColor, endColor])
+            .interpolate(d3.interpolateHcl);
 
         var node = g.append("g")
             .attr("class", "nodes")
@@ -108,7 +114,7 @@ function loadNetwork(networkData){
             node
                 // .attr("r", 32)
                 .style("fill", function (d) {
-                    return color(d.weight);
+                    return colorScale(d.weight);
                 })
                 .style("stroke", "#424242")
                 .attr("cx", function (d) { return d.x+5; })
@@ -126,7 +132,12 @@ function loadNetwork(networkData){
                 .attr("font-size", function(d){
                     return Math.sqrt(d.weight) * 3;
                 })
-                .style("fill", "#333");
+                .style("fill", function (d) {
+                    if(d.weight > 6){
+                        return "#9d9d9d"
+                    }
+                    else return "#333333"
+                });
         }
     }
 
