@@ -92,6 +92,19 @@ function loadNetwork(networkData){
             .enter().append("text")
             .text(function(d) { return d.label; });
 
+        var text = g.append("text")
+            .attr("x", 0)
+            .attr("y", 15)
+            .attr("fill", "black")
+            .append("tspan")
+            .attr("x", 0)
+            .attr("dy", 5)
+            .text("Nodes: " + graph.nodes.length)
+            .append("tspan")
+            .attr("x", 0)
+            .attr("dy", 20)
+            .text("Links: " + graph.links.length);
+
 
         //add zoom capabilities
         var zoom_handler = d3.zoom()
@@ -111,6 +124,19 @@ function loadNetwork(networkData){
         simulation.force("link")
             .links(graph.links);
 
+        function showTable(d) {
+            /* Note that the whole content variable is just a string */
+            var content = "<h4>Standard Properties</h4><table class='table-bordered property-table'>";
+            content += '<tr><td><b>Publisher</b></td><td>' + (d.publisher === null ? "N/A" : d.publisher) + '</td> </tr>';
+            content += '<tr><td><b>Published Date</b></td><td>' + (d.publishDate === null ? "N/A" : d.publishDate) + '</td></tr>';
+            content += '<tr><td><b>Developer</b></td><td>' + (d.developer === null ? "N/A" : d.developer) + '</td></tr>';
+            content += '<tr><td><b>Official Resource</b></td><td>' + (d.officialResource === null? "N/A" : "<a href='" + d.officialResource + "'>" + d.officialResource + "</a>") + '</td></tr>';
+            content += "</table>";
+            console.log(content);
+            $("#standardDetails").html(content);
+
+        }
+
         function ticked() {
             link
                 .attr("x1", function(d) { return d.source.x; })
@@ -129,9 +155,11 @@ function loadNetwork(networkData){
                 .on("click", function (d) {
                     var info = "<h4>" + d.label + "</h4></br>" + d.comment + "</br></br><a href='" + d.id + "'>More information on " + d.label + "</a>";
                     showInfo(info);
-                    var links = fetchMolecule(d.id).then(readMoleculeData).then(function (links) {
-                        showMolecule(d.id, d.label, links);
-                    });
+                    showTable(d);
+
+                    // var links = fetchMolecule(d.id).then(readMoleculeData).then(function (links) {
+                    //     showMolecule(d.id, d.label, links);
+                    // });
                 });
 
             label

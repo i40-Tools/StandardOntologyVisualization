@@ -297,3 +297,17 @@ h2{
     margin-top: 2px !important;
 }
 
+#standardDetails{
+    margin-top: 15px;
+}
+
+.property-table{
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+}
+
+.property-table td {
+    padding: 10px;
+}
+
