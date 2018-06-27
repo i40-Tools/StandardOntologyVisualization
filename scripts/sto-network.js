@@ -2,9 +2,16 @@
  * Created by mayesha on 5/24/2018.
  */
 function loadNetwork(networkData){
-    var svg = d3.select("#network"),
-        width = +svg.attr("width"),
-        height = +svg.attr("height");
+    var width = $(".chart-container").width();
+    var height = $(".chart-container").height();
+
+    var svg = d3.select(".chart-container")
+        .append("svg")
+        .attr("class", "resizeW resizeH")
+        .attr('width', width)
+        .attr('height', height)
+        .attr('viewBox','0 0 '+ width +' '+ height)
+        .attr('preserveAspectRatio','xMinYMin');
 
     var simulation = d3.forceSimulation()
         .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(200))
@@ -122,6 +129,9 @@ function loadNetwork(networkData){
                 .on("click", function (d) {
                     var info = "<h4>" + d.label + "</h4></br>" + d.comment + "</br></br><a href='" + d.id + "'>More information on " + d.label + "</a>";
                     showInfo(info);
+                    var links = fetchMolecule(d.id).then(readMoleculeData).then(function (links) {
+                        showMolecule(d.id, d.label, links);
+                    });
                 });
 
             label
@@ -151,6 +161,57 @@ function loadNetwork(networkData){
         source: search_source
     });
 
-    run(networkData)
+    run(networkData);
+
+    function showMolecule(id, label, nodes) {
+        nodes.push({id: id, label: label});
+        var links=[];
+        for(var key in nodes){
+            links.push({
+                source: id,
+                target: nodes[key].id,
+                value: 1
+            });
+        }
+
+        $("#molecule").empty();
+
+        var mol = d3.select("#molecule").append("svg")
+            .attr("width", 200)
+            .attr("height", 200);
+
+        var mNode = mol.selectAll("circle")
+            .data(nodes)
+            .enter().append("circle")
+            .attr("r", 10)
+            .attr("fill", "steelblue");
+
+        var mLink = mol.selectAll("line")
+            .data(links)
+            .enter().append("line")
+            .style("stroke", "#aaa");
+
+        var mSimulation = d3.forceSimulation(nodes)
+            .force("link", d3.forceLink().id(function(d) { return d.id; }))
+            .force("charge", d3.forceCollide().radius(20))
+            .force("r", d3.forceRadial(50))
+            .force("center", d3.forceCenter(200 / 2, 200 / 2))
+            .on("tick", mTicked);
+
+        mSimulation.force("link")
+            .links(links);
+
+        function mTicked() {
+            mNode
+                .attr("cx", function(d) { return d.x; })
+                .attr("cy", function(d) { return d.y; });
+            mLink
+                .attr("x1", function(d) { return d.source.x; })
+                .attr("y1", function(d) { return d.source.y; })
+                .attr("x2", function(d) { return d.target.x; })
+                .attr("y2", function(d) { return d.target.y; });
+        }
+
+    }
 
 }

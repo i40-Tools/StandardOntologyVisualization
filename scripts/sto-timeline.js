@@ -1,4 +1,4 @@
-var line_size;
+var line_size = 0;
 
 function drawTimeline(dates) {
     var search_source = $.map(dates, function(d){
@@ -14,8 +14,6 @@ function drawTimeline(dates) {
         height = $('.chart-container').height();
 
     line_size = height - margin.top - margin.bottom;
-
-    var colorScale = d3.scaleOrdinal(d3.schemeCategory20);
 
     var x = d3.scaleTime()
         .domain([new Date(1870, 1, 1), new Date(2008, 1, 1) - 1])

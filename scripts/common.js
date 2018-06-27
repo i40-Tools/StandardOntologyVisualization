@@ -27,14 +27,13 @@ function showInfo(html) {
 function adjustSize() {
     d3.selectAll('.resizeW').attr('width', $('.chart-container').width());
     d3.selectAll('.resizeH').attr('height', $('.chart-container').height());
-    b.w = $('.chart-container').width() / 3;
-    b.h = $('.chart-container').height() / 28;
-}
-
-function adjustTimeLine() {
-    d3.selectAll('.resizeW').attr('width', $('.chart-container').width());
-    d3.selectAll('.resizeH').attr('height', $('.chart-container').height());
-    line_size = $('.chart-container').height() - 100;
+    if('b' in window){
+        b.w = $('.chart-container').width() / 3;
+        b.h = $('.chart-container').height() / 28;
+    }
+    if('line_size' in window){
+        line_size = $('.chart-container').height() - 100;
+    }
 }
 
 function getUnique(a) {

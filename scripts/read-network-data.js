@@ -7,6 +7,19 @@ var networkData = {
     links: null
 };
 
+function fetchMolecule(standard) {
+    var query = "   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \
+                    PREFIX sto: <https://w3id.org/i40/sto#> \
+                    SELECT ?secondStandardLabelString ?secondStandard \
+            WHERE { \
+            <" + standard + "> sto:relatedTo+|^sto:relatedTo ?secondStandard . \
+            ?secondStandard rdfs:label  ?secondStandardLabel . \
+            BIND (STR(?secondStandardLabel)  AS ?secondStandardLabelString) . \
+        } ";
+
+    return fetchData(url, query);
+}
+
 function fetchNetworkData() {
     var query = "   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \
                     PREFIX sto: <https://w3id.org/i40/sto#>\
@@ -54,6 +67,22 @@ function readNetworkData(nData) {
         networkData.nodes = Object.values(nodes);
         networkData.links = links;
         resolve(networkData);
+    });
+    return promise;
+}
+
+function readMoleculeData(mData) {
+    var promise = new Promise(function (resolve) {
+        var myData = mData.results.bindings;
+        var links = [];
+        for(var key in myData){
+            var data = myData[key];
+            links.push({
+                id: data.secondStandard.value,
+                label: data.secondStandardLabelString.value
+            });
+        }
+        resolve(links);
     });
     return promise;
 }

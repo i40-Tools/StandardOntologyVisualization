@@ -90,7 +90,7 @@
 
 <!--Chart Script-->
 <script>
-    d3.select(window).on('resize', adjustTimeLine);
+    d3.select(window).on('resize', adjustSize);
     fetchTimeData()
         .then(readTimeData)
         .then(drawTimeline);

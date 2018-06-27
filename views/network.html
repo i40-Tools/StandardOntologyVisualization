@@ -61,9 +61,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <svg id="network" width="960" height="600"></svg>
-                </div>
+                <div class="row chart-container"></div>
             </div>
         </div>
     </div>
@@ -72,6 +70,7 @@
         <div id="sidebar-text">
             <p class="info">Select an element in the visualization to see details</p>
         </div>
+        <div id="molecule"></div>
     </div>
 </div>
 
@@ -88,9 +87,8 @@
 
 <!--Chart Script-->
 <script>
-
-    //d3.select(window).on('resize', adjustSize);
     fetchNetworkData()
         .then(readNetworkData)
         .then(loadNetwork);
+    d3.select(window).on('resize', adjustSize);
 </script>
