@@ -1,12 +1,16 @@
 /**
  * Created by mayesha on 5/24/2018.
  */
+function destroyChart(){
+    d3.select("#networks").remove();
+}
 function loadNetwork(networkData){
     var width = $(".chart-container").width();
     var height = $(".chart-container").height();
 
     var svg = d3.select(".chart-container")
         .append("svg")
+        .attr("id", "networks")
         .attr("class", "resizeW resizeH")
         .attr('width', width)
         .attr('height', height)
