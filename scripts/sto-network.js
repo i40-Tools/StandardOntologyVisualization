@@ -2,6 +2,7 @@
  * Created by mayesha on 5/24/2018.
  */
 function destroyChart(){
+    clearSidebar();
     d3.select("#networks").remove();
 }
 function loadNetwork(networkData){
@@ -129,16 +130,26 @@ function loadNetwork(networkData){
             .links(graph.links);
 
         function showTable(d) {
-            /* Note that the whole content variable is just a string */
             var content = "<h4>Standard Properties</h4><table class='table-bordered property-table'>";
             content += '<tr><td><b>Publisher</b></td><td>' + (d.publisher === null ? "N/A" : d.publisher) + '</td> </tr>';
             content += '<tr><td><b>Published Date</b></td><td>' + (d.publishDate === null ? "N/A" : d.publishDate) + '</td></tr>';
             content += '<tr><td><b>Developer</b></td><td>' + (d.developer === null ? "N/A" : d.developer) + '</td></tr>';
-            content += '<tr><td><b>Official Resource</b></td><td>' + (d.officialResource === null? "N/A" : "<a href='" + d.officialResource + "'>" + d.officialResource + "</a>") + '</td></tr>';
+            content += '<tr><td><b>Official Resource</b></td><td>' + (d.officialResource === null? "N/A" : "<a href='" + d.officialResource + "'>Link to Resource</a>") + '</td></tr>';
             content += "</table>";
             console.log(content);
             $("#standardDetails").html(content);
 
+        }
+
+        function showMoleculeTable(id, label, links) {
+            if(links.length){
+                var content = "<h4>Related Standards</h4><table class='table-bordered property-table'>";
+                for(var i = 0; i < links.length; i++){
+                    content += "<tr><td><a href='" + links[i].id + "'>" + links[i].label + "</a></td></tr>";
+                }
+                content += "</table>";
+                $("#relatedStandards").html(content);
+            }
         }
 
         function ticked() {
@@ -161,9 +172,9 @@ function loadNetwork(networkData){
                     showInfo(info);
                     showTable(d);
 
-                    // var links = fetchMolecule(d.id).then(readMoleculeData).then(function (links) {
-                    //     showMolecule(d.id, d.label, links);
-                    // });
+                    fetchMolecule(d.id, $('#togBtn').is(':checked')).then(readMoleculeData).then(function (links) {
+                        showMoleculeTable(d.id, d.label, links);
+                    });
                 });
 
             label

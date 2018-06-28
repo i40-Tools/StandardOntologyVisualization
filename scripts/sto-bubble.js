@@ -123,6 +123,7 @@ function drawBubbleChart(json, width, height) {
         .style("background", "white")
         .on("click", function () {
             zoom(root);
+            clearSidebar();
             updateBreadcrumbs([]);
         });
 

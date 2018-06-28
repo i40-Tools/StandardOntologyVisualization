@@ -7,8 +7,9 @@ var networkData = {
     links: null
 };
 
-function fetchMolecule(standard) {
-    var query = "   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \
+function fetchMolecule(standard, inference) {
+    if(inference){
+        var query = "   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \
                     PREFIX sto: <https://w3id.org/i40/sto#> \
                     SELECT ?secondStandardLabelString ?secondStandard \
             WHERE { \
@@ -16,6 +17,18 @@ function fetchMolecule(standard) {
             ?secondStandard rdfs:label  ?secondStandardLabel . \
             BIND (STR(?secondStandardLabel)  AS ?secondStandardLabelString) . \
         } ";
+    }
+    else{
+        var query = "   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \
+                    PREFIX sto: <https://w3id.org/i40/sto#> \
+                    SELECT ?secondStandardLabelString ?secondStandard \
+            WHERE { \
+            <" + standard + "> sto:relatedTo ?secondStandard . \
+            ?secondStandard rdfs:label  ?secondStandardLabel . \
+            BIND (STR(?secondStandardLabel)  AS ?secondStandardLabelString) . \
+        } ";
+    }
+
 
     return fetchData(url, query);
 }
