@@ -27,13 +27,9 @@ function showInfo(html) {
 function clearSidebar(){
     var html =  "<div id='sidebar-text'>" +
                 "<p class='info'>Select an element in the visualization to see details</p>" +
-                "</div>";
-
-    //only in case of networks page
-    if('simulation' in window){
-        html += "<div id='standardDetails'></div>" +
+                "</div>" +
+                "<div id='standardDetails'></div>" +
                 "<div id='relatedStandards'></div>";
-    }
 
     $("#sidebar-info").html(html);
 }
