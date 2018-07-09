@@ -20,10 +20,22 @@ Please note you will need a working internet connection for the visualizations t
 
 ## List of Visualizations
 
-### Standard - A hierarchical view of Initiatives, Classifications and Standards
-### Locations - A geographical map of the headquarters of Standards Organizations
-### Timeline - A chronological view of the formation dates of Standards Organizations
-### Network - A network diagram of Standards and their relations
+### 1. Framework
+#### A hierarchical view of Initiatives, Classifications and Standards
+![Standards Packed Circle Chart](https://raw.githubusercontent.com/i40-Tools/StandardOntologyVisualization/master/static/images/standards.PNG)
+
+
+### 2. Locations
+#### Geographical map of the headquarters of Standards Organizations
+![Headquarters Map](https://raw.githubusercontent.com/i40-Tools/StandardOntologyVisualization/master/static/images/map.PNG)
+
+### 3. Timeline
+#### Chronological view of the formation dates of Standards Organizations
+![Standards Packed Circle Chart](https://raw.githubusercontent.com/i40-Tools/StandardOntologyVisualization/master/static/images/timeline.PNG)
+
+### 4. Network
+#### Network diagram of Standards and their relations
+![Standards Packed Circle Chart](https://raw.githubusercontent.com/i40-Tools/StandardOntologyVisualization/master/static/images/network.png)
 
 ## Currently in Development
 - Displaying Standards which have no relations in 'Network'
