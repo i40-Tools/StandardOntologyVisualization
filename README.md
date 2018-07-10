@@ -24,10 +24,17 @@ Please note you will need a working internet connection for the visualizations t
 #### A hierarchical view of Initiatives, Classifications and Standards
 ![Standards Packed Circle Chart](https://raw.githubusercontent.com/i40-Tools/StandardOntologyVisualization/master/static/images/standards.PNG)
 
+This chart represents the hierarchical relationship between Standards, the Classifications they fall under, and the Initiatives which define the classifications.
+
+The largest circles represent initiatives. Circles contained within the biggest circle are the classifications defined by that initiative. Similarly the smallest circles represent the standards defined within a particular classification. 
+
+Clicking on any of the circles in the chart zooms in on the element and displays its details in the sidebar on the right. Users can use the search bar to search for any standards, classifications or initiatives. The breadcrumb trail on top of the chart also helps users navigate between elements.
 
 ### 2. Locations
 #### Geographical map of the headquarters of Standards Organizations
 ![Headquarters Map](https://raw.githubusercontent.com/i40-Tools/StandardOntologyVisualization/master/static/images/map.PNG)
+
+
 
 ### 3. Timeline
 #### Chronological view of the formation dates of Standards Organizations
