@@ -62,7 +62,6 @@ function readStoData(data) {
             };
             pushInitiative(initiative, classification, standard);
         }
-        console.log(final_data);
         resolve(final_data);
     });
 
@@ -162,13 +161,4 @@ function pushStandard(standard, grandparentIndex, parentIndex) {
             size: 100
         });
     }
-}
-
-
-function parseURI(string) {
-    return string.split('#')[1];
-}
-
-function addSpace(string) {
-    return string.replace(/([A-Z])/g, ' $1');
 }

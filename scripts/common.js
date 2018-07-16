@@ -1,5 +1,5 @@
-// var url = 'http://vocol.iais.fraunhofer.de/sto/fuseki/dataset/query';
-var url = 'https://dydra.com/mtasnim/sto/sparql';
+var url = 'https://vocol.iais.fraunhofer.de/sto/fuseki/dataset/query';
+//var url = 'https://dydra.com/mtasnim/sto/sparql';
 
 function fetchData(url, query) {
     var promise = new Promise(function (resolve) {
@@ -91,28 +91,6 @@ find_node = function(text, pageName){
             })
     }
 
-
-
-    // function blink() {
-    //     if(blink_flag){
-    //         d3.selectAll("." + class_name).transition()
-    //             .duration(1000)
-    //             .style("fill", "rgb(255,255,0)")
-    //             .transition()
-    //             .duration(1000)
-    //             .style("fill", "rgb(255,255,255)")
-    //             .on("end", blink)
-    //     }
-    //     else{
-    //         var counter = 0;
-    //         d3.selectAll("." + class_name)
-    //             .each(function (d,i) {
-    //                 d3.select(this).style("fill", colArray[counter]);
-    //                 counter = counter + 1;
-    //             })
-    //     }
-    // }
-    // blink();
 };
 
 function drawHalo(container, radius, x, y) {
@@ -179,4 +157,16 @@ function search_chart(pageName){
     // get the searched node name
     var text = $('#search_box').val();
     find_node(text, pageName);
+}
+
+function parseURI(string) {
+    return string.split('#')[1];
+}
+
+function addSpace(string) {
+    return string.replace(/([A-Z])/g, ' $1');
+}
+
+function replaceUnderscore(string){
+    return string.replace(/_/g,' ');
 }

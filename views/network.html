@@ -51,17 +51,21 @@
         <div id="network-chart">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-4 checkbox">
-                        <label class="switch">
-                            <input type="checkbox" id="togBtn" checked="checked" onchange="toggleInference(this)">
-                            <div class="slider round">
-                                <span class="on">Inference</span>
-                                <span class="off">Inference</span>
+                    <div class="col-md-8">
+                        <form class="form-inline meta-info">
+                            <div class="form-group">
+                                <label for="meta_nodes">Nodes:</label>
+                                <span id="meta_nodes">0</span>
                             </div>
-                        </label>
-                    </div>
-                    <div class="col-md-4">
-                        <h2>Relations between Standards</h2>
+                            <div class="form-group">
+                                <label for="meta_links">Links:</label>
+                                <span id="meta_links">0</span>
+                            </div>
+                            <div class="form-group">
+                                <input type="checkbox" class="form-control" id="togInf" checked="checked" onchange="toggleInference(this)">
+                                <label for="togInf">Use Inference</label>
+                            </div>
+                        </form>
                     </div>
                     <div class="col-md-4">
                         <div class="search-container">
@@ -99,19 +103,13 @@
 <script>
     function toggleInference(element){
         destroyChart();
-        if (element.checked) {
-            fetchNetworkData()
-                .then(readNetworkData)
-                .then(loadNetwork);
-        }
-        else {
-            fetchNonInferenceData()
-                .then(readNetworkData)
-                .then(loadNetwork);
-        }
+        fetchStandards(element.checked)
+            .then(readStandards)
+            .then(loadNetwork);
+
     }
-    fetchNetworkData()
-        .then(readNetworkData)
+    fetchStandards(true)
+        .then(readStandards)
         .then(loadNetwork);
     d3.select(window).on('resize', adjustSize);
 </script>

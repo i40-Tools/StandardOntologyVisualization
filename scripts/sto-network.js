@@ -37,6 +37,7 @@ function loadNetwork(networkData){
 
         var link = g.append("g")
             .style("stroke", "#aaa")
+            .style("stroke-width", "5px")
             .selectAll("line")
             .data(graph.links)
             .enter().append("line");
@@ -79,10 +80,6 @@ function loadNetwork(networkData){
                     .duration(50)
                     .style('stroke-width',1)
             });
-            // .call(d3.drag()
-            //     .on("start", dragstarted)
-            //     .on("drag", dragged)
-            //     .on("end", dragended));
 
         var title = node.append("svg:title")
             .text(function(d){
@@ -97,18 +94,8 @@ function loadNetwork(networkData){
             .enter().append("text")
             .text(function(d) { return d.label; });
 
-        var text = g.append("text")
-            .attr("x", 0)
-            .attr("y", 15)
-            .attr("fill", "black")
-            .append("tspan")
-            .attr("x", 0)
-            .attr("dy", 5)
-            .text("Nodes: " + graph.nodes.length)
-            .append("tspan")
-            .attr("x", 0)
-            .attr("dy", 20)
-            .text("Links: " + graph.links.length);
+
+        showMetaInfo(graph.nodes.length, graph.links.length);
 
 
         //add zoom capabilities
@@ -131,21 +118,26 @@ function loadNetwork(networkData){
 
         function showTable(d) {
             var content = "<h4>Standard Properties</h4><table class='table-bordered property-table'>";
-            content += '<tr><td><b>Publisher</b></td><td>' + (d.publisher === null ? "N/A" : d.publisher) + '</td> </tr>';
-            content += '<tr><td><b>Published Date</b></td><td>' + (d.publishDate === null ? "N/A" : d.publishDate) + '</td></tr>';
-            content += '<tr><td><b>Developer</b></td><td>' + (d.developer === null ? "N/A" : d.developer) + '</td></tr>';
-            content += '<tr><td><b>Official Resource</b></td><td>' + (d.officialResource === null? "N/A" : "<a href='" + d.officialResource + "'>Link to Resource</a>") + '</td></tr>';
+            for(var key in d){
+                var prop = d[key];
+                if(key.startsWith('has')){
+                    content += '<tr><td><b>'+ formatProperty(key) +'</b></td><td>' + prop + '</td> </tr>';
+                }
+            }
             content += "</table>";
-            console.log(content);
             $("#standardDetails").html(content);
-
         }
 
-        function showMoleculeTable(id, label, links) {
+        function formatProperty(key){
+            var clipped = key.substring(4);
+            return clipped.charAt(0).toUpperCase() + clipped.substr(1);
+        }
+
+        function showLinks(links) {
             if(links.length){
                 var content = "<h4>Related Standards</h4><table class='table-bordered property-table'>";
                 for(var i = 0; i < links.length; i++){
-                    content += "<tr><td><a href='" + links[i].id + "'>" + links[i].label + "</a></td></tr>";
+                    content += "<tr><td><a href='" + links[i] + "'>" + replaceUnderscore(parseURI(links[i])) + "</a></td></tr>";
                 }
                 content += "</table>";
                 $("#relatedStandards").html(content);
@@ -162,7 +154,8 @@ function loadNetwork(networkData){
             node
                 // .attr("r", 32)
                 .style("fill", function (d) {
-                    return colorScale(d.weight);
+                    if(d.isLinked) return colorScale(d.weight);
+                    else return "#f2d181";
                 })
                 .style("stroke", "#424242")
                 .attr("cx", function (d) { return d.x+5; })
@@ -171,10 +164,7 @@ function loadNetwork(networkData){
                     var info = "<h4>" + d.label + "</h4></br>" + d.comment + "</br></br><a href='" + d.id + "'>More information on " + d.label + "</a>";
                     showInfo(info);
                     showTable(d);
-
-                    fetchMolecule(d.id, $('#togBtn').is(':checked')).then(readMoleculeData).then(function (links) {
-                        showMoleculeTable(d.id, d.label, links);
-                    });
+                    showLinks(d.links);
                 });
 
             label
@@ -183,7 +173,8 @@ function loadNetwork(networkData){
                  })
                 .attr("y", function (d) { return d.y; })
                 .attr("font-size", function(d){
-                    return Math.sqrt(d.weight) * 3;
+                    if(d.weight === 0) return 5;
+                    else return Math.sqrt(d.weight) * 3;
                 })
                 .style("fill", function (d) {
                     if(d.weight > 6){
@@ -198,6 +189,11 @@ function loadNetwork(networkData){
         return d.label;
     });
 
+    function showMetaInfo(numNodes, numLinks){
+        $("#meta_nodes").text(numNodes);
+        $("#meta_links").text(numLinks);
+    }
+
     search_source = getUnique(search_source);
 
     $( "#search_box" ).autocomplete({
@@ -205,56 +201,5 @@ function loadNetwork(networkData){
     });
 
     run(networkData);
-
-    function showMolecule(id, label, nodes) {
-        nodes.push({id: id, label: label});
-        var links=[];
-        for(var key in nodes){
-            links.push({
-                source: id,
-                target: nodes[key].id,
-                value: 1
-            });
-        }
-
-        $("#molecule").empty();
-
-        var mol = d3.select("#molecule").append("svg")
-            .attr("width", 200)
-            .attr("height", 200);
-
-        var mNode = mol.selectAll("circle")
-            .data(nodes)
-            .enter().append("circle")
-            .attr("r", 10)
-            .attr("fill", "steelblue");
-
-        var mLink = mol.selectAll("line")
-            .data(links)
-            .enter().append("line")
-            .style("stroke", "#aaa");
-
-        var mSimulation = d3.forceSimulation(nodes)
-            .force("link", d3.forceLink().id(function(d) { return d.id; }))
-            .force("charge", d3.forceCollide().radius(20))
-            .force("r", d3.forceRadial(50))
-            .force("center", d3.forceCenter(200 / 2, 200 / 2))
-            .on("tick", mTicked);
-
-        mSimulation.force("link")
-            .links(links);
-
-        function mTicked() {
-            mNode
-                .attr("cx", function(d) { return d.x; })
-                .attr("cy", function(d) { return d.y; });
-            mLink
-                .attr("x1", function(d) { return d.source.x; })
-                .attr("y1", function(d) { return d.source.y; })
-                .attr("x2", function(d) { return d.target.x; })
-                .attr("y2", function(d) { return d.target.y; });
-        }
-
-    }
 
 }
