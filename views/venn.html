@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- stylesheets -->
+    <link href="../static/jquery/jquery-ui.css" rel="stylesheet">
+    <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../styles/style.css"/>
+    <!-- jquery and bootstrap -->
+    <script src="../static/jquery/jquery.min.js"></script>
+    <script src="../static/jquery/jquery-ui.js"></script>
+    <script src="../static/bootstrap/js/bootstrap.min.js"></script>
+    <!-- d3.js -->
+    <script src="../static/d3/d3.v3.min.js"></script>
+
+    <script src="../static/d3/d3-venn.js"></script>
+
+
+
+    <title>Industry 4.0 Standards</title>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header"><a href="../index.html" class="navbar-brand">Standards Knowledge Graph</a>
+                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main"><span
+                        class="icon-bar"></span> <span class="icon-bar"></span><span class="icon-bar"></span></button>
+            </div>
+            <div class="navbar-collapse collapse" id="navbar-main">
+                <ul class="nav navbar-nav">
+                    <li><a href="chart.html">Standards</a></li>
+                    <li><a href="map.html">Locations</a></li>
+                    <li><a href="timeline.html">Timeline</a></li>
+                    <li><a href="network.html">Network</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="left col-xs-9">
+        <div id="network-chart">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2>Standards and their Organizations</h2>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="search-container">
+                            <input id="search_box" type="text" placeholder="Search.." name="search">
+                            <button id="search_button" type="submit" onclick="search_chart('venn')"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row chart-container">
+                    <div class="col-md-2">
+                        <form>
+                            <div id="inputs">
+                                <p>
+                                    <label for="dataLength">Number of Nodes</label>
+                                    <input type="number" min="10" step="10" max="600" name="dataLength" id="dataLength" value="" />
+                                </p>
+                                <p>
+                                    <label for="setLength">Number of Circles</label>
+                                    <input  min="2" max="8" type="number" name="setLength" id="setLength" value="" />
+                                </p>
+                                <p>
+                                    <label for="circleOpacity">opacity for Circle</label>
+                                    <input  min="0.1" max="1" step ="0.1"  type="range" name="circleOpacity" id="circleOpacity" value="" />
+                                </p>
+                                <p>
+                                    <label for="innerOpacity">opacity for inner Circle</label>
+                                    <input  min="0" max="1" step ="0.1" type="range" name="innerOpacity" id="innerOpacity" value="" />
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-10">
+                        <svg id="venn"></svg>
+                        <script src="../scripts/sto-venn.js"></script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sidebar-info" class="right col-xs-3">
+        <div id="sidebar-text">
+            <p class="info">Select an element in the visualization to see details</p>
+        </div>
+        <div id="standardDetails"></div>
+        <div id="relatedStandards"></div>
+    </div>
+</div>
+
+<!--Footer-->
+<div class="footer navbar-fixed-bottom footer-cp">
+    <ul class="nav navbar-nav pull-right">
+        <li class="nav-item">
+            <span class="nav-link">© Fraunhofer IAIS, 2017-2018, Irlan Grangel, Steffen Lohmann, Mayesha Tasnim</span>
+        </li>
+    </ul>
+</div>
+
+</body>
+
+<!--Chart Script-->
+<script>
+    // fetchStandards(true)
+    //     .then(readStandards)
+    //     .then(loadNetwork);
+    // d3.select(window).on('resize', adjustSize);
+</script>
