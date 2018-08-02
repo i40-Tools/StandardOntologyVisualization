@@ -109,8 +109,14 @@
             .then(loadNetwork);
 
     }
-    fetchStandards(true)
+    fetchRelations()
+        .then(data => buildRelationProperty(data, true))
+        .then(fetchStandards)
         .then(readStandards)
         .then(loadNetwork);
+
+    // fetchStandards(true)
+    //     .then(readStandards)
+    //     .then(loadNetwork);
     d3.select(window).on('resize', adjustSize);
 </script>

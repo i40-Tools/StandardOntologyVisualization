@@ -36,7 +36,12 @@ function loadNetwork(networkData){
             .style("stroke-width", "5px")
             .selectAll("line")
             .data(graph.links)
-            .enter().append("line");
+            .enter().append("line")
+            .attr("class", "link");
+
+        var linkText = link
+            .append("title")
+            .text(function(d){return d.linkType});
 
         var startColor = "hsl(200,100%,70%)";
         var endColor = "hsl(200,100%,10%)";

@@ -353,3 +353,12 @@ h2{
     stroke: black;
     stroke-width: 3px;
 }
+
+.link{
+    cursor:pointer
+}
+
+.link:hover{
+    stroke: red;
+    stroke-width: 3px;
+}
