@@ -1,10 +1,6 @@
 /**
  * Created by mayesha on 5/24/2018.
  */
-function destroyChart(){
-    clearSidebar();
-    d3.select("#networks").remove();
-}
 function loadNetwork(networkData){
     var width = $(".chart-container").width();
     var height = $(".chart-container").height();

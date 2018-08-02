@@ -320,3 +320,36 @@ h2{
 .meta-info > div > span, .meta-info > div > label {
     font-size: medium;
 }
+
+.meta-info > label {
+    font-size: medium;
+}
+
+:root {
+    --rowNum: 3;
+    --colNum: 4;
+    --gridHeight: 20px;
+}
+
+#selectFrameworks{
+    display: grid;
+    width:100%;
+    grid-template-rows: repeat(var(--rowNum), var(--gridHeight));
+    grid-template-columns: repeat(var(--colNum), auto);
+    font-size: small;
+}
+
+.grid-item {
+    grid-column-start: auto;
+    grid-row-start: auto;
+    margin: 5px;
+}
+
+.venn-node {
+    cursor: pointer;
+}
+
+.venn-node:hover {
+    stroke: black;
+    stroke-width: 3px;
+}

@@ -1,4 +1,4 @@
-(function test() {
+function loadVenn(vennData) {
 
     var width = 600,
         height = 600,
@@ -9,20 +9,20 @@
         setLength = 4,
         sets = d3.range(setLength).map(function(d, i) {
             return setChar[i]
-        })
+        });
 
     var opts = {
         dataLength: 180,
         setLength: 4,
         duration: 800,
-        circleOpacity: 0.4,
-        innerOpacity: 0.2
+        circleOpacity: 0.2,
+        innerOpacity: 0.1
     };
 
 
     // Build simple getter and setter Functions
     for (var key in opts) {
-        test[key] = getSet(key, test).bind(opts);
+        loadVenn[key] = getSet(key, loadVenn).bind(opts);
     }
 
     function getSet(option, component) {
@@ -39,12 +39,12 @@
         var sel = d3.select(this),
             name = sel.attr("name"),
             value = sel.property("value")
-        test[name](value);
+        loadVenn[name](value);
         if (name == 'dataLength' || name == 'setLength') {
             if (name == 'setLength') {
                 globalData = [] // we reshuffle everything
             }
-            return refresh(generateData())
+            return refresh(vennData)
         }
         refresh();
     }
@@ -54,7 +54,7 @@
         .each(function() {
             var sel = d3.select(this),
                 name = sel.attr("name");
-            sel.property("value", test[name]())
+            sel.property("value", loadVenn[name]())
         })
         .on('input', refreshInput)
 
@@ -63,46 +63,15 @@
         .padding(0)
         .packingStragegy(d3.layout.venn.force)
 
-    // .setsSize(x => (Math.log(x) ))
-    // .value(x => 1),
-    svg = d3.select('svg')
+    svg = d3.select(".chart-container")
+        .append("svg")
+        .attr("id", "venn")
         .attr('width', width)
         .attr('height', height),
         isFirstLayout = true;
 
     var globalData = [],
         generator = 0;
-
-    function generateData() {
-        var dataLength = test.dataLength(),
-            setLength = test.setLength(),
-            diff = dataLength - globalData.length;
-
-        if (diff > 0) {
-
-            globalData = globalData.concat(d3.range(diff).map((d, i) => {
-                var l = Math.floor((Math.random() * setLength / 3) + 1),
-                set = [],
-                c,
-                i;
-            for (i = -1; ++i < l;) {
-                c = charFn(Math.floor((Math.random() * setLength)));
-                if (set.indexOf(c) == -1) {
-                    set.push(c)
-                }
-            }
-            return {
-                set: set,
-                r: 8,
-                name: 'node_' + generator++
-            }
-        }))
-        } else {
-            globalData.splice(0, -diff);
-        }
-
-        return globalData;
-    }
 
     function refresh(data) {
         if (data) {
@@ -123,7 +92,7 @@
             })
             .attr('fill', function(d, i) {
                 return colors(i)
-            })
+            });0
 
         vennEnter.append('path')
             .attr('class', 'venn-area-path');
@@ -139,8 +108,8 @@
 
 
         vennArea.selectAll('path.venn-area-path').transition()
-            .duration(isFirstLayout ? 0 : test.duration())
-            .attr('opacity', test.circleOpacity())
+            .duration(isFirstLayout ? 0 : loadVenn.duration())
+            .attr('opacity', loadVenn.circleOpacity())
             .attrTween('d', function(d) {
                 return d.d
             });
@@ -151,6 +120,7 @@
             .text(function(d) {
                 return d.__key__;
             })
+            .style("stroke", "#000000")
             .attr("x", function(d) {
                 return d.center.x
             })
@@ -162,8 +132,8 @@
         vennArea.selectAll('circle.inner').data(function(d) {
             return [d];
         }).transition()
-            .duration(isFirstLayout ? 0 : test.duration())
-            .attr('opacity', test.innerOpacity())
+            .duration(isFirstLayout ? 0 : loadVenn.duration())
+            .attr('opacity', loadVenn.innerOpacity())
             .attr("cx", function(d) {
                 return d.center.x
             })
@@ -175,7 +145,7 @@
             });
 
         vennArea.exit().transition()
-            .duration(test.duration())
+            .duration(loadVenn.duration())
             .attrTween('d', function(d) {
                 return d.d
             })
@@ -200,7 +170,7 @@
                 return d.nodes
             }, function(d) {
                 return d.name
-            })
+            });
 
         var pointsEnter = points.enter()
             .append('circle')
@@ -209,14 +179,22 @@
             .call(layout.packer().drag)
 
         points.transition()
-            .duration(isFirstLayout ? 0 : test.duration())
+            .duration(isFirstLayout ? 0 : loadVenn.duration())
+            .attr('class', "venn-node")
+            .attr('opacity', 0.1)
             .attr('r', function(d) {
                 return d.r
-            })
+            });
+
+        pointsEnter
+            .append('title')
+            .text(function(d){
+            return d.name;
+        });
 
         points.exit().transition()
             .attr('r', 0)
-            .remove()
+            .remove();
 
         isFirstLayout = false;
 
@@ -231,10 +209,10 @@
                     })
 
             }
-        })
+        });
         //start the force layout
         layout.packer().start()
-        return test
+        return loadVenn
     }
-    return refresh(generateData())
-})();
+    return refresh(vennData)
+};

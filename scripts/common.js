@@ -24,6 +24,11 @@ function showInfo(html) {
     $("#sidebar-text").html(html);
 }
 
+function destroyChart(id){
+    clearSidebar();
+    d3.select(id).remove();
+}
+
 function clearSidebar(){
     var html =  "<div id='sidebar-text'>" +
                 "<p class='info'>Select an element in the visualization to see details</p>" +
@@ -160,13 +165,16 @@ function search_chart(pageName){
 }
 
 function parseURI(string) {
+    if(string === undefined) return "";
     return string.split('#')[1];
 }
 
 function addSpace(string) {
+    if(string === undefined) return "";
     return string.replace(/([A-Z])/g, ' $1');
 }
 
 function replaceUnderscore(string){
+    if(string === undefined) return "";
     return string.replace(/_/g,' ');
 }

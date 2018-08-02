@@ -41,6 +41,7 @@
                     <li><a href="map.html">Locations</a></li>
                     <li><a href="timeline.html">Timeline</a></li>
                     <li><a href="network.html">Network</a></li>
+                    <li><a href="venn.html">Venn</a></li>
                 </ul>
             </div>
         </div>
@@ -102,7 +103,7 @@
 <!--Chart Script-->
 <script>
     function toggleInference(element){
-        destroyChart();
+        destroyChart("#networks");
         fetchStandards(element.checked)
             .then(readStandards)
             .then(loadNetwork);

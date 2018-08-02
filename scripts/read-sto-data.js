@@ -10,7 +10,7 @@ var final_data = {
 var colIndex = 0;
 
 function checkSuffix(header) {
-    return !header.includes("_name");
+    !header.includes("_");
 }
 
 function fetchStoData() {
@@ -41,7 +41,7 @@ function readStoData(data) {
     var promise = new Promise(function (resolve) {
         var original_headers = data.head.vars;
         var myData = data.results.bindings;
-        var headers = original_headers.filter(checkSuffix);
+        var headers = ["std", "classification", "initiative"];
 
         for (var i in myData) {
             var obj = myData[i];

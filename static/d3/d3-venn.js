@@ -295,7 +295,7 @@
     //return true when the point is out of all circles
     function outOfCircles(point, circles) {
         for (var i = 0; i < circles.length; ++i) {
-            if (venn.distance(point, circles[i]) < circles[i].radius + SMALL) {
+            if (distance(point, circles[i]) < circles[i].radius + SMALL) {
                 return false;
             }
         }
@@ -307,7 +307,7 @@
     // used to pack child nodes insiside inner circle of a venn set.
     function pack(layout) {
         // var valueFn = layout.value();
-        var packerConfig = layout.packerConfig();
+        var packingConfig = layout.packingConfig();
 
         layout.sets().forEach(function(k,set) {
             // function pack(set, valueFn) {
@@ -317,7 +317,7 @@
                 x = center.x - innerRadius,
                 y = center.y - innerRadius;
 
-            applier(d3.layout.pack(), packerConfig)
+            applier(d3.layout.pack(), packingConfig)
                 .size([innerRadius * 2, innerRadius * 2])
                 .nodes({
                     children: children
@@ -344,7 +344,9 @@
                 maxAttempt = 500,
                 k,
                 inCircles = [],
-                outCircles = [];
+                outCircles = [],
+                center = set.center,
+                innerRadius = set.innerRadius;
 
 
             for (k in circles) {
@@ -361,8 +363,8 @@
                     candidate = null;
 
                 if (i == 0) { // first node centered
-                    n.x = textCentres[set.__key__].x;
-                    n.y = textCentres[set.__key__].y;
+                    n.x = center.x;
+                    n.y = center.y;
                     queue.push(n)
                 } else {
                     while (!candidate && (attempt < maxAttempt)) {
@@ -375,7 +377,7 @@
                                 y: s.y + r * Math.sin(a)
                             };
                         attempt++;
-                        if (venn.containedInCircles(p, inCircles) && (outOfCircles(p, outCircles))) {
+                        if (containedInCircles(p, inCircles) && (outOfCircles(p, outCircles))) {
                             candidate = p;
                             queue.push(p)
                         }
@@ -384,14 +386,14 @@
                     if (!candidate) {
                         console.warn('NO CANDIDATE')
                         candidate = {
-                            x: textCentres[set.__key__].x,
-                            y: textCentres[set.__key__].y
+                            x: center.x,
+                            y: center.y
                         }
                     }
                     n.x = candidate.x;
                     n.y = candidate.y;
 
-                    nodes.push(n);
+                    // nodes.push(n);
                 }
             });
         })
@@ -408,8 +410,9 @@
                 padding : 3,
                 maxRadius : 8,
                 collider : true,
-                ticker: null
-
+                ticker: null,
+                ender : null,
+                starter : null
             });
         }
 
@@ -437,12 +440,21 @@
             .on('start', init)
             .on('tick', tick)
 
+        var ender ;
+        if(ender = force.ender()) {
+            force.on('end', ender)
+        }
+
         function init(e) {
             data.forEach(function(d) {
                 var center = sets.get(d.__setKey__).center;
                 d.x = d.x ? d.x * 1 : center.x;
                 d.y = d.y ? d.y * 1 : center.y;
             })
+            var starter ;
+            if(starter = force.starter()) {
+                starter(layout)
+            }
         }
 
         function tick(e) {
@@ -841,7 +853,7 @@
     /** given a list of set objects, and their corresponding overlaps.
      updates the (x, y, radius) attribute on each set such that their positions
      roughly correspond to the desired overlaps */
-    function venn$2(areas, parameters) {
+    function venn$1(areas, parameters) {
         parameters = parameters || {};
         parameters.maxIterations = parameters.maxIterations || 500;
         var lossFn = parameters.lossFunction || lossFunction;
@@ -1848,7 +1860,7 @@
         }
     }
 
-    function venn$1() {
+    function venn() {
         // d3.layout.venn = function() {
 
         var opts = {
@@ -1860,10 +1872,10 @@
                 value: valueFn,
             },
             size: [1, 1],
-            padding: 15,
+            padding: 0,
 
             // options from venn (https://github.com/benfred/venn.js)
-            layoutFunction: venn$2,
+            layoutFunction: venn$1,
             orientation: Math.PI / 2,
             normalize: true
 
@@ -2134,20 +2146,20 @@
     var version = "0.0.9";
 
     exports.version = version;
-    exports.venn = venn$1;
+    exports.venn = venn;
     exports.pack = pack;
     exports.distribute = distribute;
     exports.force = force;
 
-}));(function(target, cname, name) {
+}));(function(target, export_name, name) {
     if (target) {
-        target[name] = this[cname] && this[cname][name];
+        target[name] = this[export_name] && this[export_name][name];
 
-        for (var k in this[cname]) {
+        for (var k in this[export_name]) {
             if (k != name) {
-                target[name][k] = this[cname][k];
+                target[name][k] = this[export_name][k];
             }
         }
-        delete this[cname];
+        delete this[export_name];
     }
 }(this.d3 && this.d3.layout, 'd3_venn', 'venn'));
