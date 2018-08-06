@@ -118,7 +118,7 @@ function loadNetwork(networkData){
             .links(graph.links);
 
         function showTable(d) {
-            var content = "<h4>Standard Properties</h4><table class='table-bordered property-table'>";
+            var content = "<h4>Standard Properties</h4><table class='table-bordered property-table'><tr><td>Name</td><td>Value</td></tr>";
             for(var key in d){
                 var prop = d[key];
                 if(key.startsWith('has')){
@@ -136,9 +136,10 @@ function loadNetwork(networkData){
 
         function showLinks(links) {
             if(links.length){
-                var content = "<h4>Related Standards</h4><table class='table-bordered property-table'>";
-                for(var i = 0; i < links.length; i++){
-                    content += "<tr><td><a href='" + links[i] + "'>" + replaceUnderscore(parseURI(links[i])) + "</a></td></tr>";
+                var content = "<h4>Related Standards</h4><table class='table-bordered property-table'><tr><td>Related To</td><td>Relation Type</td></tr>";
+                for(var key in links){
+                    var link = links[key];
+                    content += "<tr><td><a href='" + link.linkedTo + "'>" + replaceUnderscore(parseURI(link.linkedTo)) + "</a></td><td>" + link.linkLabel + "</td></tr>";
                 }
                 content += "</table>";
                 $("#relatedStandards").html(content);
