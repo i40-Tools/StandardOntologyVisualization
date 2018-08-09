@@ -40,7 +40,7 @@ function fetchArchitectureAlignmentData(queryString){
          "SELECT (?concernLabel as ?resource) (?classificationLabel AS ?category)\n" +
        "WHERE\n" +
         "{\n" +
-        "\t?concern a sto:Concern .   \n" +
+        //"\t?concern a sto:Concern .   \n" +
         "\t?concern ^sto:frames ?classificationId . \n" +
         "\t?concern rdfs:label ?concernLabel .\n" +
         "\t?classificationId rdfs:label ?classificationLabel .\n" +
