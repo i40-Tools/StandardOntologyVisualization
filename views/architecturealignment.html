@@ -19,8 +19,10 @@
 
     <script src="../scripts/common.js"></script>
     <script src="../static/d3/d3-venn.js"></script>
-    <script src="../scripts/read-venn-data.js"></script>
-    <script src="../scripts/sto-venn.js"></script>
+	
+    <script src="../scripts/read-architecturealignment-data.js"></script>
+    <script src="../scripts/sto-architecturealignment.js"></script>
+
 
 
 
@@ -43,8 +45,8 @@
                     <li><a href="map.html">Locations</a></li>
                     <li><a href="timeline.html">Timeline</a></li>
                     <li><a href="network.html">Network</a></li>
-                    <li><a href="venn.html">Venn</a></li>
-                    <li><a href="architecturealignment.html">Architecture Alignment</a></li>
+						<li><a href="venn.html">Venn</a></li>
+						<li><a href="architecturealignment.html">Architecture Alignment</a></li>
                 </ul>
             </div>
         </div>
@@ -57,7 +59,7 @@
                 <div class="row">
                     <div class="col-md-8">
                             <div id="selectFrameworks"></div>
-                            <button type="submit" onclick="loadVennDiagram()" class="btn btn-primary btn-xs">Draw Diagram</button>
+                            <button type="submit" onclick="loadArchitectureAlignmentDiagram()" class="btn btn-primary btn-xs">Draw Diagram</button>
                     </div>
                     <div class="col-md-4">
                         <!--<div class="search-container">-->
@@ -102,7 +104,7 @@
             inputContainer.append(input);
         }
     });
-    function loadVennDiagram(){
+    function loadArchitectureAlignmentDiagram(){
         destroyChart("#venn");
         var queryString = "";
         $("#selectFrameworks input").each(function(index, input){
@@ -111,7 +113,7 @@
             }
         });
 
-        fetchVennData(queryString.slice(0, -1)).then(readVennData).then(loadVenn);
+        fetchArchitectureAlignmentData(queryString.slice(0, -1)).then(readArchitectureAlignmentData).then(loadArchitectureAlignment);
     }
     //loadVenn(vennData);
     // d3.select(window).on('resize', adjustSize);
