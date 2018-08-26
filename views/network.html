@@ -104,7 +104,9 @@
 <script>
     function toggleInference(element){
         destroyChart("#networks");
-        fetchStandards(element.checked)
+        fetchRelations()
+            .then(data => buildRelationProperty(data, element.checked))
+            .then(fetchStandards)
             .then(readStandards)
             .then(loadNetwork);
 

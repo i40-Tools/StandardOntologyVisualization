@@ -108,14 +108,16 @@ function readStandards(sData){
             var data = nodes[key];
             data.links = getUniqueLinks(data.links);
             for(var i=0; i < data.links.length; i++){
-                nodes[data.id]['isLinked'] = true;
-                nodes[data.links[i].linkedTo]['isLinked'] = true;
-                links.push({
-                    source: data.id,
-                    target: data.links[i].linkedTo,
-                    linkType: data.links[i].linkLabel,
-                    value: 1
-                });
+                if(nodes[data.links[i].linkedTo] !== undefined){
+                    nodes[data.id]['isLinked'] = true;
+                    nodes[data.links[i].linkedTo]['isLinked'] = true;
+                    links.push({
+                        source: data.id,
+                        target: data.links[i].linkedTo,
+                        linkType: data.links[i].linkLabel,
+                        value: 1
+                    });
+                }
             }
         }
         networkData.nodes = Object.values(nodes);
