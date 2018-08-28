@@ -44,6 +44,13 @@
                     <li><a href="timeline.html">Timeline</a></li>
                     <li><a href="network.html">Network</a></li>
                     <li><a href="venn.html">Venn</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Venn<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="venn_fw.html">Standards & Frameworks</a></li>
+                            <li><a href="venn_cls.html">Classifications & Frameworks</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -54,19 +61,18 @@
         <div id="network-chart">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-8">
-                            <div id="selectFrameworks"></div>
-                            <button type="submit" onclick="loadVennDiagram()" class="btn btn-primary btn-xs">Draw Diagram</button>
-                    </div>
-                    <div class="col-md-4">
-                        <!--<div class="search-container">-->
-                            <!--<input id="search_box" type="text" placeholder="Search.." name="search">-->
-                            <!--<button id="search_button" type="submit" onclick="search_chart('venn')"><i class="fa fa-search"></i></button>-->
-                        <!--</div>-->
-                    </div>
+                    <div class="user-input">
+                       <button id="expand" type="button" class="btn btn-link toggle-collapse" aria-label="Left Align" data-toggle="collapse" data-target="#toggle-input">
+                           <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                       </button>
+                       <div id="toggle-input" class="collapse">
+                           <div id="selectFrameworks"></div>
+                           <button type="submit" onclick="loadVennDiagram()" class="btn btn-primary btn-xs">Draw Diagram</button>
+                       </div>
+                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-10 col-md-offset-3 chart-container"></div>
+                    <div class="chart-container"></div>
                 </div>
             </div>
         </div>
@@ -76,8 +82,7 @@
         <div id="sidebar-text">
             <p class="info">Select an element in the visualization to see details</p>
         </div>
-        <div id="standardDetails"></div>
-        <div id="relatedStandards"></div>
+        <div id="details"></div>
     </div>
 </div>
 
@@ -97,10 +102,20 @@
     fetchFrameworks().then(readFrameworks).then(function(frameworks){
         var inputContainer = $("#selectFrameworks");
         for(var i=0; i < frameworks.length; i++){
-            var input = $('<input type="checkbox" class="grid-item" value="' + frameworks[i].id + '" id="togFr_' + i + '" onchange="">' + frameworks[i].name + '</input>');
+            var input = $('<input type="checkbox" checked="checked" class="grid-item" value="' + frameworks[i].id + '" id="togFr_' + i + '" onchange="">' + frameworks[i].name + '</input>');
             inputContainer.append(input);
         }
     });
+
+    $("#expand").click(function(){
+        var icon = $(this).find("span");
+        if ( icon.hasClass( "glyphicon-chevron-down" ) ) {
+            icon.removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+        } else {
+            icon.removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-down");
+        }
+    });
+
     function loadVennDiagram(){
         destroyChart("#venn");
         var queryString = "";

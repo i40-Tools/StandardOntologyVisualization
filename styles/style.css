@@ -332,7 +332,7 @@ h2{
 }
 
 #selectFrameworks{
-    display: grid;
+    display: inline-grid;
     width:100%;
     grid-template-rows: repeat(var(--rowNum), var(--gridHeight));
     grid-template-columns: repeat(var(--colNum), auto);
@@ -361,4 +361,13 @@ h2{
 .link:hover{
     stroke: red;
     stroke-width: 3px;
+}
+
+.user-input{
+    display: flex;
+}
+
+.toggle-collapse, .toggle-collapse:hover, .toggle-collapse:focus{
+    border: none !important;
+    outline: none !important;
 }

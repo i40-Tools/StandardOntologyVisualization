@@ -1,7 +1,27 @@
 function loadVenn(vennData) {
 
-    var width = 600,
-        height = 600,
+    console.log(vennData);
+
+    var setData = getSets(vennData);
+    showStats(setData);
+
+    function showStats(d) {
+        var content = "<table class='table-bordered property-table'><tr><td>Frameworks</td><td>Number of Standards</td></tr>";
+        for(var key in d){
+            var count = d[key];
+            content += '<tr><td><b>'+ key +'</b></td><td>' + count + '</td> </tr>';
+        }
+        content += "</table>";
+        $(".details").html(content);
+    }
+
+    var margin = {
+        width : 20,
+        height : 100
+    };
+
+    var width = $('.chart-container').width() - margin.width,
+        height = $('.chart-container').height() - margin.height,
         colors = d3.scale.category10();
 
     var setChar = 'ABCDEFGHIJKLMN',
@@ -196,6 +216,19 @@ function loadVenn(vennData) {
                 return d.name;
             });
 
+        pointsEnter
+            .on("click", function(d){
+                fetchDetails(d.id).then(function(resp){
+                    var detail = resp.results.bindings[0].detail.value;
+                    var info = "<h4>" + d.name + "</h4></br>" +
+                                detail + "</br></br>" +
+                                "<b>Part of Framework(s):</b> " + d.set.toString() + "</br></br>" +
+                                "<a href='" + d.id + "'>More information on " + d.name + "</a>";
+                    clearSidebar();
+                    showInfo(info);
+                })
+            });
+
         points.exit().transition()
             .attr('r', 0)
             .remove();
@@ -220,4 +253,20 @@ function loadVenn(vennData) {
     }
 
     return refresh(vennData)
-};
+}
+
+function getSets(data){
+    var sets = {};
+    for(let i = 0; i < data.length; i++){
+        var obj = data[i];
+        if(sets[obj.set.toString()] !== undefined){
+            sets[obj.set.toString()]++;
+        }
+        else{
+            sets[obj.set.toString()] = 1;
+        }
+
+    }
+    return sets;
+}
+

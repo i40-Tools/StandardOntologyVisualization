@@ -9,20 +9,20 @@
     <link href="../static/jquery/jquery-ui.css" rel="stylesheet">
     <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="../static/leaflet/leaflet.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../styles/style.css"/>
     <!-- jquery and bootstrap -->
     <script src="../static/jquery/jquery.min.js"></script>
     <script src="../static/jquery/jquery-ui.js"></script>
     <script src="../static/bootstrap/js/bootstrap.min.js"></script>
     <!-- d3.js -->
-    <script src="../static/d3/d3.v4.min.js"></script>
-    <script src="../static/d3/d3-jetpack.js"></script>
-    <script src="../scripts/common.js"></script>
+    <script src="../static/d3/d3.v3.min.js"></script>
 
-    <!-- Timeline Script -->
-    <script src="../scripts/read-time-data.js"></script>
-    <script src="../scripts/sto-timeline.js"></script>
+    <script src="../scripts/common.js"></script>
+    <script src="../static/d3/d3-venn.js"></script>
+    <script src="../scripts/read-venn-data.js"></script>
+    <script src="../scripts/sto-venn.js"></script>
+
+
 
     <title>Industry 4.0 Standards</title>
 </head>
@@ -57,21 +57,21 @@
 
     <!-- Page Content -->
     <div class="left col-xs-9">
-        <div id="time-chart">
+        <div id="network-chart">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-8">
-                        <h2>Foundation of Standards Organizations</h2>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="search-container">
-                            <input id="search_box" type="text" placeholder="Search.." name="search">
-                            <button id="search_button" type="submit" onclick="search_chart('timeline')"><i class="fa fa-search"></i></button>
+                    <div class="user-input">
+                        <button id="expand" type="button" class="btn btn-link toggle-collapse" aria-label="Left Align" data-toggle="collapse" data-target="#toggle-input">
+                            <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                        </button>
+                        <div id="toggle-input" class="collapse">
+                            <div id="selectFrameworks"></div>
+                            <button type="submit" onclick="loadVennDiagram()" class="btn btn-primary btn-xs">Draw Diagram</button>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div id="timeline" class="chart-container"></div>
+                    <div class="chart-container"></div>
                 </div>
             </div>
         </div>
@@ -81,6 +81,7 @@
         <div id="sidebar-text">
             <p class="info">Select an element in the visualization to see details</p>
         </div>
+        <div id="details"></div>
     </div>
 </div>
 
@@ -97,8 +98,34 @@
 
 <!--Chart Script-->
 <script>
-    d3.select(window).on('resize', adjustSize);
-    fetchTimeData()
-        .then(readTimeData)
-        .then(drawTimeline);
+    fetchFrameworks().then(readFrameworks).then(function(frameworks){
+        var inputContainer = $("#selectFrameworks");
+        for(var i=0; i < frameworks.length; i++){
+            var input = $('<input type="checkbox" checked="checked" class="grid-item" value="' + frameworks[i].id + '" id="togFr_' + i + '" onchange="">' + frameworks[i].name + '</input>');
+            inputContainer.append(input);
+        }
+    });
+
+    $("#expand").click(function(){
+        var icon = $(this).find("span");
+        if ( icon.hasClass( "glyphicon-chevron-down" ) ) {
+            icon.removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+        } else {
+            icon.removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-down");
+        }
+    });
+
+    function loadVennDiagram(){
+        destroyChart("#venn");
+        var queryString = "";
+        $("#selectFrameworks input").each(function(index, input){
+            if($(input).is(":checked")){
+                queryString += "<" + $(input).val() + ">,"
+            }
+        });
+
+        fetchVennData(queryString.slice(0, -1)).then(readVennData).then(loadVenn);
+    }
+    //loadVenn(vennData);
+    // d3.select(window).on('resize', adjustSize);
 </script>

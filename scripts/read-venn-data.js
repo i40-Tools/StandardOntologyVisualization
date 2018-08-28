@@ -4,7 +4,7 @@ function fetchVennData(queryString){
         "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
         "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
         "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
-        "SELECT DISTINCT ?standard ?framework\n" +
+        "SELECT DISTINCT ?standard ?framework ?standardId\n" +
         "WHERE\n" +
         "{\n" +
         "  \t?standardId a sto:Standard .   \n" +
@@ -35,6 +35,12 @@ function fetchFrameworks(){
     return fetchData(url, query);
 }
 
+function fetchDetails(standard){
+    var query = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+        "SELECT DISTINCT ?detail WHERE {<" + standard + "> rdfs:comment ?detail}";
+    return fetchData(url, query);
+}
+
 function readFrameworks(fData){
     var promise = new Promise(function (resolve) {
         var myData = fData.results.bindings;
@@ -59,7 +65,8 @@ function readVennData(vData){
             var data = myData[key];
             if(dictionary[data.standard.value] === undefined){
                 dictionary[data.standard.value] = {
-                    frameworks : [data.framework.value]
+                    frameworks : [data.framework.value],
+                    id: data.standardId.value
                 }
             }
             else{
@@ -72,7 +79,8 @@ function readVennData(vData){
             vennData.push({
                 set: value.frameworks,
                 r: 10,
-                name: key
+                name: key,
+                id: value.id
             })
         }
         resolve(vennData);

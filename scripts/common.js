@@ -2,6 +2,8 @@
 var url = 'https://dydra.com/mtasnim/sto/sparql';
 
 function fetchData(url, query) {
+    console.log("querying " + url + " with query:");
+    console.log(query)
     var promise = new Promise(function (resolve) {
         var xhr;
         xhr = new XMLHttpRequest();
@@ -33,6 +35,7 @@ function clearSidebar(){
     var html =  "<div id='sidebar-text'>" +
                 "<p class='info'>Select an element in the visualization to see details</p>" +
                 "</div>" +
+                "<div class='details'></div>" +
                 "<div id='standardDetails'></div>" +
                 "<div id='relatedStandards'></div>";
 
