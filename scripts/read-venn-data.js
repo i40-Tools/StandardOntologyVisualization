@@ -19,6 +19,26 @@ function fetchVennData(queryString){
     return fetchData(url, query);
 }
 
+function fetchVennCls(queryString){
+    var query = "PREFIX sto: <https://w3id.org/i40/sto#> \n" +
+        "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+        "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+        "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+        "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
+        "SELECT DISTINCT ?standard ?classification ?standardId\n" +
+        "WHERE\n" +
+        "{  " +
+        "    ?standardId a sto:Standard .   \n" +
+        "    ?standardId sto:hasClassification ?classificationId . \n" +
+        "    ?standardId rdfs:label ?standardLabel .\n" +
+        "    ?classificationId rdfs:label ?classificationLabel .\n" +
+        "    BIND(STR(?standardLabel) AS ?standard) \n" +
+        "    BIND(STR(?classificationLabel) AS ?classification) \n" +
+        "    FILTER ( ?classificationId IN (" + queryString + ") )\n" +
+        "}";
+    return fetchData(url, query);
+}
+
 function fetchFrameworks(){
     var query = "PREFIX sto: <https://w3id.org/i40/sto#> \n" +
         "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
@@ -34,6 +54,27 @@ function fetchFrameworks(){
         "GROUP BY ?frameworkId";
     return fetchData(url, query);
 }
+
+function fetchClassifications(){
+    var query = "PREFIX sto: <https://w3id.org/i40/sto#>\n" +
+        "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+        "SELECT (SAMPLE(?classificationId) as ?resource) (?classificationLabel AS ?label)\n" +
+        "WHERE\n" +
+        "{\n" +
+        "    {\n" +
+        "        ?classificationId a sto:StandardClassification .  \n" +
+        "    } \n" +
+        "    UNION \n" +
+        "    {\n" +
+        "         ?classification rdfs:subClassOf sto:StandardClassification . \n" +
+        "         ?classificationId a ?classification .\n" +
+        "    }\n" +
+        "?classificationId rdfs:label ?classificationLabel .\n" +
+        "}\n" +
+        "GROUP BY ?classificationLabel ORDER BY ?classificationLabel";
+    return fetchData(url, query);
+}
+
 
 function fetchDetails(standard){
     var query = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
@@ -79,6 +120,53 @@ function readVennData(vData){
             vennData.push({
                 set: value.frameworks,
                 r: 10,
+                name: key,
+                id: value.id
+            })
+        }
+        resolve(vennData);
+    });
+    return promise;
+}
+
+function readClassifications(cData){
+    var promise = new Promise(function (resolve) {
+        var myData = cData.results.bindings;
+        var classifications = [];
+        for(var key in myData){
+            var data = myData[key];
+            classifications.push({
+                id: data.resource.value,
+                name: data.label.value
+            });
+        }
+        resolve(classifications);
+    });
+    return promise;
+}
+
+function readVennClsData(vData){
+    var promise = new Promise(function (resolve) {
+        var myData = vData.results.bindings;
+        var dictionary = {};
+        for(var key in myData){
+            var data = myData[key];
+            if(dictionary[data.standard.value] === undefined){
+                dictionary[data.standard.value] = {
+                    classifications : [data.classification.value],
+                    id: data.standardId.value
+                }
+            }
+            else{
+                dictionary[data.standard.value].classifications.push(data.classification.value)
+            }
+        }
+        var vennData = [];
+        for(var key in dictionary){
+            var value = dictionary[key];
+            vennData.push({
+                set: value.classifications,
+                r: 5,
                 name: key,
                 id: value.id
             })

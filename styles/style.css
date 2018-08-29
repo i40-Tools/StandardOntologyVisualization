@@ -327,14 +327,13 @@ h2{
 
 :root {
     --rowNum: 3;
-    --colNum: 4;
+    --colNum: 8;
     --gridHeight: 20px;
 }
 
-#selectFrameworks{
+.selectionUI{
     display: inline-grid;
     width:100%;
-    grid-template-rows: repeat(var(--rowNum), var(--gridHeight));
     grid-template-columns: repeat(var(--colNum), auto);
     font-size: small;
 }

@@ -83,12 +83,16 @@ function loadVenn(vennData) {
         .padding(0)
         .packingStragegy(d3.layout.venn.force)
 
-    svg = d3.select(".chart-container")
+    var svg = d3.select(".chart-container")
         .append("svg")
         .attr("id", "venn")
         .attr('width', width)
-        .attr('height', height),
-        isFirstLayout = true;
+        .attr('height', height)
+        .call(d3.behavior.zoom().on("zoom", function () {
+            svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
+        }));
+
+    var isFirstLayout = true;
 
     var globalData = [],
         generator = 0;
