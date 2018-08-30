@@ -51,6 +51,11 @@ function loadNetwork(networkData){
             .range([startColor, endColor])
             .interpolate(d3.interpolateHcl);
 
+        var colorScaleGreen = d3.scaleLinear()
+            .domain([0, 20])
+            .range(["hsl(100,100%,90%)", "hsl(100,100%,5%)"])
+            .interpolate(d3.interpolateHcl);
+
         var node = g.append("g")
             .attr("class", "nodes")
             .selectAll("circle")
@@ -156,7 +161,10 @@ function loadNetwork(networkData){
             node
                 // .attr("r", 32)
                 .style("fill", function (d) {
-                    if(d.isLinked) return colorScale(d.weight);
+                    if(d.isLinked){
+                        if(d.nodeType !== undefined && d.nodeType === "concern") return colorScaleGreen(d.weight);
+                        else return colorScale(d.weight)
+                    }
                     else return "#f2d181";
                 })
                 .style("stroke", "#424242")
