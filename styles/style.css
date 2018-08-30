@@ -370,3 +370,7 @@ h2{
     border: none !important;
     outline: none !important;
 }
+
+#multiselect_cls{
+    height: 80vh;
+}

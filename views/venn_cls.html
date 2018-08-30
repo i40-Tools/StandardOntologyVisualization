@@ -54,6 +54,8 @@
                         <ul class="dropdown-menu">
                             <li><a href="venn_fw.html">Standards & Frameworks</a></li>
                             <li><a href="venn_cls.html">Standards & Classifications</a></li>
+                            <li><a href="venn_fw_concern.html">Concerns & Frameworks</a></li>
+                            <li><a href="venn_cls_concern.html">Concerns & Classifications</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -64,21 +66,19 @@
     <!-- Page Content -->
     <div class="left col-xs-9">
         <div id="network-chart">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="user-input">
-                        <button id="expand" type="button" class="btn btn-link toggle-collapse" aria-label="Left Align" data-toggle="collapse" data-target="#toggle-input">
-                            <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
-                        </button>
-                        <div id="toggle-input" class="collapse">
-                            <div id="selectClassifications" class="selectionUI"></div>
-                            <button type="submit" onclick="loadVennDiagram()" class="btn btn-primary btn-xs">Draw Diagram</button>
-                        </div>
+            <div class="col-md-3">
+                <div class="user-input">
+                    <button id="expand" type="button" class="btn btn-link toggle-collapse" aria-label="Left Align" data-toggle="collapse" data-target="#toggle-input">
+                        <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                    </button>
+                    <div id="toggle-input" class="collapse">
+                        <div id="selectClassifications" class="selectionUI"></div>
+                        <button type="submit" onclick="loadVennDiagram()" class="btn btn-primary btn-xs">Draw Diagram</button>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="chart-container"></div>
-                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="chart-container"></div>
             </div>
         </div>
     </div>
@@ -106,10 +106,12 @@
 <script>
     fetchClassifications().then(readClassifications).then(function(classifications){
         var inputContainer = $("#selectClassifications");
+        var multiSelect = $("<select id='multiselect_cls' multiple='multiple'></select>");
         for(var i=0; i < classifications.length; i++){
-            var input = $('<input type="checkbox" checked="checked" class="grid-item" value="' + classifications[i].id + '" id="togCls_' + i + '" onchange="">' + classifications[i].name + '</input>');
-            inputContainer.append(input);
+            var option = $('<option value="' + classifications[i].id + '" id="togCls_' + i + '">' + classifications[i].name + '</option>');
+            multiSelect.append(option);
         }
+        inputContainer.append(multiSelect);
     });
 
     $("#expand").click(function(){
@@ -124,12 +126,10 @@
     function loadVennDiagram(){
         destroyChart("#venn");
         var queryString = "";
-        $("#selectClassifications input").each(function(index, input){
-            if($(input).is(":checked")){
-                queryString += "<" + $(input).val() + ">,"
-            }
-        });
-
+        var selectedValues = $('#multiselect_cls').val();
+        for(var i=0; i < selectedValues.length; i++){
+            queryString += "<" + selectedValues[i] + ">,"
+        }
         fetchVennCls(queryString.slice(0, -1)).then(readVennClsData).then(loadVenn);
     }
     //loadVenn(vennData);

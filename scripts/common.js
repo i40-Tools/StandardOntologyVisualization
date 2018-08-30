@@ -1,5 +1,5 @@
-//var url = 'https://vocol.iais.fraunhofer.de/sto/fuseki/dataset/query';
-var url = 'https://dydra.com/mtasnim/sto/sparql';
+var url = 'https://vocol.iais.fraunhofer.de/sto/fuseki/dataset/query';
+//var url = 'https://dydra.com/mtasnim/sto/sparql';
 
 function fetchData(url, query) {
     console.log("querying " + url + " with query:");
