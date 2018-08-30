@@ -152,6 +152,7 @@ function fetchConcerns(){
         "\n" +
         "} UNION {\n" +
         "?concern rdfs:label ?co_label .\n" +
+        "?concern rdf:type sto:Concern . " +
         "OPTIONAL { ?concern rdfs:comment ?co_comment . } \n" +
         "}\n" +
         "\n" +
