@@ -108,10 +108,11 @@
         var inputContainer = $("#selectClassifications");
         var multiSelect = $("<select id='multiselect_cls' multiple='multiple'></select>");
         for(var i=0; i < classifications.length; i++){
-            var option = $('<option value="' + classifications[i].id + '" id="togCls_' + i + '">' + classifications[i].name + '</option>');
+            var option = $('<option value="' + classifications[i].id + '" id="togCls_' + i + '" selected>' + classifications[i].name + '</option>');
             multiSelect.append(option);
         }
         inputContainer.append(multiSelect);
+        loadVennDiagram();
     });
 
     $("#expand").click(function(){

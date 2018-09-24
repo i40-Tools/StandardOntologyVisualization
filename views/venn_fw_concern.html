@@ -112,6 +112,7 @@
             var input = $('<input type="checkbox" checked="checked" class="grid-item" value="' + frameworks[i].id + '" id="togFr_' + i + '" onchange="">' + frameworks[i].name + '</input>');
             inputContainer.append(input);
         }
+        loadVennDiagram();
     });
 
     $("#expand").click(function(){
