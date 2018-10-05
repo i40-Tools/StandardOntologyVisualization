@@ -144,8 +144,12 @@ function loadNetwork(networkData){
                 var content = "<h4>Related Standards</h4><table class='table-bordered property-table'><tr><td>Related To</td><td>Relation Type</td></tr>";
                 for(var key in links){
                     var link = links[key];
+					if (link.linkedToLabel !== undefined) {
+					content += "<tr><td><a href='" + link.linkedTo + "'>" + link.linkedToLabel + "</a></td><td>" + link.linkLabel + "</td></tr>"; 						
+					} else {
                     content += "<tr><td><a href='" + link.linkedTo + "'>" + replaceUnderscore(parseURI(link.linkedTo)) + "</a></td><td>" + link.linkLabel + "</td></tr>";
-                }
+					}
+				}
                 content += "</table>";
                 $("#relatedStandards").html(content);
             }

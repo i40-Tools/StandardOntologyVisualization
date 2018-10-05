@@ -133,29 +133,18 @@ function fetchConcerns(){
         "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
         "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
         "\n" +
-        "SELECT ?cl_label ?cl_comment ?framework ?co_label ?co_comment ?classification ?relation1 ?concern ?relation2 ?classification2\n" +
+        "SELECT ?cl_label ?cl_comment ?framework ?classification2 ?relation2 ?classification ?cl2_label\n" +
         "WHERE\n" +
-        "{\n" +
-        "\n" +
         "{\n" +
         "?classification rdfs:label ?cl_label .\n" +
         "?classification sto:isDescribedin ?frameworkId .\n" +
         "?frameworkId rdfs:label ?framework .\n" +
-        "OPTIONAL { ?classification rdfs:comment ?cl_comment . } OPTIONAL {\n" +
-        "?classification sto:frames ?concern .\n" +
-        "sto:frames rdfs:label ?relation1 .\n" +
-        "}\n" +
+        "OPTIONAL { ?classification rdfs:comment ?cl_comment . }\n" +
         "OPTIONAL {\n" +
         "?classification sto:alignesWith ?classification2 .\n" +
+        "?classification2 rdfs:label ?cl2_label .\n" +
         "sto:alignesWith rdfs:label ?relation2 .\n" +
         "}\n" +
-        "\n" +
-        "} UNION {\n" +
-        "?concern rdfs:label ?co_label .\n" +
-        "?concern rdf:type sto:Concern . " +
-        "OPTIONAL { ?concern rdfs:comment ?co_comment . } \n" +
-        "}\n" +
-        "\n" +
         "}";
     return fetchData(url, query);
 }
@@ -202,6 +191,7 @@ function readConcerns(cData){
             if(data.classification2 !== undefined){
                 nodes[data.classification.value]['links'].push({
                     linkedTo : data.classification2.value,
+                    linkedToLabel : data.cl2_label.value,
                     linkType : data.relation2.value,
                     linkLabel : data.relation2.value
                 })

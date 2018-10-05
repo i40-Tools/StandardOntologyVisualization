@@ -169,7 +169,8 @@ function search_chart(pageName){
 
 function parseURI(string) {
     if(string === undefined) return "";
-    return string.split('#')[1];
+    if(string.includes("#") ) return string.split('#')[1];
+     return string.split('/')[string.split('/').length - 1];
 }
 
 function addSpace(string) {
