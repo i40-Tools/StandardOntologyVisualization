@@ -133,7 +133,7 @@ function fetchConcerns(){
         "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
         "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
         "\n" +
-        "SELECT ?cl_label ?cl_comment ?framework ?co_label ?co_comment ?classification ?relation1 ?concern ?relation2 ?classification2\n" +
+        "SELECT ?cl_label ?cl_comment ?framework ?co_label ?co_comment ?classification2 ?relation2 ?concern ?relation1 ?classification\n" +
         "WHERE\n" +
         "{\n" +
         "\n" +
