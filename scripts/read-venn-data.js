@@ -95,10 +95,9 @@ function fetchFrameworks(isConcern){
             "SELECT DISTINCT ?frameworkId ?frameworkLabel\n" +
             "WHERE\n" +
             "{\n" +
-            "  \t?frameworkId rdfs:label ?framework .\n" +
+            "  \t?frameworkId rdfs:label ?frameworkLabel .\n" +
             "  \t?class sto:isDescribedin ?frameworkId .\n" +
             "  \t?class sto:frames ?concern .\n" +
-            "    BIND(str(?framework) AS ?frameworkLabel)\n" +
             "}";
     }
     return fetchData(url, query);
