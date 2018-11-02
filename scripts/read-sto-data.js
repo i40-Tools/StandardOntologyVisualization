@@ -62,6 +62,7 @@ function readStoData(data) {
             };
             pushInitiative(initiative, classification, standard);
         }
+        console.log(final_data);
         resolve(final_data);
     });
 

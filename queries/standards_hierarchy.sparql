@@ -1,0 +1,28 @@
+PREFIX rami: <https://w3id.org/i40/rami#>
+PREFIX sto: <https://w3id.org/i40/sto#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dct: <http://purl.org/dc/terms/>
+SELECT DISTINCT  ?std_name
+                 ?classification_name
+                 ?initiative_name
+                 ?std
+                 ?classification
+                 ?initiative
+                 ?std_comment
+                 ?classification_comment
+                 ?initiative_comment
+WHERE {
+    ?classification sto:isDescribedin ?initiative .
+    ?std sto:hasClassification ?classification .
+    OPTIONAL{ ?std rdfs:label ?sto } .
+    OPTIONAL{ ?classification rdfs:label ?cto } .
+    OPTIONAL{ ?initiative rdfs:label ?ito } .
+    OPTIONAL{ ?std rdfs:comment ?std_comment } .
+    OPTIONAL{ ?classification rdfs:comment ?classification_comment } .
+    OPTIONAL{ ?initiative rdfs:comment ?initiative_comment } .
+    FILTER( langMatches( lang(?sto), 'en' ) )
+    FILTER( langMatches( lang(?std_comment), 'en' ) )
+    BIND(CONCAT(str(?sto)) as ?std_name) .
+    BIND(CONCAT(str(?cto)) as ?classification_name) .
+    BIND(CONCAT(str(?ito)) as ?initiative_name)
+}
