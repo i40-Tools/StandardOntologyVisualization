@@ -6,7 +6,7 @@ function loadVenn(vennData) {
     showStats(setData);
 
     function showStats(d) {
-        var content = "<table class='table-bordered property-table'><tr><td>Frameworks</td><td>Number of connected Concerns</td></tr>";
+        var content = "<table class='table-bordered property-table'><tr><td>Frameworks</td><td>Number of Standards</td></tr>";
         for(var key in d){
             var count = d[key];
             content += '<tr><td><b>'+ key +'</b></td><td>' + count + '</td> </tr>';
@@ -77,12 +77,14 @@ function loadVenn(vennData) {
             sel.property("value", loadVenn[name]())
         })
         .on('input', refreshInput)
-
+		
+// sba: from venn
     var layout = d3.layout.venn()
         .size([width, height])
         .padding(0)
         .packingStragegy(d3.layout.venn.force)
 
+	/*
     var svg = d3.select(".chart-container")
         .append("svg")
         .attr("id", "venn")
@@ -91,7 +93,34 @@ function loadVenn(vennData) {
         .call(d3.behavior.zoom().on("zoom", function () {
             svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
         }));
-
+	*/
+	
+	// sba: 
+	var margin = {
+			top: 285,
+			right: 0,
+			bottom: 10,
+			left: 285
+		};
+	
+	var svg = d3.select(".chart-container")
+        .append("svg")
+		.attr("class", "background")
+        .attr("id", "matrix")
+		.attr("width", width - margin.right)
+		.attr("height", height - margin.top)
+		.append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		//.call(d3.behavior.zoom().on("zoom", function () {
+        //    svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
+        //}))
+		;
+	svg.append("rect")
+            .attr("class", "background")
+            .attr("width", width)
+            .attr("height", height);
+	
+	// sba: from venn
     var isFirstLayout = true;
 
     var globalData = [],
@@ -103,7 +132,7 @@ function loadVenn(vennData) {
             layout.nodes(data)
         }
 
-        var vennArea = svg.selectAll("g.venn-area")
+        var vennArea = svg.selectAll("g.venn")
             .data(layout.sets().values(), function (d) {
                 return d.__key__;
             });
@@ -119,7 +148,7 @@ function loadVenn(vennData) {
         });
 
         vennEnter.append('path')
-            .attr('class', 'venn-area-path')
+            .attr('class', 'matrix-area-path')
             .attr('stroke', function (d, i) {
                 return colors(i)
             })
@@ -134,7 +163,7 @@ function loadVenn(vennData) {
             .attr("dy", ".35em");
 
 
-        vennArea.selectAll('path.venn-area-path').transition()
+        vennArea.selectAll('path.matrix-area-path').transition()
             .duration(isFirstLayout ? 0 : loadVenn.duration())
             .attr('opacity', loadVenn.circleOpacity())
             .attrTween('d', function (d) {
@@ -155,7 +184,7 @@ function loadVenn(vennData) {
                 return d.center.y
             });
 
-        //we need to rebind data so that parent data propagetes to child nodes (otherwise, updating parent has no effect on child.__data__ property)
+        //we need to rebind data so that parent data propagates to child nodes (otherwise, updating parent has no effect on child.__data__ property)
         vennArea.selectAll('circle.inner').data(function (d) {
             return [d];
         }).transition()
@@ -256,6 +285,83 @@ function loadVenn(vennData) {
         return loadVenn
     }
 
+
+	// sba: new:
+
+	//[...] //transform the data
+
+	var matrixScale = d3.scaleBand().range([0, width]).domain(d3.range(vennData.length));
+	var opacityScale = d3.scaleLinear().domain([0, 10]).range([0.3, 1.0]).clamp(true);
+	var colorScale = d3.scaleOrdinal(d3.schemeCategory20);
+
+	// Draw each row (translating the y coordinate) 
+		var rows = svg.selectAll(".row")
+			.data(vennData)
+			.enter().append("g")
+			.attr("class", "row")
+			.attr("transform", (d, i) => {
+				return "translate(0," + matrixScale(i) + ")";
+			});
+
+
+	var squares = rows.selectAll(".cell")
+			//.data(d => d.filter(item => item.set.length > 0))
+			.enter().append("svg")
+			.attr("class", "cell")
+			.attr("id", d => matrixScale(d.id))
+			.attr("width", matrixScale.bandwidth())
+			.attr("height", matrixScale.bandwidth())
+			.style("fill-opacity", d => opacityScale(d.set.length)).style("fill", d => {
+				return nodes[d.id].group == nodes[d.set[0]].group ? colorScale(nodes[d.id].group) : "grey";
+			})
+			//.on("mouseover", mouseover)
+			//.on("mouseout", mouseout)
+			;
+	
+	var columns = svg.selectAll(".column")
+        .data(vennData)
+        .enter().append("g")
+        .attr("class", "column")
+        .attr("transform", (d, i) => {
+            return "translate(" + matrixScale(i) + ")rotate(-90)";
+        });
+		
+	rows.append("text")
+        .attr("class", "label")
+        //.attr("id", -5)
+        .attr("y", matrixScale.bandwidth() / 2)
+        .attr("dy", ".32em")
+        .attr("text-anchor", "end")
+        //.text((d, i) => console.log(d.name))
+        .text((d, i) => d.name )
+		;
+  
+    columns.append("text")
+        .attr("class", "label")
+        .attr("y", 100)
+        .attr("y", matrixScale.bandwidth() / 2)
+        .attr("dy", ".32em")
+        .attr("text-anchor", "start")
+        .text((d, i) => d.name );
+
+	// Precompute the orders.
+	var orders = {
+		name: d3.range(total_items).sort((a, b) => {
+			return d3.ascending(nodes[a].name, nodes[b].name);
+		}),
+		count: d3.range(total_items).sort((a, b) => {
+			return nodes[b].count - nodes[a].count;
+		}),
+		group: d3.range(total_items).sort((a, b) => {
+			return nodes[b].group - nodes[a].group;
+		})
+	};
+	d3.select("#order").on("change", function() {
+		changeOrder(this.value);
+	});
+
+	//*
+	
     return refresh(vennData)
 }
 
