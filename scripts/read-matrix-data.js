@@ -134,6 +134,107 @@ function fetchDetails(standard){
     return fetchData(url, query);
 }
 
+
+function fetchConcerns(){
+    var query = "PREFIX sto: <https://w3id.org/i40/sto#>\n" +
+        "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+        "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+        "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+        "\n" +
+        "SELECT ?cl_label ?cl_comment ?framework ?classification2 ?relation2 ?classification ?cl2_label\n" +
+        "WHERE\n" +
+        "{\n" +
+        "?classification rdfs:label ?cl_label .\n" +
+        "?classification sto:isDescribedin ?frameworkId .\n" +
+        "?frameworkId rdfs:label ?framework .\n" +
+        "OPTIONAL { ?classification rdfs:comment ?cl_comment . }\n" +
+        "OPTIONAL {\n" +
+        "?classification sto:alignesWith ?classification2 .\n" +
+        "?classification2 rdfs:label ?cl2_label .\n" +
+        "sto:alignesWith rdfs:label ?relation2 .\n" +
+        "}\n" +
+        "}";
+    return fetchData(url, query);
+}
+
+var networkData = {
+    nodes : null,
+    links: null
+};
+
+
+function readConcerns(cData){
+    var promise = new Promise(function (resolve) {
+        var myData = cData.results.bindings;
+        var nodes = {};
+        var links = [];
+        var clsCount = 0;
+        var cnCount = 0;
+        for(var key in myData){
+            var data = myData[key];
+            if(data.classification !== undefined){
+                clsCount++;
+                if(nodes[data.classification.value] === undefined){
+                    nodes[data.classification.value] = {};
+                    nodes[data.classification.value]['id'] = data.classification.value;
+                    nodes[data.classification.value]['label'] = data.cl_label.value;
+                    nodes[data.classification.value]['comment'] = data.cl_comment === undefined ?  "" : data.cl_comment.value;
+                    nodes[data.classification.value]['links'] = [];
+                    nodes[data.classification.value]['isLinked'] = false;
+                    nodes[data.classification.value]['nodeType'] = 'class';
+                }
+            }
+            if(data.concern !== undefined){
+                if(nodes[data.concern.value] === undefined){
+                    nodes[data.concern.value] = {};
+                    nodes[data.concern.value]['id'] = data.concern.value;
+                    nodes[data.concern.value]['label'] = data.co_label === undefined ? "" : data.co_label.value;
+                    nodes[data.concern.value]['comment'] = data.co_comment === undefined ?  "" : data.co_comment.value;
+                    nodes[data.concern.value]['nodeType'] = 'concern';
+                    nodes[data.concern.value]['links'] = [];
+                }
+
+                if(data.classification !== undefined){
+                    nodes[data.classification.value]['links'].push({
+                        linkedTo : data.concern.value,
+                        linkType : data.relation1.value,
+                        linkLabel : data.relation1.value
+                    })
+                }
+            }
+            if(data.classification2 !== undefined){
+                nodes[data.classification.value]['links'].push({
+                    linkedTo : data.classification2.value,
+                    linkedToLabel : data.cl2_label.value,
+                    linkType : data.relation2.value,
+                    linkLabel : data.relation2.value
+                })
+            }
+        }
+        for(var key in nodes){
+            var data = nodes[key];
+            data.links = getUniqueLinks(data.links);
+            for(var i=0; i < data.links.length; i++){
+                if(nodes[data.links[i].linkedTo] !== undefined){
+                    nodes[data.id]['isLinked'] = true;
+                    nodes[data.links[i].linkedTo]['isLinked'] = true;
+                    links.push({
+                        source: data.id,
+                        target: data.links[i].linkedTo,
+                        linkType: data.links[i].linkLabel,
+                        value: 1
+                    });
+                }
+            }
+        }
+        networkData.nodes = Object.values(nodes);
+        networkData.links = links;
+        resolve(networkData);
+    });
+    return promise;
+}
+
+
 function readFrameworks(fData){
     var promise = new Promise(function (resolve) {
         var myData = fData.results.bindings;
@@ -148,6 +249,15 @@ function readFrameworks(fData){
         resolve(frameworks);
     });
     return promise;
+}
+
+function getUniqueLinks(links) {
+    var map = {};
+    for(var key in links){
+        var link = links[key];
+        map[link.linkedTo + link.linkType] = link;
+    }
+    return Object.values(map);
 }
 
 function readVennData(vData){
@@ -197,33 +307,3 @@ function readClassifications(cData){
     return promise;
 }
 
-function readVennClsData(vData){
-    var promise = new Promise(function (resolve) {
-        var myData = vData.results.bindings;
-        var dictionary = {};
-        for(var key in myData){
-            var data = myData[key];
-            if(dictionary[data.standard.value] === undefined){
-                dictionary[data.standard.value] = {
-                    classifications : [data.classification.value],
-                    id: data.standardId.value
-                }
-            }
-            else{
-                dictionary[data.standard.value].classifications.push(data.classification.value)
-            }
-        }
-        var vennData = [];
-        for(var key in dictionary){
-            var value = dictionary[key];
-            vennData.push({
-                set: value.classifications,
-                r: 5,
-                name: key,
-                id: value.id
-            })
-        }
-        resolve(vennData);
-    });
-    return promise;
-}
