@@ -135,7 +135,7 @@ function fetchDetails(standard){
 }
 
 
-function fetchConcerns(){
+function fetchConcerns(queryString){
     var query = "PREFIX sto: <https://w3id.org/i40/sto#>\n" +
         "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
         "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
@@ -153,7 +153,8 @@ function fetchConcerns(){
         "?classification2 rdfs:label ?cl2_label .\n" +
         "sto:alignesWith rdfs:label ?relation2 .\n" +
         "}\n" +
-        "}";
+        " FILTER ( ?frameworkId IN (" + queryString + ") )\n" +
+        "} ";
     return fetchData(url, query);
 }
 
@@ -215,16 +216,16 @@ function readConcerns(cData){
             var data = nodes[key];
             data.links = getUniqueLinks(data.links);
             for(var i=0; i < data.links.length; i++){
-                if(nodes[data.links[i].linkedTo] !== undefined){
+                //if(nodes[data.links[i].linkedTo] !== undefined){
                     nodes[data.id]['isLinked'] = true;
-                    nodes[data.links[i].linkedTo]['isLinked'] = true;
+                    //nodes[data.links[i].linkedTo]['isLinked'] = true;
                     links.push({
                         source: data.id,
                         target: data.links[i].linkedTo,
                         linkType: data.links[i].linkLabel,
                         value: 1
                     });
-                }
+                //}
             }
         }
         networkData.nodes = Object.values(nodes);
