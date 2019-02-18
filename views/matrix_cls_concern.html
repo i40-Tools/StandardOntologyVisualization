@@ -47,11 +47,9 @@
           stroke: #fff;
         }
         .container {
-        	display: grid;
+        	//display: grid;
         	width: 1000px;
-        	grid-template-areas: "head head"
-        												"intro intro"
-        												"graph aside";
+        	grid-template-areas: "head head" "intro intro" "graph aside";
         	grid-template-columns: auto auto;
         	justify-items: center;
         	margin: auto;
@@ -151,7 +149,7 @@
                         </button>
                         <div id="toggle-input" class="collapse">
                             <div id="selectFrameworks" class="selectionUI"></div>
-                            <button type="submit" onclick="loadMatrixDiagram()" class="btn btn-primary btn-xs">Draw Diagram</button>
+                            <button type="submit" onclick="loadMatrix()" class="btn btn-primary btn-xs">Draw Diagram</button>
                         </div>
                     </div>
                 </div>
@@ -187,12 +185,40 @@
 
 <!--Chart Script-->
 <script>
- 
-    //loadMatrixDiagram(vennData);
-    // d3.select(window).on('resize', adjustSize);
-	var inputContainer = $("#selectFrameworks");
+	fetchFrameworks(true).then(readFrameworks).then(function(frameworks){
+        var inputContainer = $("#selectFrameworks");
+        for(var i=0; i < frameworks.length; i++){
+            var input = $('<input type="checkbox" checked="checked" class="grid-item" value="' + frameworks[i].id + '" id="togFr_' + i + '" onchange="">' + frameworks[i].name + '</input>');
+            inputContainer.append(input);
+        }
+        
+		//start with all or only one framework?
+		//loadMatrix();
+		loadMatrixDiagram("https://w3id.org/i40/sto#IIRA");
+    });
+
+    $("#expand").click(function(){
+        var icon = $(this).find("span");
+        if ( icon.hasClass( "glyphicon-chevron-down" ) ) {
+            icon.removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+        } else {
+            icon.removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-down");
+        }
+    });
 	
-	loadMatrixDiagram("https://w3id.org/i40/sto#IIRA");
+    function loadMatrix(){
+        destroyChart("#matrix");
+        var queryString = "";
+        $("#selectFrameworks input").each(function(index, input){
+            if($(input).is(":checked")){
+                queryString += "<" + $(input).val() + ">,"
+            }
+        });
+
+        loadMatrixDiagram(queryString.slice(1, -2));
+    }
+	
+	
 
     d3.select(window).on('resize', adjustSize);
 </script>

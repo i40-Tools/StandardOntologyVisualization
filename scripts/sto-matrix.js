@@ -1,59 +1,5 @@
-
-
-function getSets(data){
-    var sets = {};
-    for(let i = 0; i < data.length; i++){
-        var obj = data[i];
-        if(sets[obj.set.toString()] !== undefined){
-            sets[obj.set.toString()]++;
-        }
-        else{
-            sets[obj.set.toString()] = 1;
-        }
-
-    }
-    return sets;
-}
-
-
-
-
 function createMatrix(data) {
-	 var margin = {
-	  top: 285,
-	  right: 0,
-	  bottom: 0,
-	  left: 285
-	  },
-	  width = 500,
-	  height = 500;
-	  
-	var svg = d3.select("graph").append("svg")
-		.attr("width", width + margin.left + margin.right)
-		.attr("height", height + margin.top + margin.bottom)
-		.append("g")
-		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-	svg.append("rect")
-		.attr("class", "background")
-		.attr("width", width)
-		.attr("height", height);
-
-	
-	// sba: core
-	//var data = getSets(vennData);
-	//showStats(data);
-
-	function showStats(d) {
-		var content = "<table class='table-bordered property-table'><tr><td>Frameworks</td><td>Number of Standards</td></tr>";
-		for(var key in d){
-			var count = d[key];
-			content += '<tr><td><b>'+ key +'</b></td><td>' + count + '</td> </tr>';
-		}
-		content += "</table>";
-		$(".details").html(content);
-	}
-	console.log(data);
-	
+		
 	var matrix = [];
 	var nodes = data.nodes;
 	var total_items = nodes.length;
@@ -72,8 +18,42 @@ function createMatrix(data) {
 		if (!node_ids.includes(node.id) ) node_ids.push(node.id);
 	});
 	
+
 	
-	var matrixScale = d3.scaleBand().range([0, width]).domain(d3.range(nodes.length));
+	// create the matrix area
+	 var margin = {
+	  top: 350,
+	  right: 0,
+	  bottom: 0,
+	  left: 200
+	  },
+	  width = unique_targets.length * 13,
+	  height = data.nodes.length * 13;
+	  
+	var svg = d3.select("graph").append("svg")
+		.attr("id", "matrix")
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom)
+		.append("g")
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	svg.append("rect")
+		.attr("class", "background")
+		.attr("width", width)
+		.attr("height", height);
+
+	function showStats(d) {
+		var content = "<table class='table-bordered property-table'><tr><td>Frameworks</td><td>Number of Standards</td></tr>";
+		for(var key in d){
+			var count = d[key];
+			content += '<tr><td><b>'+ key +'</b></td><td>' + count + '</td> </tr>';
+		}
+		content += "</table>";
+		$(".details").html(content);
+	}
+	console.log(data);
+
+	
+	var matrixScale = d3.scaleBand().range([0, width]).domain(d3.range(unique_targets.length));
 	var opacityScale = d3.scaleLinear().domain([0, 10]).range([0.3, 1.0]).clamp(true);
 	var colorScale = d3.scaleOrdinal(d3.schemeCategory20);
 		
@@ -90,20 +70,9 @@ function createMatrix(data) {
 			};
 			matrix[i][j] = point;
 		};
-		/*
-		var i;
-		for (i = 0; i < unique_targets.length; i++ ) {
-			var point = {
-				x: node.id,
-				y: unique_targets[i],
-				z: 0
-			};
-            matrix[node.id][unique_targets[i]] = point;
-		
-		}
-		*/
 	};
 	
+	var setData = [];
 	
 	// Fill matrix with data from links and count how many times each item appears
 	data.links.forEach(function(link) {
@@ -117,11 +86,30 @@ function createMatrix(data) {
 		if (i < nodes.length ) {
 			var j = unique_targets.indexOf(link.target);
 			matrix[i][j].z = link.value;
+			
+			if(setData[i] !== undefined){
+				setData[i]++;
+			}
+			else{
+				setData[i] = 1;
+			}
 			//matrix[j][i].z += link.value;
-			//nodes[i].count += link.value;
-			//unique_targets[j].count += link.value;
 		}
 	});
+		
+	//create the side panel
+    showStats(setData);
+
+    function showStats(d) {
+        var content = "<table class='table-bordered property-table'><tr><td>Frameworks</td><td>Number of framed Concerns</td></tr>";
+        for(var key in d){
+            var count = d[key];
+            content += '<tr><td><b>'+ nodes[key].label +'</b></td><td>' + count + '</td> </tr>';
+        }
+        content += "</table>";
+        $(".details").html(content);
+    }
+	
 	// Draw each row (translating the y coordinate)
 	var rows = svg.selectAll(".row")
 		.data(matrix)
@@ -129,7 +117,11 @@ function createMatrix(data) {
 		.attr("class", "row")
 		.attr("transform", (d, i) => {
 			return "translate(0," + matrixScale.bandwidth(1) * i + ")";
-		});
+		})
+		.attr("transform", (d, i) => {
+			return "translate(0," + matrixScale.bandwidth(1) * i + ")";
+		})
+		;
 
 	var squares = rows.selectAll(".cell")
 		.data(d => d.filter(item => item.z > 0))
@@ -149,7 +141,7 @@ function createMatrix(data) {
 		;
 		
 	var columns = svg.selectAll(".column")
-		.data(matrix)
+		.data(matrix[0])
 		.enter().append("g")
 		.attr("class", "column")
 		.attr("transform", (d, i) => {
@@ -162,17 +154,20 @@ function createMatrix(data) {
 		.attr("y", 4)
 		.attr("dy", ".32em")
 		.attr("text-anchor", "end")
-		//rows.forEach(function(row) { row.text = nodes[row[0].x].id})
 		.text((d, i) => nodes[i].id)
 		;
 	columns.append("text")
 		.attr("class", "label")
 		.attr("y", 100)
-		.attr("y", matrixScale.bandwidth() / 2)
+		.attr("y", matrixScale.bandwidth() / 2 - 2)
 		.attr("dy", ".32em")
 		.attr("text-anchor", "start")
-		.text((d, i) => unique_targets[i]);
-		
+		.text(
+		(d, i) => unique_targets[i]
+		);
+	
+	console.log(columns);
+	console.log(unique_targets);
 		/*
 	// Precompute the orders.
 	var orders = {
@@ -273,6 +268,23 @@ var intToGroup = function(area) {
 function capitalize_Words(str){
 	return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
+
+
+function getSets(data){
+    var sets = {};
+    for(let i = 0; i < data.links.length; i++){
+        var obj = data.links[i];
+        if(sets[obj.source] !== undefined){
+            sets[obj.source]++;
+        }
+        else{
+            sets[obj.source] = 1;
+        }
+
+    }
+    return sets;
+}
+
   
 function loadMatrixDiagram(query){
 	destroyChart("#matrix");
@@ -284,7 +296,54 @@ function loadMatrixDiagram(query){
 		}
 	});
 	queryString = "<" + query + ">,";
-	fetchConcerns(queryString.slice(0, -1))
-		.then(readConcerns)
+	fetchClassificationsAndConcerns(queryString.slice(0, -1))
+		.then(readClassificationAndConcerns)
+		.then(createMatrix);
+}
+
+function loadMatrixDiagramFrameworksAndConcerns(query){
+	destroyChart("#matrix");
+	
+	var queryString = "";
+	$("#selectFrameworks input").each(function(index, input){
+		if($(input).is(":checked")){
+			queryString += "<" + $(input).val() + ">,"
+		}
+	});
+	queryString = "<" + query + ">,";
+	fetchFrameworksAndConcerns(queryString.slice(0, -1))
+		.then(readClassificationAndConcerns)
+		.then(createMatrix);
+}
+
+
+function loadMatrixDiagramConcernAndClassifications(query){
+	destroyChart("#matrix");
+	
+	var queryString = "";
+	$("#selectFrameworks input").each(function(index, input){
+		if($(input).is(":checked")){
+			queryString += "<" + $(input).val() + ">,"
+		}
+	});
+	queryString = "<" + query + ">,";
+	fetchConcernsAndClassifications(queryString.slice(0, -1))
+		.then(readClassificationAndConcerns)
+		.then(createMatrix);
+}
+
+
+function loadMatrixDiagramConcernAndFrameworks(query){
+	destroyChart("#matrix");
+	
+	var queryString = "";
+	$("#selectFrameworks input").each(function(index, input){
+		if($(input).is(":checked")){
+			queryString += "<" + $(input).val() + ">,"
+		}
+	});
+	queryString = "<" + query + ">,";
+	fetchConcernsAndFrameworks(queryString.slice(0, -1))
+		.then(readClassificationAndConcerns)
 		.then(createMatrix);
 }
