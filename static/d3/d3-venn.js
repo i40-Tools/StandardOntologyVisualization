@@ -2088,10 +2088,49 @@
                     sets.set(k, v);
                 }
             });
+            sets.forEach(function(k, v){
+                if(!k.includes(",")){
+                    var currentSet = k;
+                    var sizeToBeAdded = 0;
+                    sets.forEach(function (k, v) {
+                        if(k.includes(",") && k.includes(currentSet)){
+                            sizeToBeAdded += v.size
+                        }
+                    });
+                    v.size += sizeToBeAdded
+                }
+            });
+            //check for SPECIAL CASE
+            var totalSet = Object.keys(sets._);
+            var originalSet = [];
+            sets.forEach(function(k, v){
+                if(!k.includes(",")){
+                    originalSet.push(k)
+                }
+            });
+            const getAllSubsets =
+                theArray => theArray.reduce(
+                    (subsets, value) => subsets.concat(
+                        subsets.map(set => [value,...set])
+                    ),
+                    [[]]
+                );
+            var subsets = getAllSubsets(originalSet);
+            //very, very special case
+            if((Math.pow(2, originalSet.length) - 1) - totalSet.length === 1){
+                subsets.forEach(function(item){
+                    if(item.length > 0){
+                        if(totalSet.indexOf(item.toString()) === -1){
+                            //enter dummy
+                            sets._[item.toString()] = {size:1, sets: item, nodes: []};
+                        }
+                    }
+                });
+            }
             // reset the size for each set.
             sets.forEach(function(k, v) {
                 v.size = size(v.size);
-            })
+            });
             // sets = sets.values();
 
             venn.sets(sets);
