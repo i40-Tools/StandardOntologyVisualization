@@ -150,7 +150,7 @@ function createMatrix(data) {
 		;
 	rows.append("text")
 		.attr("class", "label")
-		.attr("x", matrixScale.bandwidth() / 2 - 6)
+		.attr("x", matrixScale.bandwidth() / 2 - 8)
 		.attr("y", 4)
 		.attr("dy", ".32em")
 		.attr("text-anchor", "end")
