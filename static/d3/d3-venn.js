@@ -2115,9 +2115,9 @@
                     ),
                     [[]]
                 );
-            var subsets = getAllSubsets(originalSet);
             //very, very special case
-            if((Math.pow(2, originalSet.length) - 1) - totalSet.length === 1){
+            if(originalSet.length < 20 && ((Math.pow(2, originalSet.length) - 1) - totalSet.length === 1)){
+                var subsets = getAllSubsets(originalSet);
                 subsets.forEach(function(item){
                     if(item.length > 0){
                         if(totalSet.indexOf(item.toString()) === -1){
