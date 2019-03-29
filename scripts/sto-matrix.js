@@ -133,7 +133,7 @@ function createMatrix(data) {
 		.attr("height", matrixScale.bandwidth())
 		.style("fill-opacity", d => opacityScale(0))
 		.style("fill", d => {
-			return "grey";
+			return "#0083d2";
 			//return nodes[nodes.indexOf(d.x)] == nodes[nodes.indexOf(d.y)] ? colorScale(nodes[nodes.indexOf(d.x)]) : "grey";
 		})
 		//.on("mouseover", mouseover)
@@ -154,7 +154,7 @@ function createMatrix(data) {
 		.attr("y", 4)
 		.attr("dy", ".32em")
 		.attr("text-anchor", "end")
-		.text((d, i) => nodes[i].id)
+		.text((d, i) => replaceUnderscore(parseURI(nodes[i].id)))
 		;
 	columns.append("text")
 		.attr("class", "label")
@@ -163,8 +163,7 @@ function createMatrix(data) {
 		.attr("dy", ".32em")
 		.attr("text-anchor", "start")
 		.text(
-		(d, i) => unique_targets[i]
-		);
+		(d, i) => replaceUnderscore(parseURI(unique_targets[i])));
 	
 	console.log(columns);
 	console.log(unique_targets);
