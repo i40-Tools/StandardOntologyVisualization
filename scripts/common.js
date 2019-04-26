@@ -10,10 +10,11 @@ function fetchData(url, query) {
         xhr.open('POST', url, true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function (response) {
-            var fetched_data = JSON.parse(response.target.response);
-            if (fetched_data !== undefined) {
-                resolve(fetched_data);
-            }
+			var raw_response = response.target.response;
+				var fetched_data = JSON.parse(raw_response);
+				if (fetched_data !== undefined) {
+					resolve(fetched_data);
+				}
         };
         xhr.send('query=' + query);
     });

@@ -70,7 +70,8 @@ function loadNetwork(networkData){
                     return l.source == d.id || l.target == d.id
                 }).size();
                 var minRadius = 20;
-                return minRadius + (d.weight * 2);
+                //return minRadius + (d.weight * 2);
+                return minRadius ;
             })
             .style("stroke-width", "1px")
             .style('stroke','black')
@@ -187,8 +188,9 @@ function loadNetwork(networkData){
                  })
                 .attr("y", function (d) { return d.y; })
                 .attr("font-size", function(d){
-                    if(d.weight === 0) return 5;
-                    else return Math.sqrt(d.weight) * 3;
+                   // if(d.weight === 0) return 5;
+                   // else return Math.sqrt(d.weight) * 3;
+				    return 8;
                 })
                 .style("fill", function (d) {
                     if(d.weight > 6){

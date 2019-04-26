@@ -15,14 +15,10 @@
     <script src="../static/jquery/jquery-ui.js"></script>
     <script src="../static/bootstrap/js/bootstrap.min.js"></script>
     <!-- d3.js -->
-    <script src="../static/d3/d3.v3.min.js"></script>
-
     <script src="../scripts/common.js"></script>
-    <script src="../static/d3/d3-venn.js"></script>
-    <script src="../scripts/read-venn-data.js"></script>
-    <script src="../scripts/sto-venn.js"></script>
-
-
+    <script src="../static/d3/d3.v4.min.js"></script>
+    <script src="../scripts/read-matrix-data.js"></script>
+    <script src="../scripts/sto-matrix.js"></script>
 
     <title>Industry 4.0 Standards</title>
 </head>
@@ -61,10 +57,10 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Co-occurrence Matrix<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="matrix_fw_concern.html">Frameworks & Concerns</a></li>
-                            <li><a href="matrix_cls_concern.html">Classifications & Concerns</a></li>
-                            <li><a href="matrix_concern_fw.html">Concerns & Frameworks</a></li>
-                            <li><a href="matrix_concern_cls.html">Concerns & Classifications</a></li>
+							<li><a href="matrix_fw_concern.html">Frameworks & Concerns</a></li>
+							<li><a href="matrix_cls_concern.html">Classifications & Concerns</a></li>
+							<li><a href="matrix_concern_fw.html">Concerns & Frameworks</a></li>
+							<li><a href="matrix_concern_cls.html">Concerns & Classifications</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -74,23 +70,26 @@
 
     <!-- Page Content -->
     <div class="left col-xs-9">
-        <div id="network-chart">
-            <div class="col-md-3">
-                <div class="user-input">
-                    <button id="expand" type="button" class="btn btn-link toggle-collapse" aria-label="Left Align" data-toggle="collapse" data-target="#toggle-input">
-                        <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
-                    </button>
-                    <div id="toggle-input" class="collapse">
-                        <div id="selectClassifications" class="selectionUI"></div>
-                        <button type="submit" onclick="loadVennDiagram()" class="btn btn-primary btn-xs">Draw Diagram</button>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="user-input">
+                        <button id="expand" type="button" class="btn btn-link toggle-collapse" aria-label="Left Align" data-toggle="collapse" data-target="#toggle-input">
+                            <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                        </button>
+                        <div id="toggle-input" class="collapse">
+                            <div id="selectFrameworks" class="selectionUI"></div>
+                            <button type="submit" onclick="loadMatrix()" class="btn btn-primary btn-xs">Draw Diagram</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-9">
-                <div class="chart-container"></div>
-            </div>
-        </div>
-    </div>
+				
+				<div class="row">
+					<div id="matrix-chart">
+						<graph></graph>
+					</div>
+				</div>
+			</div>
+		</div>
 
     <div id="sidebar-info" class="right col-xs-3">
         <div id="sidebar-text">
@@ -113,15 +112,16 @@
 
 <!--Chart Script-->
 <script>
-    fetchClassifications().then(readClassifications).then(function(classifications){
-        var inputContainer = $("#selectClassifications");
-        var multiSelect = $("<select id='multiselect_cls' multiple='multiple'></select>");
-        for(var i=0; i < classifications.length; i++){
-            var option = $('<option value="' + classifications[i].id + '" id="togCls_' + i + '" selected>' + classifications[i].name + '</option>');
-            multiSelect.append(option);
+	fetchFrameworks(true).then(readFrameworks).then(function(frameworks){
+        var inputContainer = $("#selectFrameworks");
+        for(var i=0; i < frameworks.length; i++){
+            var input = $('<input type="checkbox" checked="checked" class="grid-item" value="' + frameworks[i].id + '" id="togFr_' + i + '" onchange="">' + frameworks[i].name + '</input>');
+            inputContainer.append(input);
         }
-        inputContainer.append(multiSelect);
-        loadVennDiagram();
+        
+		//start with all or only one framework?
+		//loadMatrix();
+		loadMatrixDiagram("https://w3id.org/i40/sto#IIRA");
     });
 
     $("#expand").click(function(){
@@ -132,16 +132,20 @@
             icon.removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-down");
         }
     });
-
-    function loadVennDiagram(){
-        destroyChart("#venn");
+	
+    function loadMatrix(){
+        destroyChart("#matrix");
         var queryString = "";
-        var selectedValues = $('#multiselect_cls').val();
-        for(var i=0; i < selectedValues.length; i++){
-            queryString += "<" + selectedValues[i] + ">,"
-        }
-        fetchVennCls(queryString.slice(0, -1)).then(readVennClsData).then(loadVenn);
+        $("#selectFrameworks input").each(function(index, input){
+            if($(input).is(":checked")){
+                queryString += "<" + $(input).val() + ">,"
+            }
+        });
+
+        loadMatrixDiagram(queryString.slice(1, -2));
     }
-    //loadVenn(vennData);
-    // d3.select(window).on('resize', adjustSize);
+	
+	
+
+    d3.select(window).on('resize', adjustSize);
 </script>

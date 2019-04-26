@@ -66,10 +66,14 @@ function fetchVennCls(queryString, isConcern){
             "        {  \n" +
             "    ?standardId a sto:Concern .   \n" +
             "    ?classificationId sto:frames ?standardId . \n" +
-            "    ?standardId rdfs:label ?standardLabel .\n" +
-            "    ?classificationId rdfs:label ?classificationLabel .\n" +
-            "    BIND(STR(?standardLabel) AS ?standard) \n" +
-            "    BIND(STR(?classificationLabel) AS ?classification) \n" +
+		//	"{"+
+			" ?classificationId a sto:StandardClassification . "+
+		//	"} UNION {" +
+		//	" ?classificationId a ?subclass . " +
+		//	" ?subclass rdfs:subClassOf sto:StandardClassification . "+
+		//	"}" +
+            "    ?standardId rdfs:label ?standard .\n" +
+            "    ?classificationId rdfs:label ?classification .\n" +
             "    FILTER ( ?classificationId IN (" + queryString + ") )\n" +
             "}";
     }

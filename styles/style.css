@@ -374,3 +374,14 @@ h2{
 #multiselect_cls{
     height: 80vh;
 }
+
+.background{
+    fill: #eee;
+}
+
+#matrix-chart{
+    height: 73vh;
+    width: 73vw;
+    overflow: auto;
+    padding: 10px;
+}

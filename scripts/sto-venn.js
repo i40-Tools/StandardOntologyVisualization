@@ -6,7 +6,7 @@ function loadVenn(vennData) {
     showStats(setData);
 
     function showStats(d) {
-        var content = "<table class='table-bordered property-table'><tr><td>Frameworks</td><td>Number of Standards</td></tr>";
+        var content = "<table class='table-bordered property-table'><tr><td>Frameworks</td><td>Number of connected Concerns</td></tr>";
         for(var key in d){
             var count = d[key];
             content += '<tr><td><b>'+ key +'</b></td><td>' + count + '</td> </tr>';
@@ -23,60 +23,6 @@ function loadVenn(vennData) {
     var width = $('.chart-container').width() - margin.width,
         height = $('.chart-container').height() - margin.height,
         colors = d3.scale.category10();
-
-    var setChar = 'ABCDEFGHIJKLMN',
-        charFn = i => setChar[i],
-        setLength = 4,
-        sets = d3.range(setLength).map(function (d, i) {
-            return setChar[i]
-        });
-
-    var opts = {
-        dataLength: 180,
-        setLength: 4,
-        duration: 800,
-        circleOpacity: 0.2,
-        innerOpacity: 0.1
-    };
-
-
-    // Build simple getter and setter Functions
-    for (var key in opts) {
-        loadVenn[key] = getSet(key, loadVenn).bind(opts);
-    }
-
-    function getSet(option, component) {
-        return function (_) {
-            if (!arguments.length) {
-                return this[option];
-            }
-            this[option] = _;
-            return component;
-        };
-    }
-
-    function refreshInput() {
-        var sel = d3.select(this),
-            name = sel.attr("name"),
-            value = sel.property("value")
-        loadVenn[name](value);
-        if (name == 'dataLength' || name == 'setLength') {
-            if (name == 'setLength') {
-                globalData = [] // we reshuffle everything
-            }
-            return refresh(vennData)
-        }
-        refresh();
-    }
-
-    //set input value accorging to options and handle change of input
-    d3.selectAll('#inputs input')
-        .each(function () {
-            var sel = d3.select(this),
-                name = sel.attr("name");
-            sel.property("value", loadVenn[name]())
-        })
-        .on('input', refreshInput)
 
     var layout = d3.layout.venn()
         .size([width, height])
@@ -135,8 +81,8 @@ function loadVenn(vennData) {
 
 
         vennArea.selectAll('path.venn-area-path').transition()
-            .duration(isFirstLayout ? 0 : loadVenn.duration())
-            .attr('opacity', loadVenn.circleOpacity())
+            .duration(isFirstLayout ? 0 : 800)
+            .attr('opacity', 0.2)
             .attrTween('d', function (d) {
                 return d.d
             });
@@ -159,8 +105,8 @@ function loadVenn(vennData) {
         vennArea.selectAll('circle.inner').data(function (d) {
             return [d];
         }).transition()
-            .duration(isFirstLayout ? 0 : loadVenn.duration())
-            .attr('opacity', loadVenn.innerOpacity())
+            .duration(isFirstLayout ? 0 : 800)
+            .attr('opacity', 0.1)
             .attr("cx", function (d) {
                 return d.center.x
             })
@@ -172,7 +118,7 @@ function loadVenn(vennData) {
             });
 
         vennArea.exit().transition()
-            .duration(loadVenn.duration())
+            .duration(800)
             .attrTween('d', function (d) {
                 return d.d
             })
@@ -206,7 +152,7 @@ function loadVenn(vennData) {
             .call(layout.packer().drag);
 
         points.transition()
-            .duration(isFirstLayout ? 0 : loadVenn.duration())
+            .duration(isFirstLayout ? 0 : 800)
             .attr('class', "venn-node")
             .attr('opacity', 0.2)
             .attr('stroke', 'black')
@@ -260,17 +206,27 @@ function loadVenn(vennData) {
 }
 
 function getSets(data){
-    var sets = {};
+    var temp = {};
     for(let i = 0; i < data.length; i++){
         var obj = data[i];
-        if(sets[obj.set.toString()] !== undefined){
-            sets[obj.set.toString()]++;
+        if(temp[obj.set.toString()] !== undefined){
+            temp[obj.set.toString()]++;
+
         }
         else{
-            sets[obj.set.toString()] = 1;
+            temp[obj.set.toString()] = 1;
         }
-
+        if(obj.set.length > 1){
+            for(var j=0; j < obj.set.length; j++){
+                if(temp[obj.set[j]] !== undefined){
+                    temp[obj.set[j]]++;
+                }
+                else{
+                    temp[obj.set[j]] = 1;
+                }
+            }
+        }
     }
-    return sets;
+    return temp;
 }
 
