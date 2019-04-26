@@ -141,9 +141,9 @@ function fetchConcerns(){
         "?frameworkId rdfs:label ?framework .\n" +
         "OPTIONAL { ?classification rdfs:comment ?cl_comment . }\n" +
         "OPTIONAL {\n" +
-        "?classification sto:alignesWith ?classification2 .\n" +
+        "?classification sto:alignsWith ?classification2 .\n" +
         "?classification2 rdfs:label ?cl2_label .\n" +
-        "sto:alignesWith rdfs:label ?relation2 .\n" +
+        "sto:alignsWith rdfs:label ?relation2 .\n" +
         "}\n" +
         "}";
     return fetchData(url, query);
