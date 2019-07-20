@@ -171,7 +171,7 @@ function readVennData(vData){
             var value = dictionary[key];
             vennData.push({
                 set: value.frameworks,
-                r: 10,
+                r: 20,
                 name: key,
                 id: value.id
             })

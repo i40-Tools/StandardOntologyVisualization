@@ -21,12 +21,12 @@ function loadVenn(vennData) {
     };
 
     var width = $('.chart-container').width() - margin.width,
-        height = $('.chart-container').height() - margin.height,
-        colors = d3.scale.category10();
+        height = $('.chart-container').height(),
+        colors = d3.scale.category20();
 
     var layout = d3.layout.venn()
         .size([width, height])
-        .padding(0)
+        .padding(20)
         .packingStragegy(d3.layout.venn.force)
 
     var svg = d3.select(".chart-container")
@@ -69,7 +69,7 @@ function loadVenn(vennData) {
             .attr('stroke', function (d, i) {
                 return colors(i)
             })
-            .attr('stroke-width', '5');
+            .attr('stroke-width', '10');
 
         vennEnter.append('circle')
             .attr('class', 'inner');
@@ -82,7 +82,7 @@ function loadVenn(vennData) {
 
         vennArea.selectAll('path.venn-area-path').transition()
             .duration(isFirstLayout ? 0 : 800)
-            .attr('opacity', 0.2)
+            .attr('opacity', 0.4)
             .attrTween('d', function (d) {
                 return d.d
             });
