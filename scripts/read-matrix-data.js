@@ -128,7 +128,7 @@ var networkData = {
     links: null
 };
 
-
+// here
 function readClassificationAndConcerns(cData){
     var promise = new Promise(function (resolve) {
         var myData = cData.results.bindings;
