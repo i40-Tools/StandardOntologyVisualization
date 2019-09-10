@@ -129,6 +129,7 @@ function readStandards(sData){
 
 function fetchConcerns(){
     var query = "PREFIX sto: <https://w3id.org/i40/sto#>\n" +
+        "PREFIX sto_iot: <https://w3id.org/i40/sto/iot#>\n" +
         "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
         "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
         "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
@@ -141,9 +142,9 @@ function fetchConcerns(){
         "?frameworkId rdfs:label ?framework .\n" +
         "OPTIONAL { ?classification rdfs:comment ?cl_comment . }\n" +
         "OPTIONAL {\n" +
-        "?classification sto:alignsWith ?classification2 .\n" +
+        "?classification sto_iot:alignsWith ?classification2 .\n" +
         "?classification2 rdfs:label ?cl2_label .\n" +
-        "sto:alignsWith rdfs:label ?relation2 .\n" +
+        "sto_iot:alignsWith rdfs:label ?relation2 .\n" +
         "}\n" +
         "}";
     return fetchData(url, query);

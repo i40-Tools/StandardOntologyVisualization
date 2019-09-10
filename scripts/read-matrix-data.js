@@ -1,11 +1,12 @@
 
 function fetchFrameworks(isConcern){
     var query = "PREFIX sto: <https://w3id.org/i40/sto#> \n" +
+        "PREFIX sto_iot: <https://w3id.org/i40/sto/iot#>\n" +
         "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
         "SELECT ?frameworkId (SAMPLE(?frameworkL) AS ?frameworkLabel)\n" +
         "WHERE\n" +
         "{\n" +
-        "  \t?frameworkId a sto:StandardizationFramework .  \n" +
+        "  \t?frameworkId a sto_iot:StandardizationFramework .  \n" +
         "  \t?frameworkId rdfs:label ?framework .\n" +
         "  \t?class sto:isDescribedin ?frameworkId .\n" +
         "  \t?standard sto:hasClassification ?class . \n" +
@@ -14,13 +15,14 @@ function fetchFrameworks(isConcern){
         "GROUP BY ?frameworkId";
     if(isConcern){
         query = "PREFIX sto: <https://w3id.org/i40/sto#> \n" +
+            "PREFIX sto_iot: <https://w3id.org/i40/sto/iot#>\n" +
             "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
             "SELECT DISTINCT ?frameworkId ?frameworkLabel\n" +
             "WHERE\n" +
             "{\n" +
             "  \t?frameworkId rdfs:label ?frameworkLabel .\n" +
             "  \t?class sto:isDescribedin ?frameworkId .\n" +
-            "  \t?class sto:frames ?concern .\n" +
+            "  \t?class sto_iot:frames ?concern .\n" +
             "}";
     }
     return fetchData(url, query);
@@ -36,6 +38,7 @@ function fetchDetails(standard){
 
 function fetchClassificationsAndConcerns(queryString){
     var query = "PREFIX sto: <https://w3id.org/i40/sto#>\n" +
+        "PREFIX sto_iot: <https://w3id.org/i40/sto/iot#>\n" +
         "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
         "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
         "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
@@ -48,7 +51,7 @@ function fetchClassificationsAndConcerns(queryString){
         "?frameworkId rdfs:label ?framework .\n" +
         "OPTIONAL { ?classification rdfs:comment ?cl_comment . }\n" +
         "OPTIONAL {\n" +
-        "?classification sto:frames ?classification2 .\n" +
+        "?classification sto_iot:frames ?classification2 .\n" +
         "?classification2 rdfs:label ?cl2_label .\n" +
         "sto:frames rdfs:label ?relation2 .\n" +
         "}\n" +
@@ -59,6 +62,7 @@ function fetchClassificationsAndConcerns(queryString){
 
 function fetchFrameworksAndConcerns(queryString){
     var query = "PREFIX sto: <https://w3id.org/i40/sto#>\n" +
+        "PREFIX sto_iot: <https://w3id.org/i40/sto/iot#>\n" +
         "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
         "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
         "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
@@ -71,9 +75,9 @@ function fetchFrameworksAndConcerns(queryString){
         "?classification rdfs:label ?cl_label .\n" +
         "OPTIONAL { ?classification rdfs:comment ?cl_comment . }\n" +
         "OPTIONAL {\n" +
-        "?cls sto:frames ?classification2 .\n" +
+        "?cls sto_iot:frames ?classification2 .\n" +
         "?classification2 rdfs:label ?cl2_label .\n" +
-        "sto:frames rdfs:label ?relation2 .\n" +
+        "sto_iot:frames rdfs:label ?relation2 .\n" +
         "}\n" +
         " FILTER ( ?classification IN (" + queryString + ") )\n" +
         "} ";
@@ -82,6 +86,7 @@ function fetchFrameworksAndConcerns(queryString){
 
 function fetchConcernsAndClassifications(queryString){
     var query = "PREFIX sto: <https://w3id.org/i40/sto#>\n" +
+        "PREFIX sto_iot: <https://w3id.org/i40/sto/iot#>\n" +
         "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
         "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
         "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
@@ -92,9 +97,9 @@ function fetchConcernsAndClassifications(queryString){
         "?classification rdfs:label ?cl_label .\n" +
         "?classification2 sto:isDescribedin ?frameworkId .\n" +
         "?frameworkId rdfs:label ?framework .\n" +
-        "sto:frames rdfs:label ?relation2 .\n" +
+        "sto_iot:frames rdfs:label ?relation2 .\n" +
         "OPTIONAL { ?classification rdfs:comment ?cl_comment . }\n" +
-        "?classification2 sto:frames ?classification .\n" +
+        "?classification2 sto_iot:frames ?classification .\n" +
         "?classification2 rdfs:label ?cl2_label .\n" +
         " FILTER ( ?frameworkId IN (" + queryString + ") )\n" +
         "} ";
@@ -104,6 +109,7 @@ function fetchConcernsAndClassifications(queryString){
 
 function fetchConcernsAndFrameworks(queryString){
     var query = "PREFIX sto: <https://w3id.org/i40/sto#>\n" +
+        "PREFIX sto_iot: <https://w3id.org/i40/sto/iot#>\n" +
         "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
         "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
         "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
@@ -114,9 +120,9 @@ function fetchConcernsAndFrameworks(queryString){
         "?classification rdfs:label ?cl_label .\n" +
         "?cls sto:isDescribedin ?classification2 .\n" +
         "?cls rdfs:label ?framework .\n" +
-        "sto:frames rdfs:label ?relation2 .\n" +
+        "sto_iot:frames rdfs:label ?relation2 .\n" +
         "OPTIONAL { ?classification2 rdfs:comment ?cl_comment . }\n" +
-        "?cls sto:frames ?classification .\n" +
+        "?cls sto_iot:frames ?classification .\n" +
         "?classification2 rdfs:label ?cl2_label .\n" +
         " FILTER ( ?classification2 IN (" + queryString + ") )\n" +
         "} ";

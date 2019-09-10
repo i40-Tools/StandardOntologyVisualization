@@ -18,6 +18,7 @@ function fetchVennData(queryString, isConcern){
         "}";
     if(isConcern){
         query = "PREFIX sto: <https://w3id.org/i40/sto#> \n" +
+            "PREFIX sto_iot: <https://w3id.org/i40/sto/iot#>\n" +
             "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
             "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
             "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
@@ -25,14 +26,14 @@ function fetchVennData(queryString, isConcern){
             "SELECT DISTINCT ?standard ?framework ?standardId\n" +
             "WHERE\n" +
             "{\n" +
-            "  \t?standardId a sto:Concern .   \n" +
-            "\t?classificationId sto:frames ?standardId .\n" +
-            "\t?classificationId sto:isDescribedin ?frameworkId . \n" +
+            "  \t?standardId a sto_iot:Concern .\n" +
+            "  \t?classificationId sto_iot:frames ?standardId .\n" +
+            "  \t?classificationId sto:isDescribedin ?frameworkId .\n" +
             "  \t?standardId rdfs:label ?standardLabel .\n" +
-            "    ?frameworkId rdfs:label ?frameworkLabel .\n" +
+            "  \t?frameworkId rdfs:label ?frameworkLabel .\n" +
             "  \tBIND(STR(?standardLabel) AS ?standard) \n" +
-            "    BIND(STR(?frameworkLabel) AS ?framework) \n" +
-            "    FILTER ( ?frameworkId IN (" + queryString + ") )\n" +
+            "  \tBIND(STR(?frameworkLabel) AS ?framework) \n" +
+            "  \tFILTER ( ?frameworkId IN (" + queryString + ") )\n" +
             "}";
     }
     return fetchData(url, query);
@@ -57,24 +58,25 @@ function fetchVennCls(queryString, isConcern){
         "}";
     if(isConcern){
         query = "PREFIX sto: <https://w3id.org/i40/sto#>\n" +
+            "PREFIX sto_iot: <https://w3id.org/i40/sto/iot#>\n" +
             "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
             "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
             "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
             "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
             "SELECT DISTINCT ?standard ?classification ?standardId\n" +
             "WHERE" +
-            "        {  \n" +
-            "    ?standardId a sto:Concern .   \n" +
-            "    ?classificationId sto:frames ?standardId . \n" +
-		//	"{"+
-			" ?classificationId a sto:StandardClassification . "+
-		//	"} UNION {" +
-		//	" ?classificationId a ?subclass . " +
-		//	" ?subclass rdfs:subClassOf sto:StandardClassification . "+
-		//	"}" +
-            "    ?standardId rdfs:label ?standard .\n" +
-            "    ?classificationId rdfs:label ?classification .\n" +
-            "    FILTER ( ?classificationId IN (" + queryString + ") )\n" +
+            "{\n" +
+            "   \t?standardId a sto_iot:Concern .   \n" +
+            "   \t?classificationId sto_iot:frames ?standardId . \n" +
+		//	"   \t{"+
+			"       \t\t?classificationId a sto:StandardClassification .\n"+
+		//	"   \t} UNION {\n" +
+		//	"       \t\t?classificationId a ?subclass .\n" +
+		//	"       \t\t?subclass rdfs:subClassOf sto:StandardClassification .\n"+
+		//	"   \t}" +
+            "   \t?standardId rdfs:label ?standard .\n" +
+            "   \t?classificationId rdfs:label ?classification .\n" +
+            "   \tFILTER ( ?classificationId IN (" + queryString + ") )\n" +
             "}";
     }
     return fetchData(url, query);
@@ -82,6 +84,7 @@ function fetchVennCls(queryString, isConcern){
 
 function fetchFrameworks(isConcern){
     var query = "PREFIX sto: <https://w3id.org/i40/sto#> \n" +
+        "PREFIX sto_iot: <https://w3id.org/i40/sto/iot#>\n" +
         "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
         "SELECT ?frameworkId (SAMPLE(?frameworkL) AS ?frameworkLabel)\n" +
         "WHERE\n" +
@@ -90,18 +93,19 @@ function fetchFrameworks(isConcern){
         "  \t?frameworkId rdfs:label ?framework .\n" +
         "  \t?class sto:isDescribedin ?frameworkId .\n" +
         "  \t?standard sto:hasClassification ?class . \n" +
-        "    BIND(str(?framework) AS ?frameworkL)\n" +
+        "  \tBIND(str(?framework) AS ?frameworkL)\n" +
         "}\n" +
         "GROUP BY ?frameworkId";
     if(isConcern){
         query = "PREFIX sto: <https://w3id.org/i40/sto#> \n" +
+            "PREFIX sto_iot: <https://w3id.org/i40/sto/iot#>\n" +
             "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
             "SELECT DISTINCT ?frameworkId ?frameworkLabel\n" +
             "WHERE\n" +
             "{\n" +
             "  \t?frameworkId rdfs:label ?frameworkLabel .\n" +
             "  \t?class sto:isDescribedin ?frameworkId .\n" +
-            "  \t?class sto:frames ?concern .\n" +
+            "  \t?class sto_iot:frames ?concern .\n" +
             "}";
     }
     return fetchData(url, query);
