@@ -63,15 +63,16 @@ function addCoordinates(list) {
                     address: location
                 },
                 success: function (response) {
+                    var loc = decodeURIComponent(this.url.split("address=")[1])
                     var coord = [response.results[0].geometry.location.lat, response.results[0].geometry.location.lng];
-                    full_list.push(coord)
+                    full_list[loc] = coord
                 }
             }));
         }
 
         $.when.apply(null, async_requests).done(function () {
             list.map(function (obj, index) {
-                obj.location = full_list[index];
+                obj.location = full_list[obj.country];
             });
             resolve(list);
         });
